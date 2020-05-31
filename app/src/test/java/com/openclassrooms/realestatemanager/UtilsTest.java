@@ -15,4 +15,11 @@ public class UtilsTest {
     public void convertDollarToEuroTest() {
         assertEquals(812,Utils.convertDollarToEuro(1000));
     }
+
+    @Test
+    public void getTodayDateTest() {
+        String actualDate = Utils.getTodayDate();
+        String newDate = "31/05/2020";
+        assertEquals(newDate, actualDate);
+    }
 }
