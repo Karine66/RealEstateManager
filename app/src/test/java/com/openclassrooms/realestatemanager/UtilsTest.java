@@ -2,6 +2,9 @@ package com.openclassrooms.realestatemanager;
 
 import org.junit.Test;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 
 public class UtilsTest {
@@ -18,8 +21,8 @@ public class UtilsTest {
 
     @Test
     public void getTodayDateTest() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String actualDate = Utils.getTodayDate();
-        String newDate = "31/05/2020";
-        assertEquals(newDate, actualDate);
+        assertEquals(dateFormat.format(new Date()), actualDate);
     }
 }
