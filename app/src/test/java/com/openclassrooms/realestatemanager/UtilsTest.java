@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager;
 
+import com.openclassrooms.realestatemanager.utils.Utils;
+
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
@@ -11,7 +13,7 @@ public class UtilsTest {
 
     @Test
     public void convertEuroToDollarTest() {
-       assertEquals(1111,Utils.convertEuroToDollar(1000));
+       assertEquals(1111, Utils.convertEuroToDollar(1000));
     }
 
     @Test
