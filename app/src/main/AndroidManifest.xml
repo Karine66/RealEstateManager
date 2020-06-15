@@ -12,17 +12,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".controllers.activities.SearchActivity"></activity>
-        <activity android:name=".controllers.activities.EditActivity" />
-        <activity android:name=".controllers.activities.AddActivity" />
-        <activity android:name=".controllers.activities.MainActivity">
+        <activity android:name=".mapPage.mapActivity"></activity>
+        <activity android:name=".searchPage.SearchActivity" />
+        <activity android:name=".EditEstate.EditActivity" />
+        <activity android:name=".createEstate.AddActivity" />
+        <activity android:name=".mainPage.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controllers.SecondActivity" />
     </application>
 
 </manifest>

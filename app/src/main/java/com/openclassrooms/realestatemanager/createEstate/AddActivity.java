@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.controllers.activities;
+package com.openclassrooms.realestatemanager.createEstate;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.openclassrooms.realestatemanager.R;
 
-public class EditActivity extends AppCompatActivity {
+public class AddActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit);
+        setContentView(R.layout.activity_add);
     }
 }

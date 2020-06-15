@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.controllers.activities;
+package com.openclassrooms.realestatemanager.searchPage;
 
 import androidx.appcompat.app.AppCompatActivity;
 
