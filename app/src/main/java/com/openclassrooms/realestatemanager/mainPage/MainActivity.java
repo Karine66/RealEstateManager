@@ -5,16 +5,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.openclassrooms.realestatemanager.EditEstate.EditActivity;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding;
 import com.openclassrooms.realestatemanager.detailDescription.DetailFragment;
 import com.openclassrooms.realestatemanager.listPage.ListFragment;
+import com.openclassrooms.realestatemanager.mapPage.MapActivity;
+import com.openclassrooms.realestatemanager.searchPage.SearchActivity;
 import com.openclassrooms.realestatemanager.utils.Utils;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,8 +39,10 @@ public class MainActivity extends AppCompatActivity {
 ////        this.textViewMain = findViewById(R.id.activity_second_activity_text_view_main);
          this.configureAndShowListFragment();
 //         this.configureAndShowDetailFragment();
-         this.configureToolbar();
+         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+             this.configureToolbar();
          }
+     }
 
 //    @SuppressLint("SetTextI18n")
 //    private void configureTextViewQuantity(){
@@ -59,6 +66,29 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //Set the toolbar
         setSupportActionBar(toolbar);
+    }
+
+    //for click on buttons in toolbar
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+         //Handle actions on menu items
+        switch (item.getItemId()) {
+            case R.id.edit_btn :
+                Intent editIntent = new Intent(this, EditActivity.class);
+                startActivity(editIntent);
+                return true;
+            case R.id.search_btn :
+                Intent searchIntent = new Intent(this, SearchActivity.class);
+                startActivity(searchIntent);
+                return true;
+            case R.id.map_btn :
+                Intent mapIntent = new Intent(this, MapActivity.class);
+                startActivity(mapIntent);
+                return true;
+            default :
+                return
+                        super.onOptionsItemSelected(item);
+        }
     }
 
     private void configureAndShowListFragment(){

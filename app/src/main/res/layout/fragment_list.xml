@@ -6,20 +6,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".listPage.ListFragment">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:rippleColor="@color/colorAccent"
+        android:src="@drawable/outline_add_white_24dp"
+        android:layout_marginTop="500dp"
+        android:layout_marginStart="280dp"
+        android:elevation="15dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:fabSize="auto"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_list_RV"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="600dp"
-        android:layout_marginStart="300dp"
-        app:rippleColor="@color/colorAccent"
-        android:src="@drawable/outline_add_white_24dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:fabSize="auto"/>
+
 
 </FrameLayout>

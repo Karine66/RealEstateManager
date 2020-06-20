@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.openclassrooms.realestatemanager.R;
 
-public class mapActivity extends AppCompatActivity {
+public class MapActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

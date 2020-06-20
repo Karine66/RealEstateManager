@@ -57,8 +57,14 @@
             android:scaleType="center"
             android:contentDescription="soldPhoto" />
 
-    </RelativeLayout>
+
+
+
+
+   </RelativeLayout>-->
 
 
 
 </androidx.cardview.widget.CardView>
+
+
