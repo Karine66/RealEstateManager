@@ -15,7 +15,8 @@
         <activity android:name=".mapPage.MapActivity"></activity>
         <activity android:name=".searchPage.SearchActivity" />
         <activity android:name=".EditEstate.EditActivity" />
-        <activity android:name=".createEstate.AddActivity" />
+        <activity android:name=".createEstate.AddActivity"
+            android:parentActivityName=".mainPage.MainActivity"/>
         <activity android:name=".mainPage.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

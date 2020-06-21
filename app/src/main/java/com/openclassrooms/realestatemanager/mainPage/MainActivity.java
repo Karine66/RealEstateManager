@@ -1,18 +1,13 @@
 package com.openclassrooms.realestatemanager.mainPage;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
+import com.openclassrooms.realestatemanager.BaseActivity;
 import com.openclassrooms.realestatemanager.EditEstate.EditActivity;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding;
@@ -20,9 +15,8 @@ import com.openclassrooms.realestatemanager.detailDescription.DetailFragment;
 import com.openclassrooms.realestatemanager.listPage.ListFragment;
 import com.openclassrooms.realestatemanager.mapPage.MapActivity;
 import com.openclassrooms.realestatemanager.searchPage.SearchActivity;
-import com.openclassrooms.realestatemanager.utils.Utils;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private ActivityMainBinding binding;
     private ListFragment listFragment;
@@ -58,14 +52,6 @@ public class MainActivity extends AppCompatActivity {
          //Inflate the menu and add it to the Toolbar
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
         return true;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void configureToolbar() {
-         //Get the toolbar view inside the activity layout
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //Set the toolbar
-        setSupportActionBar(toolbar);
     }
 
     //for click on buttons in toolbar
