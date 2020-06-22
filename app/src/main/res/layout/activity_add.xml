@@ -10,4 +10,75 @@
         layout="@layout/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_mandate"
+        app:boxStrokeColor="@color/colorAccent"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="70dp"
+        android:nextFocusRight="@id/input_estate"
+        app:helperText="Required"
+        app:helperTextEnabled="true"
+        app:errorEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_Mandate"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:hint="Mandate number"
+            android:inputType="number"
+            android:singleLine="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_estate"
+        app:boxStrokeColor="@color/colorAccent"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="70dp">
+
+        <AutoCompleteTextView
+            android:id="@+id/et_Estate"
+            android:layout_width="140dp"
+            android:hint="Estate Type"
+            android:textSize="12sp"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_surface"
+        app:boxStrokeColor="@color/colorAccent"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="150dp"
+        android:layout_alignParentTop="true"
+        android:nextFocusUp="@id/input_mandate"
+        app:suffixText="m²"
+        app:suffixTextColor="#000000"
+        app:helperText="Required"
+        app:helperTextEnabled="true"
+        app:errorEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_surface"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+
+            android:hint="Surface"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
 </RelativeLayout>
