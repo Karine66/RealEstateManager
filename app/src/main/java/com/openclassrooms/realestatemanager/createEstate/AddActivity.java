@@ -33,6 +33,9 @@ public class AddActivity extends BaseActivity {
         Objects.requireNonNull(ab).setTitle("Create Estate");
 
         this.dropDownEstates(view);
+        this.dropDownRooms(view);
+        this.dropDownBedrooms(view);
+        this.dropDownBathrooms(view);
 
 
 
@@ -47,7 +50,33 @@ public class AddActivity extends BaseActivity {
         editTextOutlinedExposedDropdown.setAdapter(adapter);
     }
 
+    //For dropDown number of rooms
+    public void dropDownRooms (View view) {
 
+        String [] ROOMS = new String[] {"1", "2", "3","4","5 et +"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.dropdown_menu_popup_item, ROOMS);
+
+        AutoCompleteTextView editTextOutlinedExposedDropdown = view.findViewById(R.id.et_rooms);
+        editTextOutlinedExposedDropdown.setAdapter(adapter);
+    }
+    //For dropDown number of bedrooms
+    public void dropDownBedrooms (View view) {
+
+        String [] BEDROOMS = new String[] {"0","1", "2", "3","4","5 et +"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.dropdown_menu_popup_item, BEDROOMS);
+
+        AutoCompleteTextView editTextOutlinedExposedDropdown = view.findViewById(R.id.et_bedrooms);
+        editTextOutlinedExposedDropdown.setAdapter(adapter);
+    }
+    //For dropDown number of bathrooms
+    public void dropDownBathrooms (View view) {
+
+        String [] BATHROOMS = new String[] {"1", "2", "3","4 et +"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.dropdown_menu_popup_item, BATHROOMS);
+
+        AutoCompleteTextView editTextOutlinedExposedDropdown = view.findViewById(R.id.et_bathrooms);
+        editTextOutlinedExposedDropdown.setAdapter(adapter);
+    }
 
 
 }

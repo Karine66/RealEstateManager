@@ -10,6 +10,7 @@ import android.view.View;
 import com.openclassrooms.realestatemanager.BaseActivity;
 import com.openclassrooms.realestatemanager.EditEstate.EditActivity;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.createEstate.AddActivity;
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding;
 import com.openclassrooms.realestatemanager.detailDescription.DetailFragment;
 import com.openclassrooms.realestatemanager.listPage.ListFragment;
@@ -29,6 +30,7 @@ public class MainActivity extends BaseActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        this.onClickFab();
 //        //First error id call error
 ////        this.textViewMain = findViewById(R.id.activity_second_activity_text_view_main);
          this.configureAndShowListFragment();
@@ -52,6 +54,18 @@ public class MainActivity extends BaseActivity {
          //Inflate the menu and add it to the Toolbar
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
         return true;
+    }
+
+    //For click on floating action button
+    public void onClickFab () {
+            binding.fabBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent fabIntent = new Intent(getApplicationContext(), AddActivity.class);
+                startActivity(fabIntent);
+            }
+        });
+
     }
 
     //for click on buttons in toolbar

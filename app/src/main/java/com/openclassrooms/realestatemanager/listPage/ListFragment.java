@@ -78,23 +78,13 @@ public class ListFragment extends Fragment {
         // For viewBinding
         fragmentListBinding = FragmentListBinding.inflate(inflater, container,false);
         View view = fragmentListBinding.getRoot();
-        this.onClickFab();
+
 //        this.configureRecyclerView();
 //        this.configureOnClickRecyclerView();
         return view;
     }
 
-    //For click on floating action button
-    public void onClickFab () {
-        fragmentListBinding.fabBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent fabIntent = new Intent(getContext(), AddActivity.class);
-                startActivity(fabIntent);
-            }
-        });
 
-    }
 
 /**
  * Configuration RecyclerView
