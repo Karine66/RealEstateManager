@@ -36,6 +36,7 @@ public class AddActivity extends BaseActivity {
         this.dropDownRooms(view);
         this.dropDownBedrooms(view);
         this.dropDownBathrooms(view);
+        this.dropDownAgentName(view);
 
 
 
@@ -77,6 +78,14 @@ public class AddActivity extends BaseActivity {
         AutoCompleteTextView editTextOutlinedExposedDropdown = view.findViewById(R.id.et_bathrooms);
         editTextOutlinedExposedDropdown.setAdapter(adapter);
     }
+    //For dropDown real estate agent name
+    public void dropDownAgentName (View view) {
 
+        String [] AGENT = new String[] {"Karine Danjard", "John Doe", "Octave Dupont","Eugene Martin"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.dropdown_menu_popup_item, AGENT);
+
+        AutoCompleteTextView editTextOutlinedExposedDropdown = view.findViewById(R.id.et_agent);
+        editTextOutlinedExposedDropdown.setAdapter(adapter);
+    }
 
 }
