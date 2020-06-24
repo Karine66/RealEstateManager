@@ -56,6 +56,7 @@
             android:paddingBottom="8dp"
             android:layout_height="40dp"
             android:inputType="none" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -108,6 +109,7 @@
             android:hint="Number of rooms"
             android:textSize="12sp"
             android:inputType="none" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -131,6 +133,7 @@
             android:hint="Number of bedrooms"
             android:textSize="12sp"
             android:inputType="none" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -155,6 +158,7 @@
             android:hint="Number of bathrooms"
             android:textSize="12sp"
             android:inputType="none" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -421,6 +425,7 @@
                 android:hint="Real Estate Agent Name"
                 android:textSize="12sp"
                 android:inputType="none" />
+
         </com.google.android.material.textfield.TextInputLayout>
     </RelativeLayout>
 </ScrollView>

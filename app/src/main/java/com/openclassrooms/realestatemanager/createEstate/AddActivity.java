@@ -2,10 +2,12 @@ package com.openclassrooms.realestatemanager.createEstate;
 
 import androidx.appcompat.app.ActionBar;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.BaseAdapter;
 
 import com.openclassrooms.realestatemanager.BaseActivity;
 import com.openclassrooms.realestatemanager.R;
@@ -16,6 +18,17 @@ import java.util.Objects;
 public class AddActivity extends BaseActivity {
 
     private ActivityAddBinding activityAddBinding;
+
+    private AutoCompleteTextView dropdownEstate;
+    private AutoCompleteTextView dropdownRooms;
+    private AutoCompleteTextView dropdownBedrooms;
+    private AutoCompleteTextView dropdownBathrooms;
+    private AutoCompleteTextView dropdownAgent;
+    private String [] ESTATES;
+    private String[] ROOMS;
+    private String[] BEDROOMS;
+    private String[] BATHROOMS;
+    private String[] AGENT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,22 +45,56 @@ public class AddActivity extends BaseActivity {
         ActionBar ab = getSupportActionBar();
         Objects.requireNonNull(ab).setTitle("Create Estate");
 
-        this.dropDownEstates(view);
-        this.dropDownRooms(view);
-        this.dropDownBedrooms(view);
-        this.dropDownBathrooms(view);
-        this.dropDownAgentName(view);
+        this.dropDownString();
+        this.dropDownView(view);
+        this.dropDownAdapters();
+
+//        this.dropDownEstates(view);
+//        this.dropDownRooms(view);
+//        this.dropDownBedrooms(view);
+//        this.dropDownBathrooms(view);
+//        this.dropDownAgentName(view);
+
+    }
 
 
 
+
+    public void dropDownAdapters() {
+        ArrayAdapter <String> adapterEstates = new ArrayAdapter<>(getApplicationContext(), R.layout.dropdown_menu_popup_item);
+        ArrayAdapter<String> adapterRooms = new ArrayAdapter<>(getApplicationContext(), R.layout.dropdown_menu_popup_item, ROOMS);
+        ArrayAdapter<String> adapterBedrooms = new ArrayAdapter<>(getApplicationContext(), R.layout.dropdown_menu_popup_item, BEDROOMS);
+        ArrayAdapter<String> adapterBathrooms = new ArrayAdapter<>(getApplicationContext(), R.layout.dropdown_menu_popup_item, BATHROOMS);
+        ArrayAdapter<String> adapterAgent = new ArrayAdapter<>(getApplicationContext(), R.layout.dropdown_menu_popup_item, AGENT);
+        dropdownEstate.setAdapter(adapterEstates);
+        dropdownRooms.setAdapter(adapterRooms);
+        dropdownBedrooms.setAdapter(adapterBedrooms);
+        dropdownBathrooms.setAdapter(adapterBathrooms);
+        dropdownAgent.setAdapter(adapterAgent);
+    }
+
+    public void dropDownString() {
+//        ESTATES = getResources().getStringArray(R.array.ESTATES);
+        ROOMS = getResources().getStringArray(R.array.ROOMS);
+        BEDROOMS = getResources().getStringArray(R.array.BEDROOMS);
+        BATHROOMS = getResources().getStringArray(R.array.BATHROOMS);
+        AGENT = getResources().getStringArray(R.array.AGENT);
+    }
+
+    public void dropDownView(View view) {
+       dropdownEstate = view.findViewById(R.id.et_Estate);
+       dropdownRooms = view.findViewById(R.id.et_rooms);
+       dropdownBedrooms = view.findViewById(R.id.et_bedrooms);
+       dropdownBathrooms = view.findViewById(R.id.et_bathrooms);
+       dropdownAgent = view.findViewById(R.id.et_agent);
     }
     //For dropDown Estates
     public void dropDownEstates (View view) {
 
-        String [] ESTATES = new String[] {"House", "Flat", "Duplex", "Penthouse"};
+         String [] ESTATES = new String[] {"House", "Flat", "Duplex","Penthouse"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.dropdown_menu_popup_item, ESTATES);
+         AutoCompleteTextView editTextOutlinedExposedDropdown = view.findViewById(R.id.et_Estate);
 
-        AutoCompleteTextView editTextOutlinedExposedDropdown = view.findViewById(R.id.et_Estate);
         editTextOutlinedExposedDropdown.setAdapter(adapter);
     }
 
