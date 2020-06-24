@@ -13,6 +13,7 @@ import com.openclassrooms.realestatemanager.BaseActivity;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class AddActivity extends BaseActivity {
@@ -45,7 +46,7 @@ public class AddActivity extends BaseActivity {
         ActionBar ab = getSupportActionBar();
         Objects.requireNonNull(ab).setTitle("Create Estate");
 
-        this.dropDownString();
+//        this.dropDownString();
         this.dropDownView(view);
         this.dropDownAdapters();
 
@@ -61,24 +62,17 @@ public class AddActivity extends BaseActivity {
 
 
     public void dropDownAdapters() {
-        ArrayAdapter <String> adapterEstates = new ArrayAdapter<>(getApplicationContext(), R.layout.dropdown_menu_popup_item);
-        ArrayAdapter<String> adapterRooms = new ArrayAdapter<>(getApplicationContext(), R.layout.dropdown_menu_popup_item, ROOMS);
-        ArrayAdapter<String> adapterBedrooms = new ArrayAdapter<>(getApplicationContext(), R.layout.dropdown_menu_popup_item, BEDROOMS);
-        ArrayAdapter<String> adapterBathrooms = new ArrayAdapter<>(getApplicationContext(), R.layout.dropdown_menu_popup_item, BATHROOMS);
-        ArrayAdapter<String> adapterAgent = new ArrayAdapter<>(getApplicationContext(), R.layout.dropdown_menu_popup_item, AGENT);
+
+        ArrayAdapter <String> adapterEstates = new ArrayAdapter<>(this, R.layout.dropdown_menu_popup_item,getResources().getStringArray(R.array.ESTATES));
+        ArrayAdapter<String> adapterRooms = new ArrayAdapter<>(this, R.layout.dropdown_menu_popup_item, getResources().getStringArray(R.array.ROOMS));
+        ArrayAdapter<String> adapterBedrooms = new ArrayAdapter<>(this, R.layout.dropdown_menu_popup_item, getResources().getStringArray(R.array.BEDROOMS));
+        ArrayAdapter<String> adapterBathrooms = new ArrayAdapter<>(this, R.layout.dropdown_menu_popup_item, getResources().getStringArray(R.array.BATHROOMS));
+        ArrayAdapter<String> adapterAgent = new ArrayAdapter<>(this, R.layout.dropdown_menu_popup_item, getResources().getStringArray(R.array.AGENT));
         dropdownEstate.setAdapter(adapterEstates);
         dropdownRooms.setAdapter(adapterRooms);
         dropdownBedrooms.setAdapter(adapterBedrooms);
         dropdownBathrooms.setAdapter(adapterBathrooms);
         dropdownAgent.setAdapter(adapterAgent);
-    }
-
-    public void dropDownString() {
-//        ESTATES = getResources().getStringArray(R.array.ESTATES);
-        ROOMS = getResources().getStringArray(R.array.ROOMS);
-        BEDROOMS = getResources().getStringArray(R.array.BEDROOMS);
-        BATHROOMS = getResources().getStringArray(R.array.BATHROOMS);
-        AGENT = getResources().getStringArray(R.array.AGENT);
     }
 
     public void dropDownView(View view) {
