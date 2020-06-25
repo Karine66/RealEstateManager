@@ -426,15 +426,69 @@
                 android:textSize="12sp"
                 android:inputType="none" />
 
+        </com.google.android.material.textfield.TextInputLayout>
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/photo_btn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="780dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="790dp"
                 android:layout_marginStart="20dp"
                 android:background="@drawable/baseline_add_a_photo_black_48dp"/>
 
-        </com.google.android.material.textfield.TextInputLayout>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/photo_file_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="790dp"
+                android:layout_marginStart="60dp"
+                android:background="@drawable/baseline_add_photo_alternate_black_48dp"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="780dp"
+                android:layout_marginStart="100dp"
+                android:background="#C18AEFD6"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="780dp"
+                android:layout_marginStart="160dp"
+                android:background="#C18AEFD6"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="780dp"
+                android:layout_marginStart="220dp"
+                android:background="#C18AEFD6"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="780dp"
+                android:layout_marginStart="280dp"
+                android:background="#C18AEFD6"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/camera_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="850dp"
+                android:layout_marginStart="45dp"
+                android:background="@drawable/baseline_camera_black_48dp"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="840dp"
+                android:layout_marginStart="130dp"
+                android:background="#C18AEFD6"/>
+
+
+
     </RelativeLayout>
 </ScrollView>
 
