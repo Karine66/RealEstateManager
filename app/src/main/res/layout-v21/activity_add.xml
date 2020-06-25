@@ -310,7 +310,7 @@
                 android:id="@+id/et_city"
                 android:layout_width="140dp"
                 android:layout_height="40dp"
-                android:hint="Postal Code"
+                android:hint="City"
                 android:paddingBottom="8dp"
                 android:inputType="text"
                 android:singleLine="true"
@@ -425,6 +425,14 @@
                 android:hint="Real Estate Agent Name"
                 android:textSize="12sp"
                 android:inputType="none" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/photo_btn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="780dp"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/baseline_add_a_photo_black_48dp"/>
 
         </com.google.android.material.textfield.TextInputLayout>
     </RelativeLayout>

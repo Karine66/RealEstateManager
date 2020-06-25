@@ -25,11 +25,7 @@ public class AddActivity extends BaseActivity {
     private AutoCompleteTextView dropdownBedrooms;
     private AutoCompleteTextView dropdownBathrooms;
     private AutoCompleteTextView dropdownAgent;
-    private String [] ESTATES;
-    private String[] ROOMS;
-    private String[] BEDROOMS;
-    private String[] BATHROOMS;
-    private String[] AGENT;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +56,7 @@ public class AddActivity extends BaseActivity {
 
 
 
-
+    //For adapters dropdown
     public void dropDownAdapters() {
 
         ArrayAdapter <String> adapterEstates = new ArrayAdapter<>(this, R.layout.dropdown_menu_popup_item,getResources().getStringArray(R.array.ESTATES));
@@ -74,7 +70,7 @@ public class AddActivity extends BaseActivity {
         dropdownBathrooms.setAdapter(adapterBathrooms);
         dropdownAgent.setAdapter(adapterAgent);
     }
-
+    //For view dropdown
     public void dropDownView(View view) {
        dropdownEstate = view.findViewById(R.id.et_Estate);
        dropdownRooms = view.findViewById(R.id.et_rooms);
