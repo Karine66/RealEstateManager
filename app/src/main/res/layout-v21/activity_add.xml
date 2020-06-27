@@ -405,13 +405,59 @@
         </RadioGroup>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_upOfSaleDate"
+            app:boxStrokeColor="@color/colorAccent"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="710dp"
+            app:startIconDrawable="@drawable/baseline_date_range_black_48dp"
+            android:layout_alignParentTop="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/upOfSaleDate"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:hint="Up Of Sale Date"
+                android:focusableInTouchMode="false"
+                android:paddingBottom="8dp"
+                android:inputType="date"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_soldDate"
+            app:boxStrokeColor="@color/colorAccent"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="710dp"
+            app:startIconDrawable="@drawable/baseline_date_range_black_48dp"
+            android:layout_alignParentTop="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/soldDate"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:paddingBottom="8dp"
+                android:focusableInTouchMode="false"
+                android:hint="Sold Date"
+                android:inputType="date"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_agent"
             app:boxStrokeColor="@color/colorAccent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="710dp"
+            android:layout_marginTop="760dp"
             android:layout_marginEnd="20dp"
             app:helperText="Required"
             app:helperTextEnabled="true"
@@ -425,69 +471,66 @@
                 android:hint="Real Estate Agent Name"
                 android:textSize="12sp"
                 android:inputType="none" />
-
         </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/photo_btn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="790dp"
-                android:layout_marginStart="20dp"
-                android:background="@drawable/baseline_add_a_photo_black_48dp"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/photo_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="840dp"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/baseline_add_a_photo_black_48dp"/>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/photo_file_btn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="790dp"
-                android:layout_marginStart="60dp"
-                android:background="@drawable/baseline_add_photo_alternate_black_48dp"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/photo_file_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="840dp"
+            android:layout_marginStart="60dp"
+            android:background="@drawable/baseline_add_photo_alternate_black_48dp"/>
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="780dp"
-                android:layout_marginStart="100dp"
-                android:background="#C18AEFD6"/>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="830dp"
+            android:layout_marginStart="100dp"
+            android:background="#C18AEFD6"/>
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="780dp"
-                android:layout_marginStart="160dp"
-                android:background="#C18AEFD6"/>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="830dp"
+            android:layout_marginStart="160dp"
+            android:background="#C18AEFD6"/>
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="780dp"
-                android:layout_marginStart="220dp"
-                android:background="#C18AEFD6"/>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="830dp"
+            android:layout_marginStart="220dp"
+            android:background="#C18AEFD6"/>
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="780dp"
-                android:layout_marginStart="280dp"
-                android:background="#C18AEFD6"/>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="830dp"
+            android:layout_marginStart="280dp"
+            android:background="#C18AEFD6"/>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/camera_btn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="850dp"
-                android:layout_marginStart="45dp"
-                android:background="@drawable/baseline_camera_black_48dp"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/camera_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="900dp"
+            android:layout_marginStart="45dp"
+            android:background="@drawable/baseline_camera_black_48dp"/>
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="840dp"
-                android:layout_marginStart="130dp"
-                android:background="#C18AEFD6"/>
-
-
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="890dp"
+            android:layout_marginStart="180dp"
+            android:background="#C18AEFD6"/>
 
     </RelativeLayout>
 </ScrollView>
