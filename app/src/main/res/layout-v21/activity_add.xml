@@ -402,9 +402,13 @@
             android:buttonTint="@color/colorPrimary"
             android:textSize="12sp"
             android:text="Sold" />
+
+
         </RadioGroup>
 
+
         <com.google.android.material.textfield.TextInputLayout
+
             android:id="@+id/input_upOfSaleDate"
             app:boxStrokeColor="@color/colorAccent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -419,11 +423,13 @@
                 android:id="@+id/upOfSaleDate"
                 android:layout_width="150dp"
                 android:layout_height="40dp"
-                android:hint="Up Of Sale Date"
                 android:focusableInTouchMode="false"
-                android:paddingBottom="8dp"
+                android:hint="Up Of Sale Date"
                 android:inputType="date"
+                android:paddingBottom="8dp"
                 android:textSize="14sp" />
+
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout

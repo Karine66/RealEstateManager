@@ -1,10 +1,12 @@
 package com.openclassrooms.realestatemanager.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.util.*
 import kotlin.collections.ArrayList
 
-
-data class Estate(val MandateNumberID:Long)
+@Entity
+data class Estate(@PrimaryKey (autoGenerate = true) val MandateNumberID:Long)
 var estateType:String = ""
 var surface: Int? = null
 var rooms:Int?=null
@@ -25,7 +27,7 @@ var sold:Boolean=false
 var upOfSaleDate:Date = TODO()
 var saleDate:Date
 var agentName:String=""
-var photo:ArrayList<String>
+//var photo:ArrayList<String>
 //var video:
 
 

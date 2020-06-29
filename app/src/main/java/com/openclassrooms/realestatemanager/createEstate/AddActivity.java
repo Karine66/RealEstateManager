@@ -1,32 +1,27 @@
 package com.openclassrooms.realestatemanager.createEstate;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.fragment.app.DialogFragment;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.DatePicker;
 
 import com.openclassrooms.realestatemanager.BaseActivity;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
 
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Objects;
 
-public class AddActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener{
+public class AddActivity extends BaseActivity implements View.OnClickListener {
 
     private ActivityAddBinding activityAddBinding;
-
-    private AutoCompleteTextView dropdownEstate;
-    private AutoCompleteTextView dropdownRooms;
-    private AutoCompleteTextView dropdownBedrooms;
-    private AutoCompleteTextView dropdownBathrooms;
-    private AutoCompleteTextView dropdownAgent;
+    private DatePickerDialog mUpOfSaleDateDialog;
+    private DatePickerDialog mSoldDate;
+    private SimpleDateFormat mDateFormat;
 
 
     @Override
@@ -40,16 +35,13 @@ public class AddActivity extends BaseActivity implements DatePickerDialog.OnDate
         //For toolbar
         this.configureToolbar();
         this.configureUpButton();
+        this.dropDownAdapters();
+        this.setDateField();
         //for title toolbar
         ActionBar ab = getSupportActionBar();
         Objects.requireNonNull(ab).setTitle("Create Estate");
-
-        this.dropDownAdapters();
-
-        activityAddBinding.upOfSaleDate.setOnClickListener(this);
-        activityAddBinding.soldDate.setOnClickListener(this);
-
-
+        //For date picker
+        mDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
     }
     //for adapter generic
     private ArrayAdapter<String> factoryAdapter(int resId) {
@@ -65,32 +57,35 @@ public class AddActivity extends BaseActivity implements DatePickerDialog.OnDate
         activityAddBinding.etBathrooms.setAdapter(factoryAdapter(R.array.BATHROOMS));
         activityAddBinding.etAgent.setAdapter(factoryAdapter(R.array.AGENT));
     }
-
-    public void onClick (View view) {
-        switch (view.getId()) {
-            case R.id.upOfSaleDate:
-            case R.id.soldDate:
-                DialogFragment datePicker = new DatePickerFragment();
-                datePicker.show(getSupportFragmentManager(), "date picker");
-                break;
-
-        }
+    // for date picker
+    private void setDateField() {
+        activityAddBinding.upOfSaleDate.setOnClickListener(this);
+        activityAddBinding.soldDate.setOnClickListener(this);
+        //For up of sale date
+        Calendar newCalendar = Calendar.getInstance();
+        mUpOfSaleDateDialog = new DatePickerDialog(this, (view, year, monthOfYear, dayOfMonth) -> {
+            Calendar newDate = Calendar.getInstance();
+            newDate.set(year, monthOfYear, dayOfMonth);
+            activityAddBinding.upOfSaleDate.setText(mDateFormat.format(newDate.getTime()));
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        //For sold date
+         mSoldDate = new DatePickerDialog(this, (view, year, monthOfYear, dayOfMonth) -> {
+            Calendar newDate = Calendar.getInstance();
+            newDate.set(year, monthOfYear, dayOfMonth);
+            activityAddBinding.soldDate.setText(mDateFormat.format(newDate.getTime()));
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
-
-
-
+// for click on date picker
     @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+    public void onClick(View view) {
+        if (view == activityAddBinding.upOfSaleDate) {
+            mUpOfSaleDateDialog.show();
+            mUpOfSaleDateDialog.getDatePicker().setMaxDate((Calendar.getInstance().getTimeInMillis()));
 
-
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.YEAR, year);
-        c.set(Calendar.MONTH, month);
-        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        String currentDateString = DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(c.getTime());
-        String currentDateStringSold = DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(c.getTime());
-        activityAddBinding.upOfSaleDate.setText(currentDateString);
-        activityAddBinding.soldDate.setText(currentDateStringSold);
+        } else if (view == activityAddBinding.soldDate) {
+            mSoldDate.show();
+            mSoldDate.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
+        }
     }
 
 }

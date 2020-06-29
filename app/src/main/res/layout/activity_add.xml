@@ -402,6 +402,8 @@
                 android:textSize="12sp" />
         </RadioGroup>
 
+        
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_upOfSaleDate"
             app:boxStrokeColor="@color/colorAccent"
@@ -413,6 +415,7 @@
             app:startIconDrawable="@drawable/baseline_date_range_black_48dp"
             android:layout_alignParentTop="true">
 
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/upOfSaleDate"
                 android:layout_width="150dp"
@@ -422,6 +425,7 @@
                 android:focusableInTouchMode="false"
                 android:inputType="date"
                 android:textSize="14sp" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
