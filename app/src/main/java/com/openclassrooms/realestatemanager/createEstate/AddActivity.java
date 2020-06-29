@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import com.openclassrooms.realestatemanager.BaseActivity;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
+import com.openclassrooms.realestatemanager.models.Estate;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -43,6 +44,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         //For date picker
         mDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
     }
+    
     //for adapter generic
     private ArrayAdapter<String> factoryAdapter(int resId) {
         return new ArrayAdapter<>(this, R.layout.dropdown_menu_popup_item, getResources().getStringArray(resId));
@@ -87,5 +89,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             mSoldDate.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
         }
     }
+
+
 
 }

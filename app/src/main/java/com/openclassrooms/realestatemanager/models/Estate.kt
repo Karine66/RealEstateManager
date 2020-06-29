@@ -24,8 +24,8 @@ var park:Boolean=false
 var restaurants:Boolean=false
 var avalaible:Boolean=false
 var sold:Boolean=false
-var upOfSaleDate:Date = TODO()
-var saleDate:Date
+var upOfSaleDate:Date?=null
+var soldDate:Date?=null
 var agentName:String=""
 //var photo:ArrayList<String>
 //var video:
