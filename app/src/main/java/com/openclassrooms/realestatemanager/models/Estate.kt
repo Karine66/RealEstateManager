@@ -5,8 +5,8 @@ import androidx.room.PrimaryKey
 import java.util.*
 import kotlin.collections.ArrayList
 
-@Entity
-data class Estate(@PrimaryKey (autoGenerate = true) val MandateNumberID:Long)
+@Entity(tableName = "estate")
+data class Estate(@PrimaryKey (autoGenerate = true) val mandateNumberID:Long)
 var estateType:String = ""
 var surface: Int? = null
 var rooms:Int?=null
@@ -27,8 +27,8 @@ var sold:Boolean=false
 var upOfSaleDate:Date?=null
 var soldDate:Date?=null
 var agentName:String=""
-//var photo:ArrayList<String>
-//var video:
+var photo:ArrayList<String> = TODO()
+var video:ArrayList<String> = TODO()
 
 
 
