@@ -377,32 +377,15 @@
             android:textColor="@color/colorPrimary"
             android:textSize="12sp"/>
 
-        <RadioGroup
-            android:id="@+id/radio_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="110dp"
-            android:layout_marginTop="665dp"
-            android:orientation="horizontal">
-
             <RadioButton
                 android:id="@+id/available_radiobtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:buttonTint="@color/colorPrimary"
-                android:text="Available"
-                android:textSize="12sp" />
-
-            <RadioButton
-                android:id="@+id/sold_radiobtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_marginTop="665dp"
+                android:layout_marginStart="100dp"
                 android:buttonTint="@color/colorPrimary"
                 android:text="Sold"
                 android:textSize="12sp" />
-        </RadioGroup>
-
-        
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_upOfSaleDate"
@@ -533,6 +516,19 @@
             android:layout_marginTop="890dp"
             android:layout_marginStart="180dp"
             android:background="#C18AEFD6"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/validate_fab_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:rippleColor="@color/colorAccent"
+            android:src="@drawable/baseline_done_black_24dp"
+            android:layout_marginTop="885dp"
+            android:layout_marginStart="300dp"
+            android:elevation="15dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:fabSize="auto"/>
 
     </RelativeLayout>
 </ScrollView>

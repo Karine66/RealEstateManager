@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.BaseActivity;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
@@ -38,6 +39,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         this.configureUpButton();
         this.dropDownAdapters();
         this.setDateField();
+        this.onClickValidateBtn();
         //for title toolbar
         ActionBar ab = getSupportActionBar();
         Objects.requireNonNull(ab).setTitle("Create Estate");
@@ -89,7 +91,16 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             mSoldDate.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
         }
     }
+// for click on fab validate btn
 
+    public void onClickValidateBtn() {
+        activityAddBinding.validateFabBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(v,"You're new Estate is created", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 
 }
