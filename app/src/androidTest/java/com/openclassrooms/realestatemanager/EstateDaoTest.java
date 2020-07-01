@@ -28,9 +28,9 @@ public class EstateDaoTest {
   //DATE SET for test
     private static long MANDATE_NUMBER_ID = 1;
     private static Estate ESTATE_HOUSE = new Estate(1,"house",200,4,2,1,200,100000.00,"Très belle maison", "2 rue du Pont", 66000, "Perpignan", true, false,
-            false, true, true, false, null, null,"Karine Danjard");
+            false, true, true, false,null,null, "Karine Danjard");
     private static Estate ESTATE_FLAT = new Estate(2,"flat",80,2,1,1,0,50000.00,"Very nice flat", "5 rue longue", 66000, "Perpignan", false, true,
-            true, true, true, false, null, null,"Karine Danjard");
+            true, true, true, false,null,null, "Karine Danjard");
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
