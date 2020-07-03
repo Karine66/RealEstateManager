@@ -17,6 +17,7 @@ import com.openclassrooms.realestatemanager.listPage.ListFragment;
 import com.openclassrooms.realestatemanager.mapPage.MapActivity;
 import com.openclassrooms.realestatemanager.searchPage.SearchActivity;
 
+
 public class MainActivity extends BaseActivity {
 
     private ActivityMainBinding binding;
@@ -37,6 +38,7 @@ public class MainActivity extends BaseActivity {
 //         this.configureAndShowDetailFragment();
          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
              this.configureToolbar();
+
          }
      }
 

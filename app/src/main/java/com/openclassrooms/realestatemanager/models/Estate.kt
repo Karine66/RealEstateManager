@@ -29,14 +29,14 @@ var park:Boolean,
 var restaurants:Boolean,
 var avalaible:Boolean,
 var sold:Boolean,
-var upOfSaleDate:Date?,
-var soldDate:Date?,
+//var upOfSaleDate:Date?,
+//var soldDate:Date?,
 var agentName:String)
 //var photo:ArrayList<String> = T
 //var video:ArrayList<String> = TODO())
 {
     constructor() : this (0,"",null,null,null,null,null,null,"","", null,"",
-    false, false, false, false,false,false,null,null,"")
+    false, false, false, false,false,false,"")
 }
 
 //fun fromContentValues(values:ContentValues):Estate{

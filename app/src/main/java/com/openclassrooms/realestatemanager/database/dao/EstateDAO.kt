@@ -11,6 +11,9 @@ interface EstateDAO {
         @Query("SELECT * FROM Estate WHERE mandateNumberID = :mandateNumberID")
         fun getEstate(mandateNumberID:Long): LiveData<List<Estate>>
 
+        @Query("SELECT * FROM Estate")
+        fun getEstate(): LiveData<List<Estate>>
+
         @Insert
         fun insertEstate(estate: Estate):Long
         @Update

@@ -7,6 +7,8 @@ import androidx.appcompat.widget.Toolbar;
 public abstract class BaseActivity extends AppCompatActivity {
 
 
+
+
     protected void configureToolbar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
