@@ -1,10 +1,28 @@
 package com.openclassrooms.realestatemanager.createEstate;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -13,17 +31,26 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
 import com.openclassrooms.realestatemanager.models.Estate;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
 public class AddActivity extends BaseActivity implements View.OnClickListener {
 
+    private static final int CAMERA_PERM_CODE = 100;
+    private static final int CAMERA_REQUEST_CODE = 200;
+    private static final int GALLERY_REQUEST_CODE = 300;
+
     private ActivityAddBinding activityAddBinding;
     private DatePickerDialog mUpOfSaleDateDialog;
     private DatePickerDialog mSoldDate;
     private SimpleDateFormat mDateFormat;
+    private View view;
+    private String currentPhotoPath;
 
 
     @Override
@@ -40,6 +67,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         this.dropDownAdapters();
         this.setDateField();
         this.onClickValidateBtn();
+        this.onClickPhotoBtn();
+        this.onClickGalleryBtn();
         //for title toolbar
         ActionBar ab = getSupportActionBar();
         Objects.requireNonNull(ab).setTitle("Create Estate");
@@ -101,6 +130,112 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             }
         });
     }
+    //For click on photo btn
+    public void onClickPhotoBtn() {
+      activityAddBinding.photoBtn.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              askCameraPermissions();
+          }
+      });
+    }
+
+    public void onClickGalleryBtn() {
+        activityAddBinding.photoFileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(gallery, GALLERY_REQUEST_CODE);
+            }
+        });
+    }
+
+    private void askCameraPermissions() {
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, CAMERA_PERM_CODE);
+        }else {
+            dispatchTakePictureIntent();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == CAMERA_PERM_CODE) {
+            if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                dispatchTakePictureIntent();
+            }else {
+                Snackbar.make(view, "Camera Permission is required to use camera", Snackbar.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @SuppressLint("MissingSuperCall")
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        if (requestCode == CAMERA_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                File file = new File(currentPhotoPath);
+                Objects.requireNonNull(activityAddBinding.photoImage1).setImageURI(Uri.fromFile(file));
+                Log.d("TestUri", "Uri image is" + Uri.fromFile(file));
+
+                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                Uri contentUri = Uri.fromFile(file);
+                mediaScanIntent.setData(contentUri);
+                this.sendBroadcast(mediaScanIntent);
+            }
+        }
+        if (requestCode == GALLERY_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                Uri contentUri = data.getData();
+                String timeStamp = new SimpleDateFormat("ddMMyyyy", Locale.FRANCE).format(new Date());
+                String imageFileName = "JPEG" + timeStamp + "." + getFileExt(contentUri);
+                Log.d("Test uri gallery", "onActivityResult : Gallery Image Uri:" + imageFileName);
+                Objects.requireNonNull(activityAddBinding.photoImage1).setImageURI(contentUri);
+            }
+        }
+    }
+
+    private String getFileExt(Uri contentUri) {
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(contentResolver.getType(contentUri));
+    }
+
+    private File createImageFile() throws IOException {
+        //Create an image file name
+        String timeStamp = new SimpleDateFormat("ddMMyyyy", Locale.FRANCE).format(new Date());
+        String imageFileName = "JPEG" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName, /*prefix*/
+                ".jpg", /*suffix*/
+                storageDir /*directory*/
+        );
+        //Save file : path for use with ACTION_VIEW intent
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //Ensure that there's camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            //Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            }catch (IOException ex) {
+                ex.getMessage();
+        }
+            //Continue only if the file was successfully created
+            if(photoFile != null) {
+                Uri photoUri = FileProvider.getUriForFile(this, "com.openclassrooms.realestatemanager", photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
+            }
+        }
 
 
+    }
 }
