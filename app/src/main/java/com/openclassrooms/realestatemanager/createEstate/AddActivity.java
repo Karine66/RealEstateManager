@@ -1,18 +1,10 @@
 package com.openclassrooms.realestatemanager.createEstate;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ContentResolver;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -25,14 +17,22 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.BaseActivity;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
-import com.openclassrooms.realestatemanager.models.Estate;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -42,8 +42,10 @@ import java.util.Objects;
 public class AddActivity extends BaseActivity implements View.OnClickListener {
 
     private static final int CAMERA_PERM_CODE = 100;
-    private static final int CAMERA_REQUEST_CODE = 200;
-    private static final int GALLERY_REQUEST_CODE = 300;
+//    private static final int CAMERA_REQUEST_CODE = 200;
+//    private static final int GALLERY_REQUEST_CODE = 300;
+
+    private final int PICK_IMAGE_CAMERA = 1, PICK_IMAGE_GALLERY = 2;
 
     private ActivityAddBinding activityAddBinding;
     private DatePickerDialog mUpOfSaleDateDialog;
@@ -51,6 +53,10 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private SimpleDateFormat mDateFormat;
     private View view;
     private String currentPhotoPath;
+    private InputStream inputStreamImg;
+    private Bitmap bitmap;
+    private  File destination = null;
+    private String imgPath = null;
 
 
     @Override
@@ -68,7 +74,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         this.setDateField();
         this.onClickValidateBtn();
         this.onClickPhotoBtn();
-        this.onClickGalleryBtn();
+
+//        this.onClickGalleryBtn();
         //for title toolbar
         ActionBar ab = getSupportActionBar();
         Objects.requireNonNull(ab).setTitle("Create Estate");
@@ -130,50 +137,70 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             }
         });
     }
+    //For manage photos
     //For click on photo btn
     public void onClickPhotoBtn() {
       activityAddBinding.photoBtn.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-              askCameraPermissions();
+             askCameraPermissions();
+             selectImage();
           }
-      });
+     });
     }
 
-    public void onClickGalleryBtn() {
-        activityAddBinding.photoFileBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(gallery, GALLERY_REQUEST_CODE);
-            }
-        });
-    }
+    // Select image from camera and gallery
+    private void selectImage() {
+
+        final CharSequence[] options = {"Take Photo", "Choose From Gallery", "Cancel"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Option");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+                        if (options[item].equals("Take Photo")) {
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            dispatchTakePictureIntent();
+                            startActivityForResult(intent, PICK_IMAGE_CAMERA);
+
+                        } else if (options[item].equals("Choose From Gallery")) {
+                            Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(pickPhoto, PICK_IMAGE_GALLERY);
+
+                        } else if (options[item].equals("Cancel")) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                builder.show();
+        }
+
 
     private void askCameraPermissions() {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, CAMERA_PERM_CODE);
         }else {
             dispatchTakePictureIntent();
-        }
+       }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode == CAMERA_PERM_CODE) {
             if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                dispatchTakePictureIntent();
+               dispatchTakePictureIntent();
             }else {
                 Snackbar.make(view, "Camera Permission is required to use camera", Snackbar.LENGTH_SHORT).show();
             }
         }
     }
 
-    @SuppressLint("MissingSuperCall")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == CAMERA_REQUEST_CODE) {
+        if (requestCode == PICK_IMAGE_CAMERA && data != null && data.getData() != null) {
             if (resultCode == Activity.RESULT_OK) {
                 File file = new File(currentPhotoPath);
                 Objects.requireNonNull(activityAddBinding.photoImage1).setImageURI(Uri.fromFile(file));
@@ -185,9 +212,9 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 this.sendBroadcast(mediaScanIntent);
             }
         }
-        if (requestCode == GALLERY_REQUEST_CODE) {
+        if (requestCode == PICK_IMAGE_GALLERY && data != null && data.getData() != null) {
             if (resultCode == Activity.RESULT_OK) {
-                Uri contentUri = data.getData();
+                Uri contentUri = Objects.requireNonNull(data).getData();
                 String timeStamp = new SimpleDateFormat("ddMMyyyy", Locale.FRANCE).format(new Date());
                 String imageFileName = "JPEG" + timeStamp + "." + getFileExt(contentUri);
                 Log.d("Test uri gallery", "onActivityResult : Gallery Image Uri:" + imageFileName);
@@ -218,24 +245,30 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//      startActivityForResult(intent, PICK_IMAGE_CAMERA);
         //Ensure that there's camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+        if (intent.resolveActivity(getPackageManager()) != null) {
             //Create the File where the photo should go
             File photoFile = null;
             try {
                 photoFile = createImageFile();
-            }catch (IOException ex) {
+            } catch (IOException ex) {
                 ex.getMessage();
-        }
+            }
             //Continue only if the file was successfully created
-            if(photoFile != null) {
-                Uri photoUri = FileProvider.getUriForFile(this, "com.openclassrooms.realestatemanager", photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-                startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
+            if (photoFile != null) {
+                Uri photoUri = FileProvider.getUriForFile(getApplicationContext(), "com.openclassrooms.realestatemanager.fileprovider", photoFile);
+
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                Log.d("PhotoUri","photoUri =" +photoUri );
+//                startActivityForResult(intent, PICK_IMAGE_CAMERA);
+
             }
         }
-
-
     }
 }
+
+
+
+
