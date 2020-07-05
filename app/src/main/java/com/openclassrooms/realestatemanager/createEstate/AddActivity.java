@@ -316,7 +316,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                         String[] filePathColumn = {MediaStore.Images.Media.DATA};
                         if (selectedImage != null) {
                             Cursor cursor = getContentResolver().query(selectedImage,
-                                    filePathColumn, null, null, null);
+                            filePathColumn, null, null, null);
                             Log.d("filePathColumn", "file path column" + Arrays.toString(filePathColumn));
                             Log.d("selectedImage", "selectedImage" +selectedImage);
                             if (cursor != null) {
