@@ -10,6 +10,7 @@ import com.openclassrooms.realestatemanager.models.Estate
 
 @Database(entities = [(Estate::class)], version = 1, exportSchema = false)
 abstract class EstateDatabase:RoomDatabase() {
+
     // --- DAO ---
     abstract fun estateDao(): EstateDAO
 
