@@ -37,6 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -316,6 +317,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                         if (selectedImage != null) {
                             Cursor cursor = getContentResolver().query(selectedImage,
                                     filePathColumn, null, null, null);
+                            Log.d("filePathColumn", "file path column" + Arrays.toString(filePathColumn));
+                            Log.d("selectedImage", "selectedImage" +selectedImage);
                             if (cursor != null) {
                                 cursor.moveToFirst();
 
@@ -323,6 +326,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                                 String picturePath = cursor.getString(columnIndex);
                                 activityAddBinding.photoImage1.setImageBitmap(BitmapFactory.decodeFile(picturePath));
                                 cursor.close();
+                                Log.d("picturePath", "picture path is :" +picturePath);
                             }
                         }
 
