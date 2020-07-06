@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,24 +47,20 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
 public class AddActivity extends BaseActivity implements View.OnClickListener {
 
-    private static final int CAMERA_PERM_CODE = 100;
-//    private static final int CAMERA_REQUEST_CODE = 200;
-//    private static final int GALLERY_REQUEST_CODE = 300;
 
-//    private final int PICK_IMAGE_CAMERA = 1, PICK_IMAGE_GALLERY = 2;
+    private static final int RC_CAMERA_AND_STORAGE =100;
+    private static final String [] CAM_AND_READ_EXTERNAL_STORAGE =
+        {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
 
     private ActivityAddBinding activityAddBinding;
     private DatePickerDialog mUpOfSaleDateDialog;
     private DatePickerDialog mSoldDate;
     private SimpleDateFormat mDateFormat;
-    private View view;
-//    private String currentPhotoPath;
-//    private InputStream inputStreamImg;
-//    private Bitmap bitmap;
-//    private  File destination = null;
-//    private String imgPath = null;
     private Context context;
 
 
@@ -151,129 +148,30 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
       activityAddBinding.photoBtn.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-             askCameraPermissions();
-             selectImage();
+            methodRequiresTwoPermission();
           }
      });
     }
-
-//    // Select image from camera and gallery
-//    private void selectImage() {
-//
-//        final CharSequence[] options = {"Take Photo", "Choose From Gallery", "Cancel"};
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle("Select Option");
-//        builder.setItems(options, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int item) {
-//                        if (options[item].equals("Take Photo")) {
-//                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                            dispatchTakePictureIntent();
-//                            startActivityForResult(intent, PICK_IMAGE_CAMERA);
-//
-//                        } else if (options[item].equals("Choose From Gallery")) {
-//                            Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                            startActivityForResult(pickPhoto, PICK_IMAGE_GALLERY);
-//
-//                        } else if (options[item].equals("Cancel")) {
-//                            dialog.dismiss();
-//                        }
-//                    }
-//                });
-//                builder.show();
-//        }
-
-
-    private void askCameraPermissions() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERM_CODE);
-
-        }
-    }
+    //For permissions camera en read external storage
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == CAMERA_PERM_CODE) {
-            if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-               selectImage();
-            }else {
-                Snackbar.make(view, "Camera Permission is required to use camera", Snackbar.LENGTH_SHORT).show();
-            }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // 2 - Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+    @AfterPermissionGranted(RC_CAMERA_AND_STORAGE)
+    private void methodRequiresTwoPermission() {
+
+        if (EasyPermissions.hasPermissions(this, CAM_AND_READ_EXTERNAL_STORAGE)) {
+            selectImage();
+        } else {
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(this, "This application need permissions to access",
+                    RC_CAMERA_AND_STORAGE, CAM_AND_READ_EXTERNAL_STORAGE);
         }
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == PICK_IMAGE_CAMERA && data != null && data.getData() != null) {
-//            if (resultCode == Activity.RESULT_OK) {
-//                File file = new File(currentPhotoPath);
-//                Objects.requireNonNull(activityAddBinding.photoImage1).setImageURI(Uri.fromFile(file));
-//                Log.d("TestUri", "Uri image is" + Uri.fromFile(file));
-//
-//                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-//                Uri contentUri = Uri.fromFile(file);
-//                mediaScanIntent.setData(contentUri);
-//                this.sendBroadcast(mediaScanIntent);
-//            }
-//        }
-//        if (requestCode == PICK_IMAGE_GALLERY && data != null && data.getData() != null) {
-//            if (resultCode == Activity.RESULT_OK) {
-//                Uri contentUri = Objects.requireNonNull(data).getData();
-//                String timeStamp = new SimpleDateFormat("ddMMyyyy", Locale.FRANCE).format(new Date());
-//                String imageFileName = "JPEG" + timeStamp + "." + getFileExt(contentUri);
-//                Log.d("Test uri gallery", "onActivityResult : Gallery Image Uri:" + imageFileName);
-//                Objects.requireNonNull(activityAddBinding.photoImage1).setImageURI(contentUri);
-//            }
-//        }
-//    }
-//
-//    private String getFileExt(Uri contentUri) {
-//        ContentResolver contentResolver = getContentResolver();
-//        MimeTypeMap mime = MimeTypeMap.getSingleton();
-//        return mime.getExtensionFromMimeType(contentResolver.getType(contentUri));
-//    }
-//
-//    private File createImageFile() throws IOException {
-//        //Create an image file name
-//        String timeStamp = new SimpleDateFormat("ddMMyyyy", Locale.FRANCE).format(new Date());
-//        String imageFileName = "JPEG" + timeStamp + "_";
-//        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-//        File image = File.createTempFile(
-//                imageFileName, /*prefix*/
-//                ".jpg", /*suffix*/
-//                storageDir /*directory*/
-//        );
-//        //Save file : path for use with ACTION_VIEW intent
-//        currentPhotoPath = image.getAbsolutePath();
-//        return image;
-//    }
-//
-//    private void dispatchTakePictureIntent() {
-//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-////      startActivityForResult(intent, PICK_IMAGE_CAMERA);
-//        //Ensure that there's camera activity to handle the intent
-//        if (intent.resolveActivity(getPackageManager()) != null) {
-//            //Create the File where the photo should go
-//            File photoFile = null;
-//            try {
-//                photoFile = createImageFile();
-//            } catch (IOException ex) {
-//                ex.getMessage();
-//            }
-//            //Continue only if the file was successfully created
-//            if (photoFile != null) {
-//                Uri photoUri = FileProvider.getUriForFile(getApplicationContext(), "com.openclassrooms.realestatemanager.fileprovider", photoFile);
-//
-//                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-//                Log.d("PhotoUri","photoUri =" +photoUri );
-////                startActivityForResult(intent, PICK_IMAGE_CAMERA);
-//
-//            }
-//        }
-//    }
-
+    //For alert dialog for choose take photo or choose in gallery
     private void selectImage() {
         final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
 
@@ -299,7 +197,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         });
         builder.show();
     }
-
+    //For bitmap
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
