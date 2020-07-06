@@ -16,7 +16,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 
@@ -28,6 +30,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.BaseActivity;
 import com.openclassrooms.realestatemanager.R;
@@ -274,9 +277,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private void selectImage() {
         final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Choose your profile picture");
-
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+        builder.setTitle("Add pictures");
         builder.setItems(options, new DialogInterface.OnClickListener() {
 
             @Override
@@ -307,6 +309,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                     if (resultCode == RESULT_OK && data != null) {
                         Bitmap selectedImage = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
                         activityAddBinding.photoImage1.setImageBitmap(selectedImage);
+                        Log.d("selectedImage", "selectedImage" +selectedImage);
                     }
 
                     break;
