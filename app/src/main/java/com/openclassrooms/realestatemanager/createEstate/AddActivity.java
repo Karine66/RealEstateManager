@@ -63,6 +63,9 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private SimpleDateFormat mDateFormat;
     private Context context;
 
+    private EstateViewModel estateViewModel;
+    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
