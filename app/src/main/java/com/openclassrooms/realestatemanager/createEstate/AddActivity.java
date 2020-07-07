@@ -24,6 +24,9 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private DatePickerDialog mSoldDate;
     private SimpleDateFormat mDateFormat;
 
+    private EstateViewModel estateViewModel;
+    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -11,10 +11,12 @@ import com.openclassrooms.realestatemanager.BaseActivity;
 import com.openclassrooms.realestatemanager.EditEstate.EditActivity;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.createEstate.AddActivity;
+import com.openclassrooms.realestatemanager.database.EstateDatabase;
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding;
 import com.openclassrooms.realestatemanager.detailDescription.DetailFragment;
 import com.openclassrooms.realestatemanager.listPage.ListFragment;
 import com.openclassrooms.realestatemanager.mapPage.MapActivity;
+import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.searchPage.SearchActivity;
 
 
@@ -40,6 +42,7 @@ public class MainActivity extends BaseActivity {
              this.configureToolbar();
 
          }
+         EstateDatabase.Companion.getInstance(getApplicationContext());
      }
 
 //    @SuppressLint("SetTextI18n")

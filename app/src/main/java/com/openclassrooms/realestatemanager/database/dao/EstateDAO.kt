@@ -12,7 +12,7 @@ interface EstateDAO {
         fun getEstate(mandateNumberID:Long): LiveData<List<Estate>>
 
         @Query("SELECT * FROM Estate")
-        fun getEstate(): LiveData<List<Estate>>
+        fun getEstate(): LiveData<Estate>
 
         @Insert
         fun insertEstate(estate: Estate):Long
