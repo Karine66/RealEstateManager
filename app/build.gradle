@@ -41,6 +41,8 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
     //for VIEW MODEL & LIVE DATA
     implementation 'android.arch.lifecycle:extensions:1.1.1'
+    //For EasyPermissions
+    implementation 'pub.devrel:easypermissions:1.1.1'
     //for tests
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
