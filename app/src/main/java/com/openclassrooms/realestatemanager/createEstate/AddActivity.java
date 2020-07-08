@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,12 +31,18 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.BaseActivity;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
+import com.openclassrooms.realestatemanager.injections.Injection;
+import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
+import com.openclassrooms.realestatemanager.listPage.ListFragment;
+import com.openclassrooms.realestatemanager.models.Estate;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,6 +63,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private static final int RC_CAMERA_AND_STORAGE =100;
     private static final String [] CAM_AND_READ_EXTERNAL_STORAGE =
         {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
+
 
     private ActivityAddBinding activityAddBinding;
     private DatePickerDialog mUpOfSaleDateDialog;
@@ -82,6 +90,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         this.setDateField();
         this.onClickValidateBtn();
         this.onClickPhotoBtn();
+        this.configureViewModel();
+
 
 //        this.onClickGalleryBtn();
         //for title toolbar
@@ -135,13 +145,59 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             mSoldDate.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
         }
     }
+
 // for click on fab validate btn
 
     public void onClickValidateBtn() {
         activityAddBinding.validateFabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v,"You're new Estate is created", Snackbar.LENGTH_SHORT).show();
+
+
+//                Snackbar.make(v,"You're new Estate is created", Snackbar.LENGTH_SHORT).show();
+            }
+
+
+        });
+    }
+
+
+//    public void createEstates() {
+//        estateViewModel.createEstate(
+//                activityAddBinding.etMandate.getId(),
+//                activityAddBinding.etEstate.getText().toString(),
+//                Objects.requireNonNull(activityAddBinding.etSurface.getText()).toString(),
+//                activityAddBinding.etRooms.getText().toString(),
+//                activityAddBinding.etBedrooms.getText().toString(),
+//                activityAddBinding.etBathrooms.getText().toString(),
+//                Objects.requireNonNull(activityAddBinding.etGround.getText()).toString(),
+//                Objects.requireNonNull(activityAddBinding.etPrice.getText()).toString(),
+//                Objects.requireNonNull(activityAddBinding.etDescription.getText()).toString(),
+//                Objects.requireNonNull(activityAddBinding.etAddress.getText()).toString(),
+//                Objects.requireNonNull(activityAddBinding.etPostalCode.getText()).toString(),
+//                Objects.requireNonNull(activityAddBinding.etCity.getText()).toString(),
+//                activityAddBinding.boxSchools.isChecked(),
+//                activityAddBinding.boxStores.isChecked(),
+//                activityAddBinding.boxPark.isChecked(),
+//                activityAddBinding.boxRestaurants.isChecked(),
+//                activityAddBinding.availableRadiobtn.isChecked(),
+//                Objects.requireNonNull(activityAddBinding.upOfSaleDate.getText()).toString(),
+//                Objects.requireNonNull(activityAddBinding.soldDate.getText()).toString(),
+//                activityAddBinding.etAgent.getText().toString()
+//        );
+//
+//    }
+
+
+
+    //Configuring ViewModel
+    private void configureViewModel() {
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
+        this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
+        this.estateViewModel.getEstate().observe(this, new Observer<Estate>() {
+            @Override
+            public void onChanged(Estate estate) {
+
             }
         });
     }
@@ -155,51 +211,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
           }
      });
     }
-    //For permissions camera en read external storage
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // 2 - Forward results to EasyPermissions
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
-    @AfterPermissionGranted(RC_CAMERA_AND_STORAGE)
-    private void methodRequiresTwoPermission() {
-
-        if (EasyPermissions.hasPermissions(this, CAM_AND_READ_EXTERNAL_STORAGE)) {
-            selectImage();
-        } else {
-            // Do not have permissions, request them now
-            EasyPermissions.requestPermissions(this, "This application need permissions to access",
-                    RC_CAMERA_AND_STORAGE, CAM_AND_READ_EXTERNAL_STORAGE);
-        }
-    }
-
-    //For alert dialog for choose take photo or choose in gallery
-    private void selectImage() {
-        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
-
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
-        builder.setTitle("Add pictures");
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-
-                if (options[item].equals("Take Photo")) {
-                    Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(takePicture, 0);
-
-                } else if (options[item].equals("Choose from Gallery")) {
-                    Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(pickPhoto , 1);
-
-                } else if (options[item].equals("Cancel")) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
-    }
     //For bitmap
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -207,6 +218,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         if (resultCode != RESULT_CANCELED) {
             switch (requestCode) {
                 case 0:
+
                     if (resultCode == RESULT_OK && data != null) {
                         Bitmap selectedImage = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
                         activityAddBinding.photoImage1.setImageBitmap(selectedImage);
@@ -215,12 +227,13 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
                     break;
                 case 1:
+
                     if (resultCode == RESULT_OK && data != null) {
                         Uri selectedImage = data.getData();
                         String[] filePathColumn = {MediaStore.Images.Media.DATA};
                         if (selectedImage != null) {
                             Cursor cursor = getContentResolver().query(selectedImage,
-                            filePathColumn, null, null, null);
+                                    filePathColumn, null, null, null);
                             Log.d("filePathColumn", "file path column" + Arrays.toString(filePathColumn));
                             Log.d("selectedImage", "selectedImage" +selectedImage);
                             if (cursor != null) {

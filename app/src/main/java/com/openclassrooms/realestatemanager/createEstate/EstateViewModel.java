@@ -22,8 +22,11 @@ public class EstateViewModel extends ViewModel {
         this.executor = executor;
     }
 
-    public LiveData<List<Estate>> getEstate (long mandateNumberID) {
-        return estateDataSource.getEstate(mandateNumberID);
+    public LiveData<List<Estate>> getEstates (long mandateNumberID) {
+        return estateDataSource.getEstates(mandateNumberID);
+    }
+    public LiveData<Estate> getEstate () {
+        return estateDataSource.getEstate();
     }
 
     public void createEstate(Estate estate) {
@@ -42,5 +45,30 @@ public class EstateViewModel extends ViewModel {
         executor.execute(()-> {
             estateDataSource.updateEstate(estate);
         });
+    }
+
+
+    public void createEstate(
+            int mandateNumberID,
+            String estateType,
+            String surface,
+            String rooms,
+            String bedrooms,
+            String bathrooms,
+            String ground,
+            String price,
+            String description,
+            String address,
+            String postalCode,
+            String city,
+            boolean schools,
+            boolean stores,
+            boolean park,
+            boolean restaurant,
+            boolean available,
+            String upOfSaleDate,
+            String soldDate,
+            String agentName) {
+
     }
 }

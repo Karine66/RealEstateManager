@@ -9,7 +9,7 @@ interface EstateDAO {
 
 
         @Query("SELECT * FROM Estate WHERE mandateNumberID = :mandateNumberID")
-        fun getEstate(mandateNumberID:Long): LiveData<List<Estate>>
+        fun getEstates(mandateNumberID:Long): LiveData<List<Estate>>
 
         @Query("SELECT * FROM Estate")
         fun getEstate(): LiveData<Estate>

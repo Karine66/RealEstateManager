@@ -57,14 +57,14 @@ public class EstateDaoTest {
         this.estateDatabase.estateDao().insertEstate(ESTATE_HOUSE);
         this.estateDatabase.estateDao().insertEstate(ESTATE_FLAT);
         //test
-        List<Estate> estateList = LiveDataTestUtil.getValue(this.estateDatabase.estateDao().getEstate(MANDATE_NUMBER_ID));
+        List<Estate> estateList = LiveDataTestUtil.getValue(this.estateDatabase.estateDao().getEstates(MANDATE_NUMBER_ID));
         assertEquals(1, estateList.size());
     }
 
     @Test
     public void getEstateWhenNoItemInserted() throws InterruptedException {
         //test
-        List<Estate> estatesList = LiveDataTestUtil.getValue(this.estateDatabase.estateDao().getEstate(MANDATE_NUMBER_ID));
+        List<Estate> estatesList = LiveDataTestUtil.getValue(this.estateDatabase.estateDao().getEstates(MANDATE_NUMBER_ID));
         assertTrue(estatesList.isEmpty());
     }
 }
