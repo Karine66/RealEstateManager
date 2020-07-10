@@ -6,6 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".createEstate.AddActivity">
+
+<!--    <include-->
+<!--        layout="@layout/estate_form"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"/>-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -465,53 +470,33 @@
             android:id="@+id/photo_btn"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="840dp"
+            android:layout_marginTop="860dp"
             android:layout_marginStart="20dp"
             android:background="@drawable/baseline_add_a_photo_black_48dp"/>
 
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/photo_image_1"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="830dp"
-            android:layout_marginStart="100dp"
-            android:background="#C18AEFD6"/>
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/photo_image_2"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="830dp"
-            android:layout_marginStart="160dp"
-            android:background="#C18AEFD6"/>
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="830dp"
-            android:layout_marginStart="220dp"
-            android:background="#C18AEFD6"/>
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="830dp"
-            android:layout_marginStart="280dp"
-            android:background="#C18AEFD6"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_photo"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_toEndOf="@+id/photo_btn"
+            android:layout_marginStart="10dp"
+            android:clipToPadding="false"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/input_agent"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/camera_btn"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="900dp"
-            android:layout_marginStart="45dp"
+            android:layout_marginTop="920dp"
+            android:layout_marginStart="20dp"
             android:background="@drawable/baseline_camera_black_48dp"/>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginTop="890dp"
+            android:layout_marginTop="910dp"
             android:layout_marginStart="180dp"
             android:background="#C18AEFD6"/>
 

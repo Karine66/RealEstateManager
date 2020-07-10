@@ -1,61 +1,42 @@
 package com.openclassrooms.realestatemanager.createEstate;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.BaseActivity;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
+import com.openclassrooms.realestatemanager.databinding.EstateFormBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
-import com.openclassrooms.realestatemanager.listPage.ListFragment;
 import com.openclassrooms.realestatemanager.models.Estate;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
 
 public class AddActivity extends BaseActivity implements View.OnClickListener {
 
@@ -66,13 +47,16 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
 
     private ActivityAddBinding activityAddBinding;
+    private EstateFormBinding estateFormBinding;
     private DatePickerDialog mUpOfSaleDateDialog;
     private DatePickerDialog mSoldDate;
     private SimpleDateFormat mDateFormat;
     private Context context;
 
     private EstateViewModel estateViewModel;
-    
+
+    private PhotoAdapter adapter;
+    private List<Integer> viewColors;
 
 
     @Override
@@ -83,6 +67,14 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         View view = activityAddBinding.getRoot();
         setContentView(view);
 
+//        // data to populate the RecyclerView with
+//        ArrayList<Integer> viewColors = new ArrayList<>();
+//        viewColors.add(Color.BLUE);
+//        viewColors.add(Color.YELLOW);
+//        viewColors.add(Color.MAGENTA);
+//        viewColors.add(Color.RED);
+//        viewColors.add(Color.BLACK);
+
         //For toolbar
         this.configureToolbar();
         this.configureUpButton();
@@ -91,7 +83,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         this.onClickValidateBtn();
         this.onClickPhotoBtn();
         this.configureViewModel();
-
+        this.configureRecyclerView();
 
 //        this.onClickGalleryBtn();
         //for title toolbar
@@ -99,6 +91,21 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         Objects.requireNonNull(ab).setTitle("Create Estate");
         //For date picker
         mDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
+    }
+
+    public void configureRecyclerView() {
+        ArrayList<Integer> viewColors = new ArrayList<>();
+        viewColors.add(Color.BLUE);
+        viewColors.add(Color.YELLOW);
+        viewColors.add(Color.MAGENTA);
+        viewColors.add(Color.RED);
+        viewColors.add(Color.BLACK);
+
+                adapter = new PhotoAdapter(viewColors);
+        LinearLayoutManager horizontalLayoutManager
+                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        Objects.requireNonNull(activityAddBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
+        activityAddBinding.rvPhoto.setAdapter(adapter);
     }
     
     //for adapter generic
@@ -204,13 +211,15 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     //For manage photos
     //For click on photo btn
     public void onClickPhotoBtn() {
-      activityAddBinding.photoBtn.setOnClickListener(new View.OnClickListener() {
+     activityAddBinding.photoBtn.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
             methodRequiresTwoPermission();
           }
      });
     }
+
+
     //For bitmap
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -221,7 +230,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
                     if (resultCode == RESULT_OK && data != null) {
                         Bitmap selectedImage = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
-                        activityAddBinding.photoImage1.setImageBitmap(selectedImage);
+//                        Objects.requireNonNull(activityAddBinding.photoImage1).setImageBitmap(selectedImage);
                         Log.d("selectedImage", "selectedImage" +selectedImage);
                     }
 
@@ -241,7 +250,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
                                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                                 String picturePath = cursor.getString(columnIndex);
-                                activityAddBinding.photoImage1.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+//                                activityAddBinding.photoImage1.setImageBitmap(BitmapFactory.decodeFile(picturePath));
                                 cursor.close();
                                 Log.d("picturePath", "picture path is :" +picturePath);
                             }

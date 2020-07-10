@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.models
 
-import android.content.ContentValues
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
@@ -12,28 +11,31 @@ data class Estate(@PrimaryKey (autoGenerate = true) val mandateNumberID:Long,
 
 
 
-var estateType:String?,
-var surface: Int?,
-var rooms:Int?,
-var bedrooms:Int?,
-var bathrooms:Int?,
-var ground:Int?,
-var price: Double?,
-var description:String?,
-var address:String?,
-var postalCode:Int?,
-var city:String?,
-var schools:Boolean,
-var stores:Boolean,
-var park:Boolean,
-var restaurants:Boolean,
-var avalaible:Boolean,
+                  var estateType:String?,
+                  var surface: Int?,
+                  var rooms:Int?,
+                  var bedrooms:Int?,
+                  var bathrooms:Int?,
+                  var ground:Int?,
+                  var price: Double?,
+                  var description:String?,
+                  var address:String?,
+                  var postalCode:Int?,
+                  var city:String?,
+                  var schools:Boolean,
+                  var stores:Boolean,
+                  var park:Boolean,
+                  var restaurants:Boolean,
+                  var avalaible:Boolean,
 
 //var upOfSaleDate:Date?,
 //var soldDate:Date?,
-var agentName:String)
-//var photo:ArrayList<String> = T
+                  var agentName:String
+//                  var photoList: List<String>
+
+
 //var video:ArrayList<String> = TODO())
+)
 {
     constructor() : this (0,"",null,null,null,null,null,null,"","", null,"",
     false, false, false, false,false,"")

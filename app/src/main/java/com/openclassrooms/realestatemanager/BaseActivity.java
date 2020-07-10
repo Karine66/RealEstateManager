@@ -3,23 +3,16 @@ package com.openclassrooms.realestatemanager;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.provider.MediaStore;
-import android.util.Log;
+import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
-
-import java.util.Arrays;
-import java.util.Objects;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -30,6 +23,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     private static final int RC_CAMERA_AND_STORAGE =100;
     private static final String [] CAM_AND_READ_EXTERNAL_STORAGE =
             {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
+    private ActivityAddBinding activityAddBinding;
+
 
 
     protected void configureToolbar(){
