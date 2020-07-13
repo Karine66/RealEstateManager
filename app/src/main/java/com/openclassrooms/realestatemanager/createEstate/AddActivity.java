@@ -55,6 +55,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
     private EstateViewModel estateViewModel;
 
+
     private PhotoAdapter adapter;
     private List<Integer> viewColors;
 
@@ -66,14 +67,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         activityAddBinding = ActivityAddBinding.inflate(getLayoutInflater());
         View view = activityAddBinding.getRoot();
         setContentView(view);
-
-//        // data to populate the RecyclerView with
-//        ArrayList<Integer> viewColors = new ArrayList<>();
-//        viewColors.add(Color.BLUE);
-//        viewColors.add(Color.YELLOW);
-//        viewColors.add(Color.MAGENTA);
-//        viewColors.add(Color.RED);
-//        viewColors.add(Color.BLACK);
 
         //For toolbar
         this.configureToolbar();
@@ -160,7 +153,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onClick(View v) {
 
-
+                    saveEstates();
 //                Snackbar.make(v,"You're new Estate is created", Snackbar.LENGTH_SHORT).show();
             }
 
@@ -168,21 +161,22 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
+    //For save in database
+    public void saveEstates() {
 
-//    public void createEstates() {
-//        estateViewModel.createEstate(
-//                activityAddBinding.etMandate.getId(),
-//                activityAddBinding.etEstate.getText().toString(),
-//                Objects.requireNonNull(activityAddBinding.etSurface.getText()).toString(),
+        Estate estate = new Estate(
+                activityAddBinding.etMandate.getId(),
+                activityAddBinding.etEstate.getText().toString(),
+                Objects.requireNonNull(activityAddBinding.etSurface.getText()).toString().length(),
 //                activityAddBinding.etRooms.getText().toString(),
 //                activityAddBinding.etBedrooms.getText().toString(),
 //                activityAddBinding.etBathrooms.getText().toString(),
 //                Objects.requireNonNull(activityAddBinding.etGround.getText()).toString(),
 //                Objects.requireNonNull(activityAddBinding.etPrice.getText()).toString(),
-//                Objects.requireNonNull(activityAddBinding.etDescription.getText()).toString(),
-//                Objects.requireNonNull(activityAddBinding.etAddress.getText()).toString(),
+                Objects.requireNonNull(activityAddBinding.etDescription.getText()).toString(),
+                Objects.requireNonNull(activityAddBinding.etAddress.getText()).toString(),
 //                Objects.requireNonNull(activityAddBinding.etPostalCode.getText()).toString(),
-//                Objects.requireNonNull(activityAddBinding.etCity.getText()).toString(),
+                Objects.requireNonNull(activityAddBinding.etCity.getText()).toString(),
 //                activityAddBinding.boxSchools.isChecked(),
 //                activityAddBinding.boxStores.isChecked(),
 //                activityAddBinding.boxPark.isChecked(),
@@ -190,23 +184,40 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 //                activityAddBinding.availableRadiobtn.isChecked(),
 //                Objects.requireNonNull(activityAddBinding.upOfSaleDate.getText()).toString(),
 //                Objects.requireNonNull(activityAddBinding.soldDate.getText()).toString(),
-//                activityAddBinding.etAgent.getText().toString()
-//        );
-//
-//    }
+                activityAddBinding.etAgent.getText().toString());
 
+//                activityAddBinding.etMandate.setText("");
+//                activityAddBinding.etEstate.setText("");
+////                activityAddBinding.etSurface.setText("");
+//////                activityAddBinding.etRooms.setText("");
+//////                activityAddBinding.etBedrooms.setText("");
+//////                activityAddBinding.etBathrooms.setText("");
+//////                activityAddBinding.etGround.setText("");
+//////                activityAddBinding.etPrice.setText("");
+//                activityAddBinding.etDescription.setText("");
+//                activityAddBinding.etAddress.setText("");
+//////                activityAddBinding.etPostalCode.setText("");
+//                activityAddBinding.etCity.setText("");
+//                activityAddBinding.etAgent.setText("");
+
+                this.estateViewModel.createEstate(estate);
+
+
+
+    }
 
 
     //Configuring ViewModel
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
-        this.estateViewModel.getEstate().observe(this, new Observer<Estate>() {
-            @Override
-            public void onChanged(Estate estate) {
-
-            }
-        });
+//        this.estateViewModel.getEstate().observe(this, new Observer<Estate>() {
+//            @Override
+//            public void onChanged(Estate estate) {
+//
+//
+//            }
+//        });
     }
     //For manage photos
     //For click on photo btn

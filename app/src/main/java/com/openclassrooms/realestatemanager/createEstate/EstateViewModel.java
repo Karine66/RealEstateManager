@@ -15,12 +15,15 @@ public class EstateViewModel extends ViewModel {
     private final EstateDataRepository estateDataSource;
     private final Executor executor;
 
+    private LiveData<List<Estate>> estate;
+
 
 
     public EstateViewModel (EstateDataRepository estateDataSource, Executor executor) {
         this.estateDataSource = estateDataSource;
         this.executor = executor;
     }
+
 
     public LiveData<List<Estate>> getEstates (long mandateNumberID) {
         return estateDataSource.getEstates(mandateNumberID);
@@ -66,8 +69,6 @@ public class EstateViewModel extends ViewModel {
             boolean park,
             boolean restaurant,
             boolean available,
-            String upOfSaleDate,
-            String soldDate,
             String agentName) {
 
     }
