@@ -46,9 +46,7 @@ data class Estate(@PrimaryKey (autoGenerate = true) val mandateNumberID:Long,
 
 }
 
-data class PhotoList (
-        val photoList: List<String> = ArrayList()
-)
+
 
 //fun fromContentValues(values: ContentValues):Estate{
 //    val estate = Estate()

@@ -1,11 +1,11 @@
-package com.openclassrooms.realestatemanager.models
+package com.openclassrooms.realestatemanager.database.converters
 
 import androidx.room.TypeConverter
-import java.util.*
+import com.openclassrooms.realestatemanager.models.PhotoList
+import java.util.ArrayList
 
+class PhotoListConverter {
 
-class Converters {
-    //for list photo
     @TypeConverter
     fun toPhotoList(value: String?): PhotoList {
         if (value == null || value.isEmpty()) {
@@ -36,14 +36,4 @@ class Converters {
         }
         return string
     }
-
-        @TypeConverter
-        fun fromTimestamp(value: Long?): Date? {
-            return value?.let { Date(it) }
-        }
-
-        @TypeConverter
-        fun dateToTimestamp(date: Date?): Long? {
-            return date?.time?.toLong()
-        }
-    }
+}
