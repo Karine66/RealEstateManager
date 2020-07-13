@@ -186,23 +186,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 //                Objects.requireNonNull(activityAddBinding.soldDate.getText()).toString(),
                 activityAddBinding.etAgent.getText().toString());
 
-//                activityAddBinding.etMandate.setText("");
-//                activityAddBinding.etEstate.setText("");
-////                activityAddBinding.etSurface.setText("");
-//////                activityAddBinding.etRooms.setText("");
-//////                activityAddBinding.etBedrooms.setText("");
-//////                activityAddBinding.etBathrooms.setText("");
-//////                activityAddBinding.etGround.setText("");
-//////                activityAddBinding.etPrice.setText("");
-//                activityAddBinding.etDescription.setText("");
-//                activityAddBinding.etAddress.setText("");
-//////                activityAddBinding.etPostalCode.setText("");
-//                activityAddBinding.etCity.setText("");
-//                activityAddBinding.etAgent.setText("");
-
                 this.estateViewModel.createEstate(estate);
-
-
 
     }
 
