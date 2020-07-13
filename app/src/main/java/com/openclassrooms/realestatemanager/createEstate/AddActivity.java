@@ -65,8 +65,11 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         //for view binding
         activityAddBinding = ActivityAddBinding.inflate(getLayoutInflater());
+        estateFormBinding = activityAddBinding.includeForm;
         View view = activityAddBinding.getRoot();
         setContentView(view);
+
+
 
         //For toolbar
         this.configureToolbar();
@@ -97,8 +100,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 adapter = new PhotoAdapter(viewColors);
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        Objects.requireNonNull(activityAddBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
-        activityAddBinding.rvPhoto.setAdapter(adapter);
+        Objects.requireNonNull(estateFormBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
+        estateFormBinding.rvPhoto.setAdapter(adapter);
     }
     
     //for adapter generic
@@ -109,38 +112,38 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     //For adapters dropdown
     public void dropDownAdapters() {
 
-        activityAddBinding.etEstate.setAdapter(factoryAdapter(R.array.ESTATES));
-        activityAddBinding.etRooms.setAdapter(factoryAdapter(R.array.ROOMS));
-        activityAddBinding.etBedrooms.setAdapter(factoryAdapter(R.array.BEDROOMS));
-        activityAddBinding.etBathrooms.setAdapter(factoryAdapter(R.array.BATHROOMS));
-        activityAddBinding.etAgent.setAdapter(factoryAdapter(R.array.AGENT));
+        estateFormBinding.etEstate.setAdapter(factoryAdapter(R.array.ESTATES));
+        estateFormBinding.etRooms.setAdapter(factoryAdapter(R.array.ROOMS));
+        estateFormBinding.etBedrooms.setAdapter(factoryAdapter(R.array.BEDROOMS));
+        estateFormBinding.etBathrooms.setAdapter(factoryAdapter(R.array.BATHROOMS));
+        estateFormBinding.etAgent.setAdapter(factoryAdapter(R.array.AGENT));
     }
     // for date picker
     private void setDateField() {
-        activityAddBinding.upOfSaleDate.setOnClickListener(this);
-        activityAddBinding.soldDate.setOnClickListener(this);
+        estateFormBinding.upOfSaleDate.setOnClickListener(this);
+        estateFormBinding.soldDate.setOnClickListener(this);
         //For up of sale date
         Calendar newCalendar = Calendar.getInstance();
         mUpOfSaleDateDialog = new DatePickerDialog(this, (view, year, monthOfYear, dayOfMonth) -> {
             Calendar newDate = Calendar.getInstance();
             newDate.set(year, monthOfYear, dayOfMonth);
-            activityAddBinding.upOfSaleDate.setText(mDateFormat.format(newDate.getTime()));
+            estateFormBinding.upOfSaleDate.setText(mDateFormat.format(newDate.getTime()));
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         //For sold date
          mSoldDate = new DatePickerDialog(this, (view, year, monthOfYear, dayOfMonth) -> {
             Calendar newDate = Calendar.getInstance();
             newDate.set(year, monthOfYear, dayOfMonth);
-            activityAddBinding.soldDate.setText(mDateFormat.format(newDate.getTime()));
+            estateFormBinding.soldDate.setText(mDateFormat.format(newDate.getTime()));
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
 // for click on date picker
     @Override
     public void onClick(View view) {
-        if (view == activityAddBinding.upOfSaleDate) {
+        if (view == estateFormBinding.upOfSaleDate) {
             mUpOfSaleDateDialog.show();
             mUpOfSaleDateDialog.getDatePicker().setMaxDate((Calendar.getInstance().getTimeInMillis()));
 
-        } else if (view == activityAddBinding.soldDate) {
+        } else if (view == estateFormBinding.soldDate) {
             mSoldDate.show();
             mSoldDate.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
         }
@@ -149,7 +152,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 // for click on fab validate btn
 
     public void onClickValidateBtn() {
-        activityAddBinding.validateFabBtn.setOnClickListener(new View.OnClickListener() {
+        estateFormBinding.validateFabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -165,26 +168,26 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     public void saveEstates() {
 
         Estate estate = new Estate(
-                activityAddBinding.etMandate.getId(),
-                activityAddBinding.etEstate.getText().toString(),
-                Objects.requireNonNull(activityAddBinding.etSurface.getText()).toString().length(),
+                estateFormBinding.etMandate.getId(),
+                estateFormBinding.etEstate.getText().toString(),
+                Objects.requireNonNull(estateFormBinding.etSurface.getText()).toString().length(),
 //                activityAddBinding.etRooms.getText().toString(),
 //                activityAddBinding.etBedrooms.getText().toString(),
 //                activityAddBinding.etBathrooms.getText().toString(),
 //                Objects.requireNonNull(activityAddBinding.etGround.getText()).toString(),
 //                Objects.requireNonNull(activityAddBinding.etPrice.getText()).toString(),
-                Objects.requireNonNull(activityAddBinding.etDescription.getText()).toString(),
-                Objects.requireNonNull(activityAddBinding.etAddress.getText()).toString(),
+                Objects.requireNonNull(estateFormBinding.etDescription.getText()).toString(),
+                Objects.requireNonNull(estateFormBinding.etAddress.getText()).toString(),
 //                Objects.requireNonNull(activityAddBinding.etPostalCode.getText()).toString(),
-                Objects.requireNonNull(activityAddBinding.etCity.getText()).toString(),
+                Objects.requireNonNull(estateFormBinding.etCity.getText()).toString(),
 //                activityAddBinding.boxSchools.isChecked(),
 //                activityAddBinding.boxStores.isChecked(),
 //                activityAddBinding.boxPark.isChecked(),
 //                activityAddBinding.boxRestaurants.isChecked(),
 //                activityAddBinding.availableRadiobtn.isChecked(),
-//                Objects.requireNonNull(activityAddBinding.upOfSaleDate.getText()).toString(),
+//                Objects.requireNonNull(activityAddBinding.upOfSaleDate.getText(),
 //                Objects.requireNonNull(activityAddBinding.soldDate.getText()).toString(),
-                activityAddBinding.etAgent.getText().toString());
+                estateFormBinding.etAgent.getText().toString());
 
                 this.estateViewModel.createEstate(estate);
 
@@ -206,7 +209,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     //For manage photos
     //For click on photo btn
     public void onClickPhotoBtn() {
-     activityAddBinding.photoBtn.setOnClickListener(new View.OnClickListener() {
+     estateFormBinding.photoBtn.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
             methodRequiresTwoPermission();
