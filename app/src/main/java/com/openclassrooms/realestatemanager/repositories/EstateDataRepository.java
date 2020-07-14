@@ -1,11 +1,14 @@
 package com.openclassrooms.realestatemanager.repositories;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 
 import com.openclassrooms.realestatemanager.database.dao.EstateDAO;
 import com.openclassrooms.realestatemanager.models.Estate;
 
 import java.util.List;
+import java.util.Objects;
 
 public class EstateDataRepository {
 
@@ -23,7 +26,12 @@ public class EstateDataRepository {
     }
     //Create
     public void createEstate(Estate estate) {
-        estateDAO.insertEstate(estate);
+        try {
+            estateDAO.insertEstate(estate);
+        }catch (Exception e) {
+            Log.e("Error insertEstate", Objects.requireNonNull(e.getMessage()));
+        }
+
     }
     //Delete
     public void deleteEstate (long mandateEstateID) {

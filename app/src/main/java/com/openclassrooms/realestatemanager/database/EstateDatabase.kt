@@ -5,13 +5,13 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.openclassrooms.realestatemanager.database.converters.ConvertersPhotoList
+import com.openclassrooms.realestatemanager.database.converters.PhotoListConverter
 import com.openclassrooms.realestatemanager.database.dao.EstateDAO
 import com.openclassrooms.realestatemanager.models.Estate
 
 
 @Database(entities = [(Estate::class)], version = 1, exportSchema = false)
-@TypeConverters(ConvertersPhotoList::class)
+@TypeConverters(PhotoListConverter::class)
 abstract class EstateDatabase:RoomDatabase() {
 
     // --- DAO ---
@@ -28,6 +28,7 @@ abstract class EstateDatabase:RoomDatabase() {
 
                         INSTANCE = Room.databaseBuilder(context.applicationContext,
                                 EstateDatabase::class.java, "Estate.db")
+                                .fallbackToDestructiveMigration()
                                 .build()
                     }
                 }

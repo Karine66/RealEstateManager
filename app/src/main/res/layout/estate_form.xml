@@ -29,8 +29,8 @@
                 android:layout_width="140dp"
                 android:layout_height="40dp"
                 android:hint="Mandate number"
+                android:inputType="none"
                 android:paddingBottom="8dp"
-                android:inputType="number"
                 android:singleLine="true"
                 android:textSize="12sp" />
         </com.google.android.material.textfield.TextInputLayout>

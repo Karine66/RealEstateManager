@@ -58,6 +58,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
     private PhotoAdapter adapter;
     private List<Integer> viewColors;
+    private int mandateNumberID;
 
 
     @Override
@@ -69,16 +70,13 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         View view = activityAddBinding.getRoot();
         setContentView(view);
 
-
-
-        //For toolbar
         this.configureToolbar();
         this.configureUpButton();
         this.dropDownAdapters();
         this.setDateField();
         this.onClickValidateBtn();
-        this.onClickPhotoBtn();
         this.configureViewModel();
+        this.onClickPhotoBtn();
         this.configureRecyclerView();
 
 //        this.onClickGalleryBtn();
@@ -156,8 +154,12 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onClick(View v) {
 
-                    saveEstates();
+               saveEstates();
+
+
+
 //                Snackbar.make(v,"You're new Estate is created", Snackbar.LENGTH_SHORT).show();
+
             }
 
 
@@ -167,25 +169,26 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     //For save in database
     public void saveEstates() {
 
+
         Estate estate = new Estate(
-                estateFormBinding.etMandate.getId(),
+
+                Long.parseLong(String.valueOf(estateFormBinding.etMandate.getId())),
                 estateFormBinding.etEstate.getText().toString(),
-                Objects.requireNonNull(estateFormBinding.etSurface.getText()).toString().length(),
-//                activityAddBinding.etRooms.getText().toString(),
-//                activityAddBinding.etBedrooms.getText().toString(),
-//                activityAddBinding.etBathrooms.getText().toString(),
-//                Objects.requireNonNull(activityAddBinding.etGround.getText()).toString(),
-//                Objects.requireNonNull(activityAddBinding.etPrice.getText()).toString(),
+                Integer.parseInt(Objects.requireNonNull(estateFormBinding.etSurface.getText()).toString()),
+                Integer.parseInt(estateFormBinding.etRooms.getText().toString()),
+                Integer.parseInt(estateFormBinding.etBedrooms.getText().toString()),
+                Integer.parseInt(estateFormBinding.etBathrooms.getText().toString()),
+                Integer.parseInt(Objects.requireNonNull(estateFormBinding.etGround.getText()).toString()),
+                Double.parseDouble(Objects.requireNonNull(estateFormBinding.etPrice.getText()).toString()),
                 Objects.requireNonNull(estateFormBinding.etDescription.getText()).toString(),
                 Objects.requireNonNull(estateFormBinding.etAddress.getText()).toString(),
-//                Objects.requireNonNull(activityAddBinding.etPostalCode.getText()).toString(),
+                Integer.parseInt(Objects.requireNonNull(estateFormBinding.etPostalCode.getText()).toString()),
                 Objects.requireNonNull(estateFormBinding.etCity.getText()).toString(),
-//                activityAddBinding.boxSchools.isChecked(),
-//                activityAddBinding.boxStores.isChecked(),
-//                activityAddBinding.boxPark.isChecked(),
-//                activityAddBinding.boxRestaurants.isChecked(),
-//                activityAddBinding.availableRadiobtn.isChecked(),
-//                Objects.requireNonNull(activityAddBinding.upOfSaleDate.getText(),
+                estateFormBinding.boxSchools.isChecked(),
+                estateFormBinding.boxStores.isChecked(),
+                estateFormBinding.boxPark.isChecked(),
+                estateFormBinding.boxRestaurants.isChecked(),
+                estateFormBinding.availableRadiobtn.isChecked(),
 //                Objects.requireNonNull(activityAddBinding.soldDate.getText()).toString(),
                 estateFormBinding.etAgent.getText().toString());
 
