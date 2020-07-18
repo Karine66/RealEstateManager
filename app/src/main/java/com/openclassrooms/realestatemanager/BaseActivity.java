@@ -34,16 +34,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private MaterialAlertDialogBuilder builder;
     private MaterialAlertDialogBuilder builderVideo;
-    private EstateFormBinding estateFormBinding;
 
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        estateFormBinding = EstateFormBinding.inflate(getLayoutInflater());
-//        View view = estateFormBinding.getRoot();
-//        setContentView(view);
-//    }
+
+
     protected void configureToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -67,10 +61,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void methodRequiresTwoPermission() {
 
         if (EasyPermissions.hasPermissions(this, CAM_AND_READ_EXTERNAL_STORAGE)) {
-//            selectImage();
-//            selectVideo();
-
-            Log.d("Permissions", "permissions granted");
+            Log.d("Permissions", "Permissions granted");
         } else {
             // Do not have permissions, request them now
             EasyPermissions.requestPermissions(this, "This application need permissions to access",
@@ -135,14 +126,5 @@ public abstract class BaseActivity extends AppCompatActivity {
         builderVideo.show();
     }
 
-//    public void displayVideo() {
-//        String videoPath = "android.resource://"+ getPackageName() + "/";
-//        Uri uri = Uri.parse(videoPath);
-//        estateFormBinding.videoView.setVideoURI(uri);
-//
-//        MediaController mediaController = new MediaController(this);
-//        estateFormBinding.videoView.setMediaController(mediaController);
-//        mediaController.setAnchorView(estateFormBinding.videoView);
-//
-//    }
+
 }

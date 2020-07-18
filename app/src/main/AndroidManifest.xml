@@ -16,12 +16,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".mapPage.MapActivity"></activity>
+        <activity android:name=".createEstate.VideoActivity"></activity>
+        <activity android:name=".mapPage.MapActivity" />
         <activity android:name=".searchPage.SearchActivity" />
         <activity android:name=".EditEstate.EditActivity" />
-        <activity android:name=".createEstate.AddActivity"
-            android:parentActivityName=".mainPage.MainActivity"/>
+        <activity
+            android:name=".createEstate.AddActivity"
+            android:parentActivityName=".mainPage.MainActivity" />
         <activity android:name=".mainPage.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
