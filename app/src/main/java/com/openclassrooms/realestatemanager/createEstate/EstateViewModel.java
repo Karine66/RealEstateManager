@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.createEstate;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.models.Estate;
@@ -16,7 +17,7 @@ public class EstateViewModel extends ViewModel {
     private final Executor executor;
 
     private LiveData<List<Estate>> estate;
-
+    private MutableLiveData<List<String>> mPhotos = new MutableLiveData<>();
 
 
     public EstateViewModel (EstateDataRepository estateDataSource, Executor executor) {
@@ -51,25 +52,7 @@ public class EstateViewModel extends ViewModel {
     }
 
 
-    public void createEstate(
-            int mandateNumberID,
-            String estateType,
-            String surface,
-            String rooms,
-            String bedrooms,
-            String bathrooms,
-            String ground,
-            String price,
-            String description,
-            String address,
-            String postalCode,
-            String city,
-            boolean schools,
-            boolean stores,
-            boolean park,
-            boolean restaurant,
-            boolean available,
-            String agentName) {
-
+    public MutableLiveData<List<String>> getPhotos () {
+        return mPhotos;
     }
 }

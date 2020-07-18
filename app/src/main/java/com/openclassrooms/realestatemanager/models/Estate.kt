@@ -1,12 +1,12 @@
 package com.openclassrooms.realestatemanager.models
 
+import android.content.ContentValues
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.*
 
 @Entity
 data class Estate(@PrimaryKey (autoGenerate = true) val mandateNumberID: Long?,
-
-
 
                   var estateType:String?,
                   var surface: Int?,
@@ -24,9 +24,8 @@ data class Estate(@PrimaryKey (autoGenerate = true) val mandateNumberID: Long?,
                   var park:Boolean,
                   var restaurants:Boolean,
                   var sold:Boolean,
-
-//var upOfSaleDate:Date?,
-//var soldDate:Date?,
+//                  var upOfSaleDate: Date?,
+//                  var soldDate:Date?,
                   var agentName:String
 //                  var photoList: List<String>
 
@@ -37,11 +36,7 @@ data class Estate(@PrimaryKey (autoGenerate = true) val mandateNumberID: Long?,
     constructor() : this (null,"",null,null,null,null,null,null,"","",
     null,"",false,false,false,false,false, "")
 
-//    override fun toString(): String {
-//        return "Estate(mandateNumberID=$mandateNumberID, estateType=$estateType, surface=$surface, rooms=$rooms, bedrooms=$bedrooms, bathrooms=$bathrooms, ground=$ground, price=$price, description=$description, address=$address, postalCode=$postalCode, city=$city, agentName='$agentName')"
-//    }
-//
-//
+
 }
 
 
@@ -59,12 +54,12 @@ data class Estate(@PrimaryKey (autoGenerate = true) val mandateNumberID: Long?,
 //    if (values.containsKey("address")) estate.address=values.getAsString("address")
 //    if (values.containsKey("postalCode")) estate.postalCode=values.getAsInteger("postalCode")
 //    if (values.containsKey("city")) estate.city=values.getAsString("city")
-////    if (values.containsKey("schools")) estate.schools=values.getAsBoolean("schools")
-////    if (values.containsKey("stores")) estate.stores=values.getAsBoolean("stores")
-////    if (values.containsKey("park")) estate.park=values.getAsBoolean("park")
-////    if (values.containsKey("restaurants")) estate.restaurants=values.getAsBoolean("restaurants")
-////    if (values.containsKey("upOfSaleDate")) estate.upOfSaleDate=values.getAsLong("upOfSaleDate")
-////    if (values.containsKey("soldDate")) estate.soldDate=values.getAsLong("soldDate")
+//    if (values.containsKey("schools")) estate.schools=values.getAsBoolean("schools")
+//    if (values.containsKey("stores")) estate.stores=values.getAsBoolean("stores")
+//    if (values.containsKey("park")) estate.park=values.getAsBoolean("park")
+//    if (values.containsKey("restaurants")) estate.restaurants=values.getAsBoolean("restaurants")
+//    if (values.containsKey("upOfSaleDate")) estate.upOfSaleDate=values.get("upOfSaleDate")
+//    if (values.containsKey("soldDate")) estate.soldDate=values.getAsLong("soldDate")
 //    if (values.containsKey("agentName")) estate.agentName=values.getAsString("agentName")
 //
 //    return estate }

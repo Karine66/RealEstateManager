@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -16,10 +14,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.BaseActivity;
 import com.openclassrooms.realestatemanager.R;
@@ -28,6 +24,7 @@ import com.openclassrooms.realestatemanager.databinding.EstateFormBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
+import com.openclassrooms.realestatemanager.models.PhotoList;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,6 +33,10 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+import pub.devrel.easypermissions.PermissionRequest;
 
 
 public class AddActivity extends BaseActivity implements View.OnClickListener {
@@ -59,6 +60,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private PhotoAdapter adapter;
     private List<Integer> viewColors;
     private int mandateNumberID;
+    private List<PhotoList> listPhoto;
 
 
     @Override
@@ -76,8 +78,11 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         this.setDateField();
         this.onClickValidateBtn();
         this.configureViewModel();
+//        this.methodRequiresTwoPermission();
         this.onClickPhotoBtn();
+        this.onClickVideoBtn();
         this.configureRecyclerView();
+//        this.displayVideo();
 
 //        this.onClickGalleryBtn();
         //for title toolbar
@@ -85,17 +90,19 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         Objects.requireNonNull(ab).setTitle("Create Estate");
         //For date picker
         mDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
+
     }
 
     public void configureRecyclerView() {
-        ArrayList<Integer> viewColors = new ArrayList<>();
-        viewColors.add(Color.BLUE);
-        viewColors.add(Color.YELLOW);
-        viewColors.add(Color.MAGENTA);
-        viewColors.add(Color.RED);
-        viewColors.add(Color.BLACK);
+//        ArrayList<Integer> viewColors = new ArrayList<>();
+//        viewColors.add(Color.BLUE);
+//        viewColors.add(Color.YELLOW);
+//        viewColors.add(Color.MAGENTA);
+//        viewColors.add(Color.RED);
+//        viewColors.add(Color.BLACK);
+          listPhoto = new ArrayList<>();
 
-                adapter = new PhotoAdapter(viewColors);
+                adapter = new PhotoAdapter(listPhoto);
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         Objects.requireNonNull(estateFormBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
@@ -172,14 +179,14 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
         Estate estate = new Estate(
 
-                Long.parseLong(String.valueOf(estateFormBinding.etMandate.getId())),
+                 Long.parseLong(String.valueOf(estateFormBinding.etMandate.getId())),
                 estateFormBinding.etEstate.getText().toString(),
                 Integer.parseInt(Objects.requireNonNull(estateFormBinding.etSurface.getText()).toString()),
                 Integer.parseInt(estateFormBinding.etRooms.getText().toString()),
                 Integer.parseInt(estateFormBinding.etBedrooms.getText().toString()),
                 Integer.parseInt(estateFormBinding.etBathrooms.getText().toString()),
                 Integer.parseInt(Objects.requireNonNull(estateFormBinding.etGround.getText()).toString()),
-                Double.parseDouble(Objects.requireNonNull(estateFormBinding.etPrice.getText()).toString()),
+                 Double.parseDouble(Objects.requireNonNull(estateFormBinding.etPrice.getText()).toString()),
                 Objects.requireNonNull(estateFormBinding.etDescription.getText()).toString(),
                 Objects.requireNonNull(estateFormBinding.etAddress.getText()).toString(),
                 Integer.parseInt(Objects.requireNonNull(estateFormBinding.etPostalCode.getText()).toString()),
@@ -189,7 +196,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 estateFormBinding.boxPark.isChecked(),
                 estateFormBinding.boxRestaurants.isChecked(),
                 estateFormBinding.availableRadiobtn.isChecked(),
-//                Objects.requireNonNull(activityAddBinding.soldDate.getText()).toString(),
+ //               Objects.requireNonNull(estateFormBinding.upOfSaleDate.getText().toString()
+//              Objects.requireNonNull(estateFormBinding.soldDate.getText()).toString(),
                 estateFormBinding.etAgent.getText().toString());
 
                 this.estateViewModel.createEstate(estate);
@@ -215,9 +223,24 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
      estateFormBinding.photoBtn.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-            methodRequiresTwoPermission();
+             methodRequiresTwoPermission();
+             selectImage();
+
           }
      });
+    }
+    //For click on video btn
+    public void onClickVideoBtn() {
+        estateFormBinding.cameraBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                methodRequiresTwoPermission();
+                selectVideo();
+
+
+
+            }
+        });
     }
 
 
@@ -232,6 +255,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                     if (resultCode == RESULT_OK && data != null) {
                         Bitmap selectedImage = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
 //                        Objects.requireNonNull(activityAddBinding.photoImage1).setImageBitmap(selectedImage);
+
+
                         Log.d("selectedImage", "selectedImage" +selectedImage);
                     }
 
@@ -252,6 +277,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                                 String picturePath = cursor.getString(columnIndex);
 //                                activityAddBinding.photoImage1.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                                Objects.requireNonNull(estateViewModel.getPhotos().getValue()).toString();
                                 cursor.close();
                                 Log.d("picturePath", "picture path is :" +picturePath);
                             }
