@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.bumptech.glide.RequestManager;
 import com.openclassrooms.realestatemanager.BaseActivity;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
@@ -61,6 +63,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private List<Integer> viewColors;
     private int mandateNumberID;
     private List<PhotoList> listPhoto;
+    private RequestManager glide;
 
 
     @Override
@@ -82,7 +85,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         this.onClickPhotoBtn();
         this.onClickVideoBtn();
         this.configureRecyclerView();
-//        this.displayVideo();
+        this.setMandateID(mandateNumberID);
 
 //        this.onClickGalleryBtn();
         //for title toolbar
@@ -102,13 +105,16 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 //        viewColors.add(Color.BLACK);
           listPhoto = new ArrayList<>();
 
-                adapter = new PhotoAdapter(listPhoto);
+                adapter = new PhotoAdapter(listPhoto,glide);
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         Objects.requireNonNull(estateFormBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
         estateFormBinding.rvPhoto.setAdapter(adapter);
     }
-    
+    private void updatePhoto(List<PhotoList> photoList){
+        listPhoto.addAll(photoList);
+        adapter.notifyDataSetChanged();
+    }
     //for adapter generic
     private ArrayAdapter<String> factoryAdapter(int resId) {
         return new ArrayAdapter<>(this, R.layout.dropdown_menu_popup_item, getResources().getStringArray(resId));
@@ -203,7 +209,12 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 this.estateViewModel.createEstate(estate);
 
     }
+    //For retrieve automatically mandate number in edit text mandate number
+    public void setMandateID(int mandateNumberID) {
 
+        estateFormBinding.etMandate.setText(String.valueOf(mandateNumberID));
+        estateFormBinding.etMandate.setEnabled(false);
+    }
 
     //Configuring ViewModel
     private void configureViewModel() {
@@ -255,7 +266,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                     if (resultCode == RESULT_OK && data != null) {
                         Bitmap selectedImage = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
 //                        Objects.requireNonNull(activityAddBinding.photoImage1).setImageBitmap(selectedImage);
-
+//                            listPhoto.add(listPhoto.get(0));
 
                         Log.d("selectedImage", "selectedImage" +selectedImage);
                     }
@@ -277,10 +288,12 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                                 String picturePath = cursor.getString(columnIndex);
 //                                activityAddBinding.photoImage1.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+//                                listPhoto.add(BitmapFactory.decodeFile(picturePath));
                                 Objects.requireNonNull(estateViewModel.getPhotos().getValue()).toString();
                                 cursor.close();
                                 Log.d("picturePath", "picture path is :" +picturePath);
                             }
+
                         }
 
                     }

@@ -14,6 +14,7 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPhotoItemBinding;
 import com.openclassrooms.realestatemanager.models.PhotoList;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,8 +27,9 @@ private RequestManager glide;
 private List<PhotoList> mPhotoList;
 
 
-public PhotoAdapter(List<PhotoList> mPhotoList) {
+public PhotoAdapter(List<PhotoList> mPhotoList, RequestManager glide) {
     this.mPhotoList = mPhotoList;
+    this.glide = glide;
 }
 
     @NonNull
@@ -41,7 +43,7 @@ public PhotoAdapter(List<PhotoList> mPhotoList) {
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
 //    int color = mViewColors.get(position);
 //    holder.activityAddPhotoItemBinding.photoImage.setBackgroundColor(color);
-    holder.updateWithDetails(Collections.singletonList(this.mPhotoList.get(position)));
+    holder.updateWithDetails(mPhotoList.get(position), glide);
     }
 
     @Override
