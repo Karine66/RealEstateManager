@@ -61,7 +61,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
     private PhotoAdapter adapter;
     private List<Integer> viewColors;
-    private int mandateNumberID;
+    private long mandateNumberID;
     private List<PhotoList> listPhoto;
     private RequestManager glide;
 
@@ -185,7 +185,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
         Estate estate = new Estate(
 
-                 Long.parseLong(String.valueOf(estateFormBinding.etMandate.getId())),
+                 Long.parseLong(Objects.requireNonNull(estateFormBinding.etMandate.getText()).toString()),
                 estateFormBinding.etEstate.getText().toString(),
                 Integer.parseInt(Objects.requireNonNull(estateFormBinding.etSurface.getText()).toString()),
                 Integer.parseInt(estateFormBinding.etRooms.getText().toString()),
@@ -210,7 +210,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
     }
     //For retrieve automatically mandate number in edit text mandate number
-    public void setMandateID(int mandateNumberID) {
+    public void setMandateID(long mandateNumberID) {
 
         estateFormBinding.etMandate.setText(String.valueOf(mandateNumberID));
         estateFormBinding.etMandate.setEnabled(false);
