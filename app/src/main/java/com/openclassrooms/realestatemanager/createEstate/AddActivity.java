@@ -27,6 +27,7 @@ import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.models.PhotoList;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -202,7 +203,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 estateFormBinding.boxPark.isChecked(),
                 estateFormBinding.boxRestaurants.isChecked(),
                 estateFormBinding.availableRadiobtn.isChecked(),
- //               Objects.requireNonNull(estateFormBinding.upOfSaleDate.getText().toString()
+                 Objects.requireNonNull(estateFormBinding.upOfSaleDate.getText()).toString(),
 //              Objects.requireNonNull(estateFormBinding.soldDate.getText()).toString(),
                 estateFormBinding.etAgent.getText().toString());
 
