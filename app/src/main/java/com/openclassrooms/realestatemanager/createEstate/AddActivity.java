@@ -1,24 +1,31 @@
 package com.openclassrooms.realestatemanager.createEstate;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.RequestManager;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.openclassrooms.realestatemanager.BaseActivity;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
@@ -27,27 +34,29 @@ import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.models.PhotoList;
-import com.openclassrooms.realestatemanager.utils.Utils;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
-import pub.devrel.easypermissions.PermissionRequest;
-
 
 public class AddActivity extends BaseActivity implements View.OnClickListener {
 
+    private static final int CAMERA_PERM_CODE = 100;
+//    private static final int CAMERA_REQUEST_CODE = 200;
+//    private static final int GALLERY_REQUEST_CODE = 300;
 
     private static final int RC_CAMERA_AND_STORAGE =100;
     private static final String [] CAM_AND_READ_EXTERNAL_STORAGE =
         {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
+    private static final int REQUEST_TAKE_PHOTO = 200;
 
 
     private ActivityAddBinding activityAddBinding;
@@ -55,6 +64,12 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private DatePickerDialog mUpOfSaleDateDialog;
     private DatePickerDialog mSoldDate;
     private SimpleDateFormat mDateFormat;
+    private View view;
+//    private String currentPhotoPath;
+//    private InputStream inputStreamImg;
+//    private Bitmap bitmap;
+//    private  File destination = null;
+//    private String imgPath = null;
     private Context context;
 
     private EstateViewModel estateViewModel;
@@ -65,6 +80,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private long mandateNumberID;
     private List<PhotoList> listPhoto;
     private RequestManager glide;
+    private String currentPhotoPath;
 
 
     @Override
@@ -204,7 +220,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 estateFormBinding.boxRestaurants.isChecked(),
                 estateFormBinding.availableRadiobtn.isChecked(),
                  Objects.requireNonNull(estateFormBinding.upOfSaleDate.getText()).toString(),
-//              Objects.requireNonNull(estateFormBinding.soldDate.getText()).toString(),
+                Objects.requireNonNull(estateFormBinding.soldDate.getText()).toString(),
                 estateFormBinding.etAgent.getText().toString());
 
                 this.estateViewModel.createEstate(estate);
@@ -237,6 +253,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
           public void onClick(View v) {
              methodRequiresTwoPermission();
              selectImage();
+             dispatchTakePictureIntent();
 
           }
      });
@@ -254,55 +271,82 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             }
         });
     }
-
-
-    //For bitmap
+    //For photos
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_CANCELED) {
-            switch (requestCode) {
-                case 0:
 
-                    if (resultCode == RESULT_OK && data != null) {
-                        Bitmap selectedImage = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
-//                        Objects.requireNonNull(activityAddBinding.photoImage1).setImageBitmap(selectedImage);
-//                            listPhoto.add(listPhoto.get(0));
-
-                        Log.d("selectedImage", "selectedImage" +selectedImage);
-                    }
-
-                    break;
-                case 1:
-
-                    if (resultCode == RESULT_OK && data != null) {
-                        Uri selectedImage = data.getData();
-                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                        if (selectedImage != null) {
-                            Cursor cursor = getContentResolver().query(selectedImage,
-                                    filePathColumn, null, null, null);
-                            Log.d("filePathColumn", "file path column" + Arrays.toString(filePathColumn));
-                            Log.d("selectedImage", "selectedImage" +selectedImage);
-                            if (cursor != null) {
-                                cursor.moveToFirst();
-
-                                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                                String picturePath = cursor.getString(columnIndex);
-//                                activityAddBinding.photoImage1.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-//                                listPhoto.add(BitmapFactory.decodeFile(picturePath));
-                                Objects.requireNonNull(estateViewModel.getPhotos().getValue()).toString();
-                                cursor.close();
-                                Log.d("picturePath", "picture path is :" +picturePath);
-                            }
-
-                        }
-
-                    }
-                    break;
+        if (requestCode == PICK_IMAGE_CAMERA && data != null && data.getData() != null) {
+            if (resultCode == Activity.RESULT_OK) {
+                File file = new File(currentPhotoPath);
+                Objects.requireNonNull(estateFormBinding.cameraView).setImageURI(Uri.fromFile(file));
+                Log.d("TestUri", "Uri image is" + Uri.fromFile(file));
+                //For save in gallery
+                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                Uri contentUri = Uri.fromFile(file);
+                mediaScanIntent.setData(contentUri);
+                this.sendBroadcast(mediaScanIntent);
+            }
+        }
+        if (requestCode == PICK_IMAGE_GALLERY && data != null && data.getData() != null) {
+            if (resultCode == Activity.RESULT_OK) {
+                Uri contentUri = Objects.requireNonNull(data).getData();
+                String timeStamp = new SimpleDateFormat("ddMMyyyy", Locale.FRANCE).format(new Date());
+                String imageFileName = "JPEG" + timeStamp + "." + getFileExt(contentUri);
+                Log.d("Test uri gallery", "onActivityResult : Gallery Image Uri:" + imageFileName);
+                Objects.requireNonNull(estateFormBinding.cameraView).setImageURI(contentUri);
             }
         }
     }
+
+    private String getFileExt(Uri contentUri) {
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(contentResolver.getType(contentUri));
+    }
+
+    private File createImageFile() throws IOException {
+        //Create an image file name
+        String timeStamp = new SimpleDateFormat("ddMMyyyy", Locale.FRANCE).format(new Date());
+        String imageFileName = "JPEG" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName, /*prefix*/
+                ".jpg", /*suffix*/
+                storageDir /*directory*/
+        );
+        //Save file : path for use with ACTION_VIEW intent
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//      startActivityForResult(intent, PICK_IMAGE_CAMERA);
+        //Ensure that there's camera activity to handle the intent
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            //Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                Log.e("PhotoFileException", Objects.requireNonNull(ex.getMessage()));
+            }
+            //Continue only if the file was successfully created
+            if (photoFile != null) {
+                Uri photoUri = FileProvider.getUriForFile(getApplicationContext(), "com.openclassrooms.realestatemanager.fileprovider", photoFile);
+
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                Log.d("PhotoUri","photoUri =" +photoUri );
+//                startActivityForResult(intent, PICK_IMAGE_CAMERA);
+
+            }
+        }
+    }
+
+
 }
+
 
 
 

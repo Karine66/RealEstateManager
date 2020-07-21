@@ -31,7 +31,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     private static final int RC_CAMERA_AND_STORAGE = 100;
     private static final String[] CAM_AND_READ_EXTERNAL_STORAGE =
             {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
-
+    protected final int PICK_IMAGE_CAMERA = 1;
+    protected final int PICK_IMAGE_GALLERY = 2;
     private MaterialAlertDialogBuilder builder;
     private MaterialAlertDialogBuilder builderVideo;
 
@@ -82,11 +83,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
                 if (options[item].equals("Take Photo")) {
                     Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(takePicture, 0);
+                    startActivityForResult(takePicture, PICK_IMAGE_CAMERA);
 
                 } else if (options[item].equals("Choose from Gallery")) {
                     Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(pickPhoto, 1);
+                    startActivityForResult(pickPhoto, PICK_IMAGE_GALLERY);
 
                 } else if (options[item].equals("Cancel")) {
                     dialog.dismiss();
@@ -111,11 +112,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
                 if (options[item].equals("Take Video")) {
                     Intent takeVideo = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                    startActivityForResult(takeVideo, 2);
+                    startActivityForResult(takeVideo, 3);
 
                 } else if (options[item].equals("Choose Video")) {
                     Intent pickVideo = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(pickVideo, 3);
+                    startActivityForResult(pickVideo, 4);
 
                 } else if (options[item].equals("Cancel")) {
                     dialog.dismiss();

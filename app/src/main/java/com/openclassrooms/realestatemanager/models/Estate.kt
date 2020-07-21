@@ -25,7 +25,7 @@ data class Estate(@PrimaryKey (autoGenerate = true) val mandateNumberID: Long?,
                   var restaurants:Boolean,
                   var sold:Boolean,
                   var upOfSaleDate: String?,
-//                  var soldDate:Date?,
+                  var soldDate:String?,
                   var agentName:String
 //                  var photoList: List<String>
 
@@ -34,7 +34,7 @@ data class Estate(@PrimaryKey (autoGenerate = true) val mandateNumberID: Long?,
 )
 {
     constructor() : this (null,"",null,null,null,null,null,null,"","",
-    null,"",false,false,false,false,false, null,"")
+    null,"",false,false,false,false,false, null,null,"")
 
 
 }
