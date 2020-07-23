@@ -38,7 +38,10 @@ public class MainActivity extends BaseActivity {
 //         this.configureAndShowDetailFragment();
          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
              this.configureToolbar();
-
+//            //for fragment
+//             getSupportFragmentManager().beginTransaction().replace(R.id.list_fragment_frameLayout,
+//                     new ListFragment()).commit();
+//
          }
 
      }
@@ -95,15 +98,15 @@ public class MainActivity extends BaseActivity {
     }
 
     private void configureAndShowListFragment(){
-        //Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
-        listFragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.frame_layout_main);
+//        Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
+        listFragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.list_fragment_frameLayout);
 
         if (listFragment == null) {
             //Create new main fragment
             listFragment = new ListFragment();
             //Add it to FrameLayout container
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.frame_layout_main, listFragment)
+                    .add(R.id.list_fragment_frameLayout, listFragment)
                     .commit();
         }
     }

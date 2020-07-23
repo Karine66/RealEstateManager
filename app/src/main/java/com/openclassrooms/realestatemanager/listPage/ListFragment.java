@@ -3,7 +3,9 @@ package com.openclassrooms.realestatemanager.listPage;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,10 +15,16 @@ import android.view.ViewGroup;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.createEstate.AddActivity;
+import com.openclassrooms.realestatemanager.createEstate.EstateViewModel;
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding;
+import com.openclassrooms.realestatemanager.injections.Injection;
+import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
+import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.utils.ItemClickSupport;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 ///**
 // * A simple {@link Fragment} subclass.
@@ -35,9 +43,10 @@ public class ListFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private ArrayList<Object> mEstateList;
+    private List<Estate> estateList;
     private ListAdapter mAdapter;
     private RecyclerView mRecyclerView;
+    private EstateViewModel estateViewModel;
 
     public ListFragment() {
         // Required empty public constructor
@@ -73,32 +82,42 @@ public class ListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // For viewBinding
         fragmentListBinding = FragmentListBinding.inflate(inflater, container,false);
         View view = fragmentListBinding.getRoot();
 
-//        this.configureRecyclerView();
+        this.configureViewModel();
+        this.configureRecyclerView();
 //        this.configureOnClickRecyclerView();
         return view;
+
+
     }
 
+    private void configureViewModel() {
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());
+        this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
 
-
+        this.estateViewModel.getEstate().observe(this, this::updateEstateList);
+    }
 /**
  * Configuration RecyclerView
  * Configure RecyclerView, Adapter, LayoutManager & glue it
  */
     private void configureRecyclerView() {
 
-        this.mEstateList = new ArrayList<>();
+        this.estateList = new ArrayList<>();
         //Create adapter
-        this.mAdapter = new ListAdapter(this.mEstateList);
+        this.mAdapter = new ListAdapter(this.estateList);
         // Attach the adapter to the recyclerview
-        this.mRecyclerView.setAdapter(this.mAdapter);
+//        this.mRecyclerView.setAdapter(this.mAdapter);
         //Set Layout manager
-        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        fragmentListBinding.fragmentListRV.setLayoutManager(layoutManager);
+        fragmentListBinding.fragmentListRV.setAdapter(mAdapter);
+//        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     /**
@@ -120,6 +139,14 @@ public class ListFragment extends Fragment {
         super.onDestroyView();
         fragmentListBinding = null;
     }
+
+    private void updateEstateList(Estate estates) {
+        if(estates != null)
+            mAdapter.updateData(Collections.singletonList(estates));
+    }
+
+
+
 
 
 }

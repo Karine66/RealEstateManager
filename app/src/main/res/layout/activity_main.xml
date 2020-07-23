@@ -8,9 +8,10 @@
     android:gravity="center">
 
    <FrameLayout
-       android:id="@+id/frame_layout_main"
+       android:id="@+id/list_fragment_frameLayout"
        android:layout_width="match_parent"
-       android:layout_height="match_parent"/>
+       android:layout_height="match_parent"
+       android:layout_above="@+id/toolbar"/>
 
    <include
       layout="@layout/toolbar"

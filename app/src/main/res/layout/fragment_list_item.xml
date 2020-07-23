@@ -17,7 +17,7 @@
         android:scaleType="centerCrop">
 
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/list_photo"
             android:layout_width="110dp"
             android:layout_height="80dp"
@@ -26,7 +26,8 @@
             android:scaleType="center"
             android:contentDescription="homePhoto" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/estateType"
             android:layout_width="150dp"
             android:layout_height="20dp"
             android:layout_alignParentEnd="true"
@@ -34,14 +35,16 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="120dp" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/City"
             android:layout_width="150dp"
             android:layout_height="20dp"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="35dp"
             android:layout_marginEnd="120dp" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/price"
             android:layout_width="150dp"
             android:layout_height="20dp"
             android:layout_alignParentEnd="true"
@@ -49,7 +52,7 @@
             android:layout_marginTop="70dp"
             android:layout_marginEnd="120dp" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/list_photo_sold"
             android:layout_width="80dp"
             android:layout_height="70dp"
@@ -63,7 +66,7 @@
 
 
 
-   </RelativeLayout>-->
+   </RelativeLayout>
 
 
 

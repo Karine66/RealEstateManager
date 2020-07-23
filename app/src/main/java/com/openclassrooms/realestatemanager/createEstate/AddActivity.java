@@ -5,10 +5,13 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -36,6 +39,7 @@ import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.models.PhotoList;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -81,6 +85,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private List<PhotoList> listPhoto;
     private RequestManager glide;
     private String currentPhotoPath;
+    private Bitmap selectedImage;
+    private Bitmap selectedImageGallery;
 
 
     @Override
@@ -110,6 +116,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         Objects.requireNonNull(ab).setTitle("Create Estate");
         //For date picker
         mDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
+
 
     }
 
@@ -254,7 +261,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
              methodRequiresTwoPermission();
              selectImage();
              dispatchTakePictureIntent();
-
+            saveImageInInternalStorage();
+//            saveImageInInternalStorageGallery();
           }
      });
     }
@@ -278,23 +286,27 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
         if (requestCode == PICK_IMAGE_CAMERA && data != null && data.getData() != null) {
             if (resultCode == Activity.RESULT_OK) {
+                selectedImage = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
                 File file = new File(currentPhotoPath);
                 Objects.requireNonNull(estateFormBinding.cameraView).setImageURI(Uri.fromFile(file));
-                Log.d("TestUri", "Uri image is" + Uri.fromFile(file));
+
                 //For save in gallery
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 Uri contentUri = Uri.fromFile(file);
                 mediaScanIntent.setData(contentUri);
                 this.sendBroadcast(mediaScanIntent);
+                Log.d("TestUri", "Uri image is" + contentUri);
             }
         }
         if (requestCode == PICK_IMAGE_GALLERY && data != null && data.getData() != null) {
             if (resultCode == Activity.RESULT_OK) {
+
                 Uri contentUri = Objects.requireNonNull(data).getData();
                 String timeStamp = new SimpleDateFormat("ddMMyyyy", Locale.FRANCE).format(new Date());
                 String imageFileName = "JPEG" + timeStamp + "." + getFileExt(contentUri);
                 Log.d("Test uri gallery", "onActivityResult : Gallery Image Uri:" + imageFileName);
                 Objects.requireNonNull(estateFormBinding.cameraView).setImageURI(contentUri);
+//                selectedImageGallery = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
             }
         }
     }
@@ -344,8 +356,43 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
+    public void saveImageInInternalStorage () {
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        File file = new File(directory, "UniqueFileName" + ".jpg");
+        if (!file.exists()) {
+            Log.d("path", file.toString());
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(file);
+                selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                fos.flush();
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+//        public void saveImageInInternalStorageGallery () {
+//            ContextWrapper cw = new ContextWrapper(getApplicationContext());
+//            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+//            File file = new File(directory, "UniqueFileName" + ".jpg");
+//            if (!file.exists()) {
+//                Log.d("path", file.toString());
+//                FileOutputStream fos = null;
+//                try {
+//                    fos = new FileOutputStream(file);
+//                    selectedImageGallery.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+//                    fos.flush();
+//                    fos.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//    }
 
-}
+    }
+
 
 
 
