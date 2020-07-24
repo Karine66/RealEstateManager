@@ -12,6 +12,7 @@ import com.openclassrooms.realestatemanager.models.PhotoList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ListAdapter extends RecyclerView.Adapter<ListViewHolder> {
 
@@ -32,7 +33,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ListViewHolder holder, int position) {
-        holder.updateWithEstate(this.estateList.get(position));
+       holder.updateWithEstate(this.estateList.get(position));
 
     }
 

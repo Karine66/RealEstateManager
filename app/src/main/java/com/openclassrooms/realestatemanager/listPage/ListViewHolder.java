@@ -2,8 +2,10 @@ package com.openclassrooms.realestatemanager.listPage;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -16,18 +18,21 @@ import java.util.Objects;
 
 public class ListViewHolder extends RecyclerView.ViewHolder {
 
-FragmentListItemBinding fragmentListItemBinding;
-private Estate mEstate;
+
+    FragmentListItemBinding fragmentListItemBinding;
+//private Estate mEstate;
 
     public ListViewHolder(FragmentListItemBinding fragmentListItemBinding) {
         super(fragmentListItemBinding.getRoot());
+        this.fragmentListItemBinding = fragmentListItemBinding;
+
 
     }
 
     public void updateWithEstate (Estate estate) {
-        mEstate = estate;
+//        mEstate = estate;
 //        if (estate.getEstateType() != null && !estate.getEstateType().isEmpty()) {
-           Objects.requireNonNull(fragmentListItemBinding.estateType).setText(estate.getEstateType());
+          Objects.requireNonNull(fragmentListItemBinding.estateType).setText(estate.getEstateType());
 //        } else {
 //            Snackbar.make(fragmentListItemBinding.getRoot(), "No Estate type found", Snackbar.LENGTH_SHORT).show();
 //        }

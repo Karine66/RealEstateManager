@@ -39,6 +39,7 @@ import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.models.PhotoList;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -87,6 +88,9 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private String currentPhotoPath;
     private Bitmap selectedImage;
     private Bitmap selectedImageGallery;
+    private Bitmap bitmap;
+    private String name;
+    private String extension;
 
 
     @Override
@@ -261,8 +265,15 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
              methodRequiresTwoPermission();
              selectImage();
              dispatchTakePictureIntent();
-            saveImageInInternalStorage();
-//            saveImageInInternalStorageGallery();
+           saveImageInInternalStorage();
+
+//              try {
+//                  saveImageInInternalStorageGallery();
+//              } catch (FileNotFoundException e) {
+//                  e.printStackTrace();
+//              }
+//
+
           }
      });
     }
@@ -286,9 +297,10 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
         if (requestCode == PICK_IMAGE_CAMERA && data != null && data.getData() != null) {
             if (resultCode == Activity.RESULT_OK) {
-                selectedImage = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
+
                 File file = new File(currentPhotoPath);
                 Objects.requireNonNull(estateFormBinding.cameraView).setImageURI(Uri.fromFile(file));
+                selectedImage = (Bitmap) Objects.requireNonNull(Objects.requireNonNull(data).getExtras()).get("data");
 
                 //For save in gallery
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
@@ -296,6 +308,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 mediaScanIntent.setData(contentUri);
                 this.sendBroadcast(mediaScanIntent);
                 Log.d("TestUri", "Uri image is" + contentUri);
+
             }
         }
         if (requestCode == PICK_IMAGE_GALLERY && data != null && data.getData() != null) {
@@ -306,7 +319,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 String imageFileName = "JPEG" + timeStamp + "." + getFileExt(contentUri);
                 Log.d("Test uri gallery", "onActivityResult : Gallery Image Uri:" + imageFileName);
                 Objects.requireNonNull(estateFormBinding.cameraView).setImageURI(contentUri);
-//                selectedImageGallery = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
+//                selectedImageGallery = (Bitmap) Objects.requireNonNull(data.getExtras()).get("dataGallery");
             }
         }
     }
@@ -356,6 +369,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
+
+
     public void saveImageInInternalStorage () {
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
@@ -373,23 +388,23 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             }
         }
     }
-//        public void saveImageInInternalStorageGallery () {
-//            ContextWrapper cw = new ContextWrapper(getApplicationContext());
-//            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-//            File file = new File(directory, "UniqueFileName" + ".jpg");
-//            if (!file.exists()) {
-//                Log.d("path", file.toString());
-//                FileOutputStream fos = null;
-//                try {
-//                    fos = new FileOutputStream(file);
-//                    selectedImageGallery.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-//                    fos.flush();
-//                    fos.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//    }
+        public void saveImageInInternalStorageGallery () throws FileNotFoundException {
+            ContextWrapper cw = new ContextWrapper(getApplicationContext());
+            File directory = cw.getDir("imageDirGal", Context.MODE_PRIVATE);
+            File file = new File(directory, "UniqueFileName" + ".jpg");
+            if (!file.exists()) {
+                Log.d("path", file.toString());
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(file);
+                    selectedImageGallery.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                    fos.flush();
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+    }
 
     }
 

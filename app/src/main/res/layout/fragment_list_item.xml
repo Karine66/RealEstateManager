@@ -13,14 +13,14 @@
     <RelativeLayout
         android:id="@+id/fragment_list_item"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="95dp"
         android:scaleType="centerCrop">
 
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/list_photo"
             android:layout_width="110dp"
-            android:layout_height="80dp"
+            android:layout_height="85dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:scaleType="center"
@@ -29,28 +29,39 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/estateType"
             android:layout_width="150dp"
-            android:layout_height="20dp"
+            android:layout_height="30dp"
             android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="110dp"
+            android:textAllCaps="true"
+            android:gravity="top"
             android:textColor="#711515"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="120dp" />
+            android:textSize="25sp"
+            android:textStyle="bold|italic" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/City"
             android:layout_width="150dp"
             android:layout_height="20dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="35dp"
-            android:layout_marginEnd="120dp" />
+            android:gravity="center_vertical"
+            android:layout_marginTop="40dp"
+            android:textAllCaps="true"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="110dp" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/price"
             android:layout_width="150dp"
-            android:layout_height="20dp"
+            android:layout_height="30dp"
             android:layout_alignParentEnd="true"
+            android:gravity="center_vertical"
             android:textColor="#DA13D7"
-            android:layout_marginTop="70dp"
-            android:layout_marginEnd="120dp" />
+            android:layout_marginTop="60dp"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="110dp" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/list_photo_sold"
@@ -66,10 +77,8 @@
 
 
 
-   </RelativeLayout>
+    </RelativeLayout>
 
 
 
 </androidx.cardview.widget.CardView>
-
-

@@ -10,11 +10,12 @@
    <FrameLayout
        android:id="@+id/list_fragment_frameLayout"
        android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:layout_above="@+id/toolbar"/>
+       android:layout_marginTop="?attr/actionBarSize"
+       android:layout_height="match_parent" />
 
    <include
       layout="@layout/toolbar"
+       android:layout_below="@+id/fragment_list_item"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"/>
 
