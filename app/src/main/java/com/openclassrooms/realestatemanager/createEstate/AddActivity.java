@@ -37,11 +37,13 @@ import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.models.PhotoList;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -85,12 +87,9 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private long mandateNumberID;
     private List<PhotoList> listPhoto;
     private RequestManager glide;
-    private String currentPhotoPath;
     private Bitmap selectedImage;
-    private Bitmap selectedImageGallery;
-    private Bitmap bitmap;
-    private String name;
-    private String extension;
+    private String currentPhotoPath;
+    private File mPhotoGallery;
 
 
     @Override
@@ -121,7 +120,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         //For date picker
         mDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
 
-
+        
     }
 
     public void configureRecyclerView() {
@@ -244,7 +243,9 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         estateFormBinding.etMandate.setEnabled(false);
     }
 
-    //Configuring ViewModel
+
+
+        //Configuring ViewModel
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
@@ -264,15 +265,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
           public void onClick(View v) {
              methodRequiresTwoPermission();
              selectImage();
-             dispatchTakePictureIntent();
            saveImageInInternalStorage();
-
-//              try {
-//                  saveImageInInternalStorageGallery();
-//              } catch (FileNotFoundException e) {
-//                  e.printStackTrace();
-//              }
-//
 
           }
      });
@@ -284,8 +277,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             public void onClick(View v) {
                 methodRequiresTwoPermission();
                 selectVideo();
-
-
 
             }
         });
@@ -299,7 +290,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             if (resultCode == Activity.RESULT_OK) {
 
                 File file = new File(currentPhotoPath);
-                Objects.requireNonNull(estateFormBinding.cameraView).setImageURI(Uri.fromFile(file));
+//                Objects.requireNonNull(estateFormBinding.cameraView).setImageURI(Uri.fromFile(file));
                 selectedImage = (Bitmap) Objects.requireNonNull(Objects.requireNonNull(data).getExtras()).get("data");
 
                 //For save in gallery
@@ -318,8 +309,20 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 String timeStamp = new SimpleDateFormat("ddMMyyyy", Locale.FRANCE).format(new Date());
                 String imageFileName = "JPEG" + timeStamp + "." + getFileExt(contentUri);
                 Log.d("Test uri gallery", "onActivityResult : Gallery Image Uri:" + imageFileName);
-                Objects.requireNonNull(estateFormBinding.cameraView).setImageURI(contentUri);
-//                selectedImageGallery = (Bitmap) Objects.requireNonNull(data.getExtras()).get("dataGallery");
+//                Objects.requireNonNull(estateFormBinding.cameraView).setImageURI(contentUri);
+//                try{
+//
+//                    String imageGallery = imageFileName;
+//                    FileOutputStream fOut = openFileOutput("imageGallery",MODE_PRIVATE);
+//                    OutputStreamWriter osw = new OutputStreamWriter(fOut);
+//                    osw.write(imageGallery);
+//                    int len = imageGallery.length();
+//                    osw.flush();
+//                    osw.close();
+//                }catch(IOException ioe){
+//                    ioe.printStackTrace();
+//                }
+
             }
         }
     }
@@ -329,47 +332,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(contentResolver.getType(contentUri));
     }
-
-    private File createImageFile() throws IOException {
-        //Create an image file name
-        String timeStamp = new SimpleDateFormat("ddMMyyyy", Locale.FRANCE).format(new Date());
-        String imageFileName = "JPEG" + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName, /*prefix*/
-                ".jpg", /*suffix*/
-                storageDir /*directory*/
-        );
-        //Save file : path for use with ACTION_VIEW intent
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
-
-    private void dispatchTakePictureIntent() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//      startActivityForResult(intent, PICK_IMAGE_CAMERA);
-        //Ensure that there's camera activity to handle the intent
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            //Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                Log.e("PhotoFileException", Objects.requireNonNull(ex.getMessage()));
-            }
-            //Continue only if the file was successfully created
-            if (photoFile != null) {
-                Uri photoUri = FileProvider.getUriForFile(getApplicationContext(), "com.openclassrooms.realestatemanager.fileprovider", photoFile);
-
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-                Log.d("PhotoUri","photoUri =" +photoUri );
-//                startActivityForResult(intent, PICK_IMAGE_CAMERA);
-
-            }
-        }
-    }
-
-
 
     public void saveImageInInternalStorage () {
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
@@ -387,23 +349,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 e.printStackTrace();
             }
         }
-    }
-        public void saveImageInInternalStorageGallery () throws FileNotFoundException {
-            ContextWrapper cw = new ContextWrapper(getApplicationContext());
-            File directory = cw.getDir("imageDirGal", Context.MODE_PRIVATE);
-            File file = new File(directory, "UniqueFileName" + ".jpg");
-            if (!file.exists()) {
-                Log.d("path", file.toString());
-                FileOutputStream fos = null;
-                try {
-                    fos = new FileOutputStream(file);
-                    selectedImageGallery.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-                    fos.flush();
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
     }
 
     }
