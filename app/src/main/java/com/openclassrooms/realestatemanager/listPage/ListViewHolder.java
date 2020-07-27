@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.listPage;
 
+import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -14,6 +15,8 @@ import com.openclassrooms.realestatemanager.databinding.FragmentListItemBinding;
 import com.openclassrooms.realestatemanager.models.Estate;
 
 import java.lang.ref.WeakReference;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Objects;
 
 public class ListViewHolder extends RecyclerView.ViewHolder {
@@ -29,26 +32,18 @@ public class ListViewHolder extends RecyclerView.ViewHolder {
 
     }
 
+    @SuppressLint("SetTextI18n")
     public void updateWithEstate (Estate estate) {
-//        mEstate = estate;
-//        if (estate.getEstateType() != null && !estate.getEstateType().isEmpty()) {
-          Objects.requireNonNull(fragmentListItemBinding.estateType).setText(estate.getEstateType());
-//        } else {
-//            Snackbar.make(fragmentListItemBinding.getRoot(), "No Estate type found", Snackbar.LENGTH_SHORT).show();
-//        }
-        if (estate.getCity() != null && !estate.getCity().isEmpty()) {
-            Objects.requireNonNull(fragmentListItemBinding.City).setText(estate.getCity());
-        } else {
-            Snackbar.make(fragmentListItemBinding.getRoot(), "No city found", Snackbar.LENGTH_SHORT).show();
+
+        Objects.requireNonNull(fragmentListItemBinding.estateType).setText(estate.getEstateType());
+
+        Objects.requireNonNull(fragmentListItemBinding.City).setText(estate.getCity());
+
+        if (estate.getPrice() != null) {
+            Objects.requireNonNull(fragmentListItemBinding.price).setText("$"+ NumberFormat.getInstance(Locale.US).format(estate.getPrice()));
+
         }
-        if (estate.getPrice() != null){
-            Objects.requireNonNull(fragmentListItemBinding.price).setText(String.valueOf(estate.getPrice()));
-        }else {
-            Snackbar.make(fragmentListItemBinding.getRoot(), "No price found", Snackbar.LENGTH_SHORT).show();
-        }
+
 
     }
-
-
-
 }

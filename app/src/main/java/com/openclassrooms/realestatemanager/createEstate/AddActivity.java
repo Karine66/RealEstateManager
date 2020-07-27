@@ -6,16 +6,10 @@ import android.app.DatePickerDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -23,12 +17,10 @@ import android.widget.ArrayAdapter;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.RequestManager;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.openclassrooms.realestatemanager.BaseActivity;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
@@ -37,7 +29,6 @@ import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.models.PhotoList;
-import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,7 +37,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -72,11 +62,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private DatePickerDialog mSoldDate;
     private SimpleDateFormat mDateFormat;
     private View view;
-//    private String currentPhotoPath;
-//    private InputStream inputStreamImg;
-//    private Bitmap bitmap;
-//    private  File destination = null;
-//    private String imgPath = null;
     private Context context;
 
     private EstateViewModel estateViewModel;
@@ -89,7 +74,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private RequestManager glide;
     private Bitmap selectedImage;
     private String currentPhotoPath;
-    private File mPhotoGallery;
+
 
 
     @Override
@@ -120,7 +105,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         //For date picker
         mDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
 
-        
     }
 
     public void configureRecyclerView() {
@@ -219,7 +203,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 Integer.parseInt(estateFormBinding.etBedrooms.getText().toString()),
                 Integer.parseInt(estateFormBinding.etBathrooms.getText().toString()),
                 Integer.parseInt(Objects.requireNonNull(estateFormBinding.etGround.getText()).toString()),
-                 Double.parseDouble(Objects.requireNonNull(estateFormBinding.etPrice.getText()).toString()),
+                Double.parseDouble(Objects.requireNonNull((estateFormBinding.etPrice.getText())).toString()),
                 Objects.requireNonNull(estateFormBinding.etDescription.getText()).toString(),
                 Objects.requireNonNull(estateFormBinding.etAddress.getText()).toString(),
                 Integer.parseInt(Objects.requireNonNull(estateFormBinding.etPostalCode.getText()).toString()),
@@ -310,9 +294,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 String imageFileName = "JPEG" + timeStamp + "." + getFileExt(contentUri);
                 Log.d("Test uri gallery", "onActivityResult : Gallery Image Uri:" + imageFileName);
 //                Objects.requireNonNull(estateFormBinding.cameraView).setImageURI(contentUri);
-//                try{
-//
-//                    String imageGallery = imageFileName;
+
+                //For save image in internal storage
                 FileOutputStream fOut = null;
                 try {
                     fOut = openFileOutput("imageGallery",MODE_PRIVATE);

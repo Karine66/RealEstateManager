@@ -3,21 +3,11 @@ package com.openclassrooms.realestatemanager.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.net.Network;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
-import android.os.Build;
-import android.util.Log;
-
-import androidx.annotation.RequiresApi;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.EmptyStackException;
 import java.util.Objects;
 
 /**
@@ -73,9 +63,5 @@ public class Utils {
 
     }
 
-    public static void decimalDouble() {
-        DecimalFormat f = new DecimalFormat();
-        f.setMaximumFractionDigits(2);
 
-    }
 }

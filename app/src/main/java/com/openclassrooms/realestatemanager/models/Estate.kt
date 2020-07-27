@@ -1,8 +1,8 @@
 package com.openclassrooms.realestatemanager.models
 
-import android.content.ContentValues
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.text.NumberFormat
 import java.util.*
 
 @Entity
