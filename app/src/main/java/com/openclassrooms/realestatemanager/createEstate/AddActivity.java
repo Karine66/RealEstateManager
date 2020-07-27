@@ -313,15 +313,27 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 //                try{
 //
 //                    String imageGallery = imageFileName;
-//                    FileOutputStream fOut = openFileOutput("imageGallery",MODE_PRIVATE);
-//                    OutputStreamWriter osw = new OutputStreamWriter(fOut);
-//                    osw.write(imageGallery);
-//                    int len = imageGallery.length();
-//                    osw.flush();
-//                    osw.close();
-//                }catch(IOException ioe){
-//                    ioe.printStackTrace();
-//                }
+                FileOutputStream fOut = null;
+                try {
+                    fOut = openFileOutput("imageGallery",MODE_PRIVATE);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                OutputStreamWriter osw = new OutputStreamWriter(Objects.requireNonNull(fOut));
+                try {
+                    osw.write(imageFileName);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                int len = imageFileName.length();
+                try {
+                    osw.flush();
+                    osw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
 
             }
         }
