@@ -25,8 +25,11 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
 
     public void updateWithDetails(PhotoList photoList,  RequestManager glide) {
 
-        Uri photoUri = Uri.fromFile( new File(String.valueOf(photoList.getPhotoList())));
-            glide.load(new File (Objects.requireNonNull(photoUri.getPath()))).into(activityAddPhotoItemBinding.photoImage);
+//        Uri photoUri = Uri.fromFile( new File(String.valueOf(photoList.getPhotoList())));
+//            glide.load(new File (Objects.requireNonNull(photoUri.getPath()))).into(activityAddPhotoItemBinding.photoImage);
+        if (photoList != null && photoList.getPhotoList().isEmpty()) {
+            glide.load(photoList.getPhotoList().get(0)).into(activityAddPhotoItemBinding.photoImage);
+        }
 
 
     }
