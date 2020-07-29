@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.listPage;
+package com.openclassrooms.realestatemanager.ui.listPage;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -8,11 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.databinding.FragmentListItemBinding;
 import com.openclassrooms.realestatemanager.models.Estate;
-import com.openclassrooms.realestatemanager.models.PhotoList;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class ListAdapter extends RecyclerView.Adapter<ListViewHolder> {
 

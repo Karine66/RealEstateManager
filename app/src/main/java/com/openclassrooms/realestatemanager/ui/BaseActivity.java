@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager;
+package com.openclassrooms.realestatemanager.ui;
 
 import android.Manifest;
 import android.content.Context;
@@ -16,6 +16,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.models.PhotoList;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,6 +43,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private MaterialAlertDialogBuilder builderVideo;
     private String currentPhotoPath;
     private Context context;
+    private PhotoList photoList;
 
 
     protected void configureToolbar() {

@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.detailDescription;
+package com.openclassrooms.realestatemanager.ui.detailDescription;
 
 import android.os.Bundle;
 

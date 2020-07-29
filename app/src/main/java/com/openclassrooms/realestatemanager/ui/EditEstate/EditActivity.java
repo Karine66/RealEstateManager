@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.mapPage;
+package com.openclassrooms.realestatemanager.ui.EditEstate;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.openclassrooms.realestatemanager.R;
 
-public class MapActivity extends AppCompatActivity {
+public class EditActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
+        setContentView(R.layout.activity_edit);
     }
 }

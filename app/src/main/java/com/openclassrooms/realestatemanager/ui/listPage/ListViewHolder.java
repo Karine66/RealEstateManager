@@ -1,20 +1,12 @@
-package com.openclassrooms.realestatemanager.listPage;
+package com.openclassrooms.realestatemanager.ui.listPage;
 
 import android.annotation.SuppressLint;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.databinding.FragmentListItemBinding;
 import com.openclassrooms.realestatemanager.models.Estate;
 
-import java.lang.ref.WeakReference;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Objects;
@@ -28,6 +20,7 @@ public class ListViewHolder extends RecyclerView.ViewHolder {
     public ListViewHolder(FragmentListItemBinding fragmentListItemBinding) {
         super(fragmentListItemBinding.getRoot());
         this.fragmentListItemBinding = fragmentListItemBinding;
+
 
 
     }

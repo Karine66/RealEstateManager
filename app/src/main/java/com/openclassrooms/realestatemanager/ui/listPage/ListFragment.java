@@ -1,6 +1,5 @@
-package com.openclassrooms.realestatemanager.listPage;
+package com.openclassrooms.realestatemanager.ui.listPage;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,14 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.createEstate.AddActivity;
-import com.openclassrooms.realestatemanager.createEstate.EstateViewModel;
+import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.utils.ItemClickSupport;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.createEstate;
+package com.openclassrooms.realestatemanager.ui.createEstate;
 
 import android.Manifest;
 import android.app.Activity;
@@ -21,14 +21,15 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.RequestManager;
-import com.openclassrooms.realestatemanager.BaseActivity;
+import com.openclassrooms.realestatemanager.database.converters.PhotoListConverter;
+import com.openclassrooms.realestatemanager.models.PhotoList;
+import com.openclassrooms.realestatemanager.ui.BaseActivity;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
 import com.openclassrooms.realestatemanager.databinding.EstateFormBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
-import com.openclassrooms.realestatemanager.models.PhotoList;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,6 +39,7 @@ import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -96,7 +98,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         this.onClickPhotoBtn();
         this.onClickVideoBtn();
         this.configureRecyclerView();
-        this.setMandateID(mandateNumberID);
+//        this.setMandateID(mandateNumberID);
 
 //        this.onClickGalleryBtn();
         //for title toolbar
@@ -104,6 +106,20 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         Objects.requireNonNull(ab).setTitle("Create Estate");
         //For date picker
         mDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
+        //For mandate number
+        estateFormBinding.etMandate.setVisibility(View.INVISIBLE);
+        estateFormBinding.inputMandate.setVisibility(View.INVISIBLE);
+
+        this.estateViewModel.getPhotos().observe(this, this::updatePhotoList);
+
+    }
+//    private void updatePhotoList(PhotoList photoList) {
+//        if(photoList != null)
+//            adapter.updatePhoto(photoList);
+//    }
+    private void updatePhotoList(List<String> photoList) {
+        if(photoList != null)
+            adapter.updatePhoto(photoList);
 
     }
 
@@ -122,10 +138,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         Objects.requireNonNull(estateFormBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
         estateFormBinding.rvPhoto.setAdapter(adapter);
     }
-    private void updatePhoto(List<PhotoList> photoList){
-        listPhoto.addAll(photoList);
-        adapter.notifyDataSetChanged();
-    }
+
     //for adapter generic
     private ArrayAdapter<String> factoryAdapter(int resId) {
         return new ArrayAdapter<>(this, R.layout.dropdown_menu_popup_item, getResources().getStringArray(resId));
@@ -220,12 +233,12 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 this.estateViewModel.createEstate(estate);
 
     }
-    //For retrieve automatically mandate number in edit text mandate number
-    public void setMandateID(long mandateNumberID) {
-
-        estateFormBinding.etMandate.setText(String.valueOf(mandateNumberID));
-        estateFormBinding.etMandate.setEnabled(false);
-    }
+//    //For retrieve automatically mandate number in edit text mandate number
+//    public void setMandateID(long mandateNumberID) {
+//
+//        estateFormBinding.etMandate.setText(String.valueOf(mandateNumberID));
+//        estateFormBinding.etMandate.setEnabled(false);
+//    }
 
 
 
@@ -283,6 +296,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 mediaScanIntent.setData(contentUri);
                 this.sendBroadcast(mediaScanIntent);
                 Log.d("TestUri", "Uri image is" + contentUri);
+                String contentUriToString = contentUri.toString();
+
 
             }
         }
@@ -316,8 +331,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                     e.printStackTrace();
                 }
 
-
-
+//                listPhoto.add(contentUri);
+//                Log.d("listPhotoGallery", "listPhotoGallery" + listPhoto);
             }
         }
     }

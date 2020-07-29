@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.mainPage;
+package com.openclassrooms.realestatemanager.ui.mainPage;
 
 import android.content.Intent;
 import android.os.Build;
@@ -7,15 +7,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.openclassrooms.realestatemanager.BaseActivity;
-import com.openclassrooms.realestatemanager.EditEstate.EditActivity;
+import com.openclassrooms.realestatemanager.ui.BaseActivity;
+import com.openclassrooms.realestatemanager.ui.EditEstate.EditActivity;
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.createEstate.AddActivity;
+import com.openclassrooms.realestatemanager.ui.createEstate.AddActivity;
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding;
-import com.openclassrooms.realestatemanager.detailDescription.DetailFragment;
-import com.openclassrooms.realestatemanager.listPage.ListFragment;
-import com.openclassrooms.realestatemanager.mapPage.MapActivity;
-import com.openclassrooms.realestatemanager.searchPage.SearchActivity;
+import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
+import com.openclassrooms.realestatemanager.ui.listPage.ListFragment;
+import com.openclassrooms.realestatemanager.ui.mapPage.MapActivity;
+import com.openclassrooms.realestatemanager.ui.searchPage.SearchActivity;
 
 
 public class MainActivity extends BaseActivity {

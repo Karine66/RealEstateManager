@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.createEstate;
+package com.openclassrooms.realestatemanager.ui.createEstate;
 
 import androidx.appcompat.app.AppCompatActivity;
 

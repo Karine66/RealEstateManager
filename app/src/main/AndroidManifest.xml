@@ -27,13 +27,13 @@
                 android:resource="@xml/file_paths"></meta-data>
         </provider>
 
-        <activity android:name=".mapPage.MapActivity"></activity>
-        <activity android:name=".searchPage.SearchActivity" />
-        <activity android:name=".EditEstate.EditActivity" />
+        <activity android:name=".ui.mapPage.MapActivity"></activity>
+        <activity android:name=".ui.searchPage.SearchActivity" />
+        <activity android:name=".ui.EditEstate.EditActivity" />
         <activity
-            android:name=".createEstate.AddActivity"
-            android:parentActivityName=".mainPage.MainActivity" />
-        <activity android:name=".mainPage.MainActivity">
+            android:name=".ui.createEstate.AddActivity"
+            android:parentActivityName=".ui.mainPage.MainActivity" />
+        <activity android:name=".ui.mainPage.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

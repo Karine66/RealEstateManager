@@ -1,33 +1,30 @@
-package com.openclassrooms.realestatemanager.createEstate;
+package com.openclassrooms.realestatemanager.ui.createEstate;
 
-import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPhotoItemBinding;
 import com.openclassrooms.realestatemanager.models.PhotoList;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder>{
 
-    ActivityAddPhotoItemBinding activityAddPhotoItemBinding;
+
 
 private List<Integer> mViewColors;
 private RequestManager glide;
 private List<PhotoList> mPhotoList;
+    private List<String> photoList;
 
 
-public PhotoAdapter(List<PhotoList> mPhotoList, RequestManager glide) {
+    public PhotoAdapter(List<PhotoList> mPhotoList, RequestManager glide) {
     this.mPhotoList = mPhotoList;
     this.glide = glide;
 }
@@ -50,5 +47,15 @@ public PhotoAdapter(List<PhotoList> mPhotoList, RequestManager glide) {
     public int getItemCount() {
 //        return mViewColors.size();
         return mPhotoList.size();
+    }
+
+//    private void updatePhoto(List<PhotoList> photoList){
+//        this.mPhotoList = mPhotoList;
+//        this.notifyDataSetChanged();
+//    }
+
+    public void updatePhoto(List<String> photoList) {
+    this.photoList = photoList;
+    this.notifyDataSetChanged();
     }
 }
