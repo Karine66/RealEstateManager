@@ -110,7 +110,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         estateFormBinding.etMandate.setVisibility(View.INVISIBLE);
         estateFormBinding.inputMandate.setVisibility(View.INVISIBLE);
 
-        this.estateViewModel.getPhotos().observe(this, this::updatePhotoList);
+//        this.estateViewModel.getPhotos().observe(this, this::updatePhotoList);
 
     }
 //    private void updatePhotoList(PhotoList photoList) {
@@ -138,7 +138,10 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         Objects.requireNonNull(estateFormBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
         estateFormBinding.rvPhoto.setAdapter(adapter);
     }
-
+    private void updatePhoto(List<PhotoList> photoList){
+        listPhoto.addAll(photoList);
+        adapter.notifyDataSetChanged();
+    }
     //for adapter generic
     private ArrayAdapter<String> factoryAdapter(int resId) {
         return new ArrayAdapter<>(this, R.layout.dropdown_menu_popup_item, getResources().getStringArray(resId));
@@ -297,7 +300,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 this.sendBroadcast(mediaScanIntent);
                 Log.d("TestUri", "Uri image is" + contentUri);
                 String contentUriToString = contentUri.toString();
-
+                estateViewModel.getPhotos().setValue(Collections.singletonList(contentUriToString));
 
             }
         }
@@ -309,7 +312,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 String imageFileName = "JPEG" + timeStamp + "." + getFileExt(contentUri);
                 Log.d("Test uri gallery", "onActivityResult : Gallery Image Uri:" + imageFileName);
 //                Objects.requireNonNull(estateFormBinding.cameraView).setImageURI(contentUri);
-
+                estateViewModel.getPhotos().setValue(Collections.singletonList(imageFileName));
                 //For save image in internal storage
                 FileOutputStream fOut = null;
                 try {
