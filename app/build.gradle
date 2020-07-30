@@ -48,6 +48,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     //for recyclerview
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
     //for ROOM
     def room_version = "2.2.5"
 
@@ -73,6 +74,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     //For Glide
     implementation 'com.github.bumptech.glide:glide:4.11.0'
+
 
 
 }

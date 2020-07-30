@@ -21,7 +21,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder>{
 private List<Integer> mViewColors;
 private RequestManager glide;
 private List<PhotoList> mPhotoList;
-    private List<String> photoList;
+    private List<PhotoList> photoList;
 
 
     public PhotoAdapter(List<PhotoList> mPhotoList, RequestManager glide) {
@@ -54,7 +54,7 @@ private List<PhotoList> mPhotoList;
 //        this.notifyDataSetChanged();
 //    }
 
-    public void updatePhoto(List<String> photoList) {
+    public void updatePhoto(List<PhotoList> photoList) {
     this.photoList = photoList;
     this.notifyDataSetChanged();
     }

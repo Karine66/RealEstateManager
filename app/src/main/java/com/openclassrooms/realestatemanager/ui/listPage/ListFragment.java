@@ -13,8 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding;
+import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
+
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;

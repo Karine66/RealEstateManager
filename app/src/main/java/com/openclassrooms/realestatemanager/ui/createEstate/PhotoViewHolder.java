@@ -5,6 +5,7 @@ import android.net.Uri;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
+
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPhotoItemBinding;
 import com.openclassrooms.realestatemanager.models.PhotoList;
 
@@ -13,7 +14,7 @@ import java.util.Objects;
 
 public class PhotoViewHolder extends RecyclerView.ViewHolder {
 
-   ActivityAddPhotoItemBinding activityAddPhotoItemBinding;
+ private ActivityAddPhotoItemBinding activityAddPhotoItemBinding;
 
 
 

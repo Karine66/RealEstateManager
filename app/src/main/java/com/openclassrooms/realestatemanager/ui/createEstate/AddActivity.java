@@ -76,7 +76,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private RequestManager glide;
     private Bitmap selectedImage;
     private String currentPhotoPath;
-
+    private List<PhotoList> photolist;
 
 
     @Override
@@ -110,18 +110,10 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         estateFormBinding.etMandate.setVisibility(View.INVISIBLE);
         estateFormBinding.inputMandate.setVisibility(View.INVISIBLE);
 
-//        this.estateViewModel.getPhotos().observe(this, this::updatePhotoList);
+
 
     }
-//    private void updatePhotoList(PhotoList photoList) {
-//        if(photoList != null)
-//            adapter.updatePhoto(photoList);
-//    }
-    private void updatePhotoList(List<String> photoList) {
-        if(photoList != null)
-            adapter.updatePhoto(photoList);
 
-    }
 
     public void configureRecyclerView() {
 //        ArrayList<Integer> viewColors = new ArrayList<>();
@@ -138,10 +130,17 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         Objects.requireNonNull(estateFormBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
         estateFormBinding.rvPhoto.setAdapter(adapter);
     }
-    private void updatePhoto(List<PhotoList> photoList){
-        listPhoto.addAll(photoList);
+        private void updatePhotoList(List<PhotoList> photoList) {
+        if(photoList != null)
+            adapter.updatePhoto(photoList);
         adapter.notifyDataSetChanged();
     }
+
+//    private void updatePhotoList(List<PhotoList> photoList){
+//        listPhoto.addAll(photoList);
+//        adapter.notifyDataSetChanged();
+//    }
+
     //for adapter generic
     private ArrayAdapter<String> factoryAdapter(int resId) {
         return new ArrayAdapter<>(this, R.layout.dropdown_menu_popup_item, getResources().getStringArray(resId));
@@ -249,6 +248,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
+
+//        this.estateViewModel.getPhotos().observe(this, this::updatePhotoList);
 //        this.estateViewModel.getEstate().observe(this, new Observer<Estate>() {
 //            @Override
 //            public void onChanged(Estate estate) {
@@ -257,6 +258,9 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 //            }
 //        });
     }
+
+
+
     //For manage photos
     //For click on photo btn
     public void onClickPhotoBtn() {
@@ -300,8 +304,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 this.sendBroadcast(mediaScanIntent);
                 Log.d("TestUri", "Uri image is" + contentUri);
                 String contentUriToString = contentUri.toString();
-                estateViewModel.getPhotos().setValue(Collections.singletonList(contentUriToString));
-
+//                estateViewModel.getPhotos().setValue(Collections.singletonList(contentUriToString));
+//                updatePhoto(photolist);
             }
         }
         if (requestCode == PICK_IMAGE_GALLERY && data != null && data.getData() != null) {
@@ -313,6 +317,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 Log.d("Test uri gallery", "onActivityResult : Gallery Image Uri:" + imageFileName);
 //                Objects.requireNonNull(estateFormBinding.cameraView).setImageURI(contentUri);
                 estateViewModel.getPhotos().setValue(Collections.singletonList(imageFileName));
+                updatePhotoList(photolist);
                 //For save image in internal storage
                 FileOutputStream fOut = null;
                 try {
