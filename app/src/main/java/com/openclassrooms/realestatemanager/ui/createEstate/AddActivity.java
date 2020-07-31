@@ -20,6 +20,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.openclassrooms.realestatemanager.database.converters.PhotoListConverter;
 import com.openclassrooms.realestatemanager.models.PhotoList;
@@ -124,7 +125,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 //        viewColors.add(Color.BLACK);
           listPhoto = new ArrayList<>();
 
-                adapter = new PhotoAdapter(listPhoto,glide);
+          adapter = new PhotoAdapter(this.listPhoto, Glide.with(this));
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         Objects.requireNonNull(estateFormBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);

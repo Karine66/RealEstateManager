@@ -24,10 +24,10 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".ui.mapPage.MapActivity"></activity>
+        <activity android:name=".ui.mapPage.MapActivity" />
         <activity android:name=".ui.searchPage.SearchActivity" />
         <activity android:name=".ui.EditEstate.EditActivity" />
         <activity

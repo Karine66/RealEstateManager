@@ -40,7 +40,7 @@ private List<PhotoList> mPhotoList;
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
 //    int color = mViewColors.get(position);
 //    holder.activityAddPhotoItemBinding.photoImage.setBackgroundColor(color);
-    holder.updateWithDetails(mPhotoList.get(position), glide);
+    holder.updateWithDetails(this.mPhotoList.get(position), this.glide);
     }
 
     @Override
