@@ -44,6 +44,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private String currentPhotoPath;
     private Context context;
     private PhotoList photoList;
+    protected ActionBar ab;
 
 
     protected void configureToolbar() {
@@ -52,7 +53,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void configureUpButton() {
-        ActionBar ab = getSupportActionBar();
+        ab = getSupportActionBar();
         if (ab != null) ab.setDisplayHomeAsUpEnabled(true);
     }
 

@@ -16,6 +16,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+<!--        <activity android:name=".ui.detailDescription.DetailActivity"></activity>-->
+
+        <!-- A child of the main activity -->
+        <!-- DETAIL Activity -->
+        <activity
+            android:name=".ui.detailDescription.DetailActivity"
+            android:label="Details Description"
+            android:parentActivityName=".ui.mainPage.MainActivity">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.mainPage.MainActivity" />
+        </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"

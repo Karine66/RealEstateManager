@@ -6,4 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".ui.detailDescription.DetailActivity">
 
+    <FrameLayout
+        android:id="@+id/detail_fragment_frameLayout"
+        android:layout_width="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_height="match_parent" />
+
+    <include
+        layout="@layout/toolbar"
+        android:layout_below="@+id/detail_fragment_frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

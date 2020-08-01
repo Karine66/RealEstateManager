@@ -22,6 +22,7 @@ import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
+import com.openclassrooms.realestatemanager.ui.detailDescription.DetailActivity;
 import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
 import com.openclassrooms.realestatemanager.utils.ItemClickSupport;
 
@@ -133,7 +134,7 @@ public class ListFragment extends Fragment {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
 
-                        Intent intent = new Intent(getContext(), DetailFragment.class);
+                        Intent intent = new Intent(getContext(), DetailActivity.class);
                             Estate estate = mAdapter.getEstate(position);
                             Log.d("Test click Rv", "click on" + estate.getPrice());
                             startActivity(intent);
