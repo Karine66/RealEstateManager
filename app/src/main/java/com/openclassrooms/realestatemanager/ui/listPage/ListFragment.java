@@ -92,7 +92,6 @@ public class ListFragment extends Fragment {
         // For viewBinding
         fragmentListBinding = FragmentListBinding.inflate(inflater, container,false);
         View view = fragmentListBinding.getRoot();
-
         this.configureViewModel();
         this.configureRecyclerView();
         this.configureOnClickRecyclerView();

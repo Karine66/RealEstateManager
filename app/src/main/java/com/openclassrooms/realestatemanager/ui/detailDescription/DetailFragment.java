@@ -1,16 +1,26 @@
 package com.openclassrooms.realestatemanager.ui.detailDescription;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding;
+import com.openclassrooms.realestatemanager.injections.Injection;
+import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
+import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
+
+import java.util.Collections;
+import java.util.Objects;
 
 ///**
 // * A simple {@link Fragment} subclass.
@@ -21,6 +31,8 @@ public class DetailFragment extends Fragment {
 
     private FragmentDetailBinding fragmentDetailBinding;
     private Estate estate;
+    private EstateViewModel estateViewModel;
+    private long mandateNumberID;
 //
 //    // TODO: Rename parameter arguments, choose names that match
 //    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -65,28 +77,52 @@ public class DetailFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // For viewbinding
         fragmentDetailBinding = FragmentDetailBinding.inflate(inflater, container,false);
         View view = fragmentDetailBinding.getRoot();
-//        updateUi(estate);
+        configureViewModel();
+        setMandateID(mandateNumberID);
         return view;
 
     }
 
+    private void configureViewModel() {
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());
+        this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
 
+        this.estateViewModel.getEstate().observe(this, this::updateUi);
+    }
 
+    @SuppressLint("SetTextI18n")
     public void updateUi(Estate estate) {
-        this.estate = estate;
 
-        fragmentDetailBinding.etSurface.setText(estate.getSurface());
-        fragmentDetailBinding.etRooms.setText(estate.getRooms());
-        fragmentDetailBinding.etBathrooms.setText(estate.getBathrooms());
-        fragmentDetailBinding.etBedrooms.setText(estate.getBedrooms());
-        fragmentDetailBinding.etAddress.setText(estate.getAddress());
-        fragmentDetailBinding.etPostalCode.setText(estate.getPostalCode());
-        fragmentDetailBinding.etCity.setText(estate.getCity());
+        if(estate !=null) {
+            fragmentDetailBinding.etSurface.setText(Objects.requireNonNull(estate.getSurface()).toString());
+            fragmentDetailBinding.etSurface.setEnabled(false);
+            fragmentDetailBinding.etDescription.setText(estate.getDescription());
+            fragmentDetailBinding.etDescription.setEnabled(false);
+            fragmentDetailBinding.etRooms.setText(Objects.requireNonNull(estate.getRooms()).toString());
+            fragmentDetailBinding.etRooms.setEnabled(false);
+            fragmentDetailBinding.etBathrooms.setText(Objects.requireNonNull(estate.getBathrooms()).toString());
+            fragmentDetailBinding.etBathrooms.setEnabled(false);
+            fragmentDetailBinding.etBedrooms.setText(Objects.requireNonNull(estate.getBedrooms()).toString());
+            fragmentDetailBinding.etBedrooms.setEnabled(false);
+            fragmentDetailBinding.etAddress.setText(estate.getAddress());
+            fragmentDetailBinding.etAddress.setEnabled(false);
+            fragmentDetailBinding.etPostalCode.setText(Objects.requireNonNull(estate.getPostalCode()).toString());
+            fragmentDetailBinding.etPostalCode.setEnabled(false);
+            fragmentDetailBinding.etCity.setText(estate.getCity());
+            fragmentDetailBinding.etCity.setEnabled(false);
+        }else{
+            Snackbar.make(fragmentDetailBinding.getRoot(), "No Estate create",Snackbar.LENGTH_SHORT).show();
+        }
+    }
 
+        //For retrieve automatically mandate number in edit text mandate number
+    public void setMandateID(long mandateNumberID) {
+        fragmentDetailBinding.etMandate.setText(String.valueOf(mandateNumberID));
+        fragmentDetailBinding.etMandate.setEnabled(false);
     }
 }

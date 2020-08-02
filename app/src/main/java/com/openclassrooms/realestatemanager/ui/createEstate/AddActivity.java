@@ -99,7 +99,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         this.onClickPhotoBtn();
         this.onClickVideoBtn();
         this.configureRecyclerView();
-//        this.setMandateID(mandateNumberID);
 
 //        this.onClickGalleryBtn();
         //for title toolbar
@@ -236,12 +235,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 this.estateViewModel.createEstate(estate);
 
     }
-//    //For retrieve automatically mandate number in edit text mandate number
-//    public void setMandateID(long mandateNumberID) {
-//
-//        estateFormBinding.etMandate.setText(String.valueOf(mandateNumberID));
-//        estateFormBinding.etMandate.setEnabled(false);
-//    }
+
 
 
 
