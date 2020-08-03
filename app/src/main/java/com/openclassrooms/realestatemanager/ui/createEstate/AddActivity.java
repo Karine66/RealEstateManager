@@ -73,11 +73,11 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private PhotoAdapter adapter;
     private List<Integer> viewColors;
     private long mandateNumberID;
-    private List<PhotoList> listPhoto;
+    private List<String> listPhoto;
     private RequestManager glide;
     private Bitmap selectedImage;
     private String currentPhotoPath;
-    private List<PhotoList> photolist;
+    private List<String> photolist;
 
 
     @Override
@@ -95,12 +95,10 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         this.setDateField();
         this.onClickValidateBtn();
         this.configureViewModel();
-//        this.methodRequiresTwoPermission();
         this.onClickPhotoBtn();
         this.onClickVideoBtn();
         this.configureRecyclerView();
 
-//        this.onClickGalleryBtn();
         //for title toolbar
         ActionBar ab = getSupportActionBar();
         Objects.requireNonNull(ab).setTitle("Create Estate");
@@ -110,31 +108,24 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         estateFormBinding.etMandate.setVisibility(View.INVISIBLE);
         estateFormBinding.inputMandate.setVisibility(View.INVISIBLE);
 
-
-
     }
 
 
     public void configureRecyclerView() {
-//        ArrayList<Integer> viewColors = new ArrayList<>();
-//        viewColors.add(Color.BLUE);
-//        viewColors.add(Color.YELLOW);
-//        viewColors.add(Color.MAGENTA);
-//        viewColors.add(Color.RED);
-//        viewColors.add(Color.BLACK);
+
           listPhoto = new ArrayList<>();
 
-          adapter = new PhotoAdapter(this.listPhoto, Glide.with(this));
+          adapter = new PhotoAdapter(listPhoto, Glide.with(this));
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         Objects.requireNonNull(estateFormBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
         estateFormBinding.rvPhoto.setAdapter(adapter);
     }
-        private void updatePhotoList(List<PhotoList> photoList) {
-        if(photoList != null)
-            adapter.updatePhoto(photoList);
-        adapter.notifyDataSetChanged();
-    }
+//        private void updatePhotoList(List<String> photoList) {
+//        if(photoList != null)
+//            adapter.updatePhoto(photoList);
+//        adapter.notifyDataSetChanged();
+//    }
 
 //    private void updatePhotoList(List<PhotoList> photoList){
 //        listPhoto.addAll(photoList);
@@ -312,7 +303,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 Log.d("Test uri gallery", "onActivityResult : Gallery Image Uri:" + imageFileName);
 //                Objects.requireNonNull(estateFormBinding.cameraView).setImageURI(contentUri);
                 estateViewModel.getPhotos().setValue(Collections.singletonList(imageFileName));
-                updatePhotoList(photolist);
+//                updatePhotoList(photolist);
                 //For save image in internal storage
                 FileOutputStream fOut = null;
                 try {
