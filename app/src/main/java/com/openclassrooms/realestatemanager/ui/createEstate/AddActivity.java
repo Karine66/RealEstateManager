@@ -8,20 +8,27 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.openclassrooms.realestatemanager.BuildConfig;
 import com.openclassrooms.realestatemanager.database.converters.PhotoListConverter;
 import com.openclassrooms.realestatemanager.models.PhotoList;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
@@ -33,10 +40,12 @@ import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,9 +62,9 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 //    private static final int CAMERA_REQUEST_CODE = 200;
 //    private static final int GALLERY_REQUEST_CODE = 300;
 
-    private static final int RC_CAMERA_AND_STORAGE =100;
-    private static final String [] CAM_AND_READ_EXTERNAL_STORAGE =
-        {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
+    private static final int RC_CAMERA_AND_STORAGE = 100;
+    private static final String[] CAM_AND_READ_EXTERNAL_STORAGE =
+            {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
     private static final int REQUEST_TAKE_PHOTO = 200;
 
 
@@ -71,13 +80,15 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
 
     private PhotoAdapter adapter;
-    private List<Integer> viewColors;
     private long mandateNumberID;
-    private List<String> listPhoto;
+    private List<Uri> listPhoto;
     private RequestManager glide;
     private Bitmap selectedImage;
     private String currentPhotoPath;
-    private List<String> photolist;
+    private Uri photoUri;
+    private Uri uriCamera;
+    private String path;
+    private Estate estate;
 
 
     @Override
@@ -99,6 +110,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         this.onClickVideoBtn();
         this.configureRecyclerView();
 
+
         //for title toolbar
         ActionBar ab = getSupportActionBar();
         Objects.requireNonNull(ab).setTitle("Create Estate");
@@ -113,24 +125,14 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
     public void configureRecyclerView() {
 
-          listPhoto = new ArrayList<>();
+        listPhoto = new ArrayList<>();
 
-          adapter = new PhotoAdapter(listPhoto, Glide.with(this));
+        adapter = new PhotoAdapter(listPhoto, Glide.with(this));
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         Objects.requireNonNull(estateFormBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
         estateFormBinding.rvPhoto.setAdapter(adapter);
     }
-//        private void updatePhotoList(List<String> photoList) {
-//        if(photoList != null)
-//            adapter.updatePhoto(photoList);
-//        adapter.notifyDataSetChanged();
-//    }
-
-//    private void updatePhotoList(List<PhotoList> photoList){
-//        listPhoto.addAll(photoList);
-//        adapter.notifyDataSetChanged();
-//    }
 
     //for adapter generic
     private ArrayAdapter<String> factoryAdapter(int resId) {
@@ -146,6 +148,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         estateFormBinding.etBathrooms.setAdapter(factoryAdapter(R.array.BATHROOMS));
         estateFormBinding.etAgent.setAdapter(factoryAdapter(R.array.AGENT));
     }
+
     // for date picker
     private void setDateField() {
         estateFormBinding.upOfSaleDate.setOnClickListener(this);
@@ -158,13 +161,14 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             estateFormBinding.upOfSaleDate.setText(mDateFormat.format(newDate.getTime()));
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         //For sold date
-         mSoldDate = new DatePickerDialog(this, (view, year, monthOfYear, dayOfMonth) -> {
+        mSoldDate = new DatePickerDialog(this, (view, year, monthOfYear, dayOfMonth) -> {
             Calendar newDate = Calendar.getInstance();
             newDate.set(year, monthOfYear, dayOfMonth);
             estateFormBinding.soldDate.setText(mDateFormat.format(newDate.getTime()));
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
-// for click on date picker
+
+    // for click on date picker
     @Override
     public void onClick(View view) {
         if (view == estateFormBinding.upOfSaleDate) {
@@ -180,13 +184,13 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 // for click on fab validate btn
 
     public void onClickValidateBtn() {
+
         estateFormBinding.validateFabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-               saveEstates();
-
-
+                saveEstates();
+                formatPrice(estate);
 
 //                Snackbar.make(v,"You're new Estate is created", Snackbar.LENGTH_SHORT).show();
 
@@ -200,9 +204,12 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     public void saveEstates() {
 
 
+
+        PhotoList photo = new PhotoList();
         Estate estate = new Estate(
 
-                 Long.parseLong(Objects.requireNonNull(estateFormBinding.etMandate.getText()).toString()),
+                mandateNumberID,
+//                Long.parseLong(Objects.requireNonNull(estateFormBinding.etMandate.getText()).toString()),
                 estateFormBinding.etEstate.getText().toString(),
                 Integer.parseInt(Objects.requireNonNull(estateFormBinding.etSurface.getText()).toString()),
                 Integer.parseInt(estateFormBinding.etRooms.getText().toString()),
@@ -219,18 +226,23 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 estateFormBinding.boxPark.isChecked(),
                 estateFormBinding.boxRestaurants.isChecked(),
                 estateFormBinding.availableRadiobtn.isChecked(),
-                 Objects.requireNonNull(estateFormBinding.upOfSaleDate.getText()).toString(),
+                Objects.requireNonNull(estateFormBinding.upOfSaleDate.getText()).toString(),
                 Objects.requireNonNull(estateFormBinding.soldDate.getText()).toString(),
-                estateFormBinding.etAgent.getText().toString());
+                estateFormBinding.etAgent.getText().toString(),
+                photo);
 
-                this.estateViewModel.createEstate(estate);
+
+        this.estateViewModel.createEstate(estate);
 
     }
 
+    public void formatPrice(Estate estate) {
+
+        NumberFormat.getInstance(Locale.US).format(estate.getPrice());
+    }
 
 
-
-        //Configuring ViewModel
+    //Configuring ViewModel
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
@@ -246,20 +258,20 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
-
     //For manage photos
     //For click on photo btn
     public void onClickPhotoBtn() {
-     estateFormBinding.photoBtn.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-             methodRequiresTwoPermission();
-             selectImage();
-           saveImageInInternalStorage();
+        estateFormBinding.photoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                methodRequiresTwoPermission();
+                selectImage();
+                saveImageInInternalStorage();
 
-          }
-     });
+            }
+        });
     }
+
     //For click on video btn
     public void onClickVideoBtn() {
         estateFormBinding.cameraBtn.setOnClickListener(new View.OnClickListener() {
@@ -271,6 +283,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             }
         });
     }
+
     //For photos
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -282,17 +295,15 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 File file = new File(currentPhotoPath);
 //                Objects.requireNonNull(estateFormBinding.cameraView).setImageURI(Uri.fromFile(file));
                 selectedImage = (Bitmap) Objects.requireNonNull(Objects.requireNonNull(data).getExtras()).get("data");
-
+//
                 //For save in gallery
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 Uri contentUri = Uri.fromFile(file);
                 mediaScanIntent.setData(contentUri);
                 this.sendBroadcast(mediaScanIntent);
-                Log.d("TestUri", "Uri image is" + contentUri);
-                String contentUriToString = contentUri.toString();
-//                estateViewModel.getPhotos().setValue(Collections.singletonList(contentUriToString));
-//                updatePhoto(photolist);
+              
             }
+
         }
         if (requestCode == PICK_IMAGE_GALLERY && data != null && data.getData() != null) {
             if (resultCode == Activity.RESULT_OK) {
@@ -301,13 +312,11 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 String timeStamp = new SimpleDateFormat("ddMMyyyy", Locale.FRANCE).format(new Date());
                 String imageFileName = "JPEG" + timeStamp + "." + getFileExt(contentUri);
                 Log.d("Test uri gallery", "onActivityResult : Gallery Image Uri:" + imageFileName);
-//                Objects.requireNonNull(estateFormBinding.cameraView).setImageURI(contentUri);
-                estateViewModel.getPhotos().setValue(Collections.singletonList(imageFileName));
-//                updatePhotoList(photolist);
+
                 //For save image in internal storage
                 FileOutputStream fOut = null;
                 try {
-                    fOut = openFileOutput("imageGallery",MODE_PRIVATE);
+                    fOut = openFileOutput("imageGallery", MODE_PRIVATE);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -325,7 +334,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                     e.printStackTrace();
                 }
 
-//                listPhoto.add(contentUri);
+                listPhoto.add(contentUri);
+                adapter.setPhotoList(listPhoto);
 //                Log.d("listPhotoGallery", "listPhotoGallery" + listPhoto);
             }
         }
@@ -336,8 +346,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(contentResolver.getType(contentUri));
     }
-
-    public void saveImageInInternalStorage () {
+    //for pick image camera
+    public void saveImageInInternalStorage() {
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
         File file = new File(directory, "UniqueFileName" + ".jpg");
@@ -345,15 +355,17 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             Log.d("path", file.toString());
             FileOutputStream fos = null;
             try {
-                fos = new FileOutputStream(file);
-                selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-                fos.flush();
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+                if (selectedImage != null) {
+                    fos = new FileOutputStream(file);
+                    selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                    fos.flush();
+                    fos.close();
+                }
+                } catch(IOException e){
+                    e.printStackTrace();
+                }
             }
         }
-    }
 
     }
 

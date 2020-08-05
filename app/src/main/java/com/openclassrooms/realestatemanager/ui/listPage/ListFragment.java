@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding;
 import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
@@ -23,10 +22,8 @@ import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.ui.detailDescription.DetailActivity;
-import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
 import com.openclassrooms.realestatemanager.utils.ItemClickSupport;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -106,7 +103,10 @@ public class ListFragment extends Fragment {
 
         this.estateViewModel.getEstate().observe(this, this::updateEstateList);
     }
-/**
+
+
+
+    /**
  * Configuration RecyclerView
  * Configure RecyclerView, Adapter, LayoutManager & glue it
  */

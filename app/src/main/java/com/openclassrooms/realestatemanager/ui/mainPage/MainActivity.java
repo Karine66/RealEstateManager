@@ -110,14 +110,14 @@ public class MainActivity extends BaseActivity {
 
 //    private void configureAndShowDetailFragment(){
 //        //Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
-//        detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_detail);
+//        detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.detail_fragment_frameLayout);
 //
 //        if (detailFragment == null) {
 //            //Create new main fragment
 //            detailFragment = new DetailFragment();
 //            //Add it to FrameLayout container
 //            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.list_fragment_frameLayout, detailFragment)
+//                    .add(R.id.detail_fragment_frameLayout, detailFragment)
 //                    .commit();
 //        }
 //    }

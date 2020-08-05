@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPhotoItemBinding;
-import com.openclassrooms.realestatemanager.models.PhotoList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +21,10 @@ private List<Integer> mViewColors;
 private RequestManager glide;
 //private List<PhotoList> mPhotoList;
 //    private List<PhotoList> photoList;
-private List<String> mPhotoList = new ArrayList<>();
+private List<Uri> mPhotoList = new ArrayList<Uri>();
 
 
-    public PhotoAdapter( List<String> listPhoto, RequestManager glide) {
+    public PhotoAdapter( List<Uri> listPhoto, RequestManager glide) {
 
     this.glide = glide;
 }
@@ -49,13 +48,13 @@ private List<String> mPhotoList = new ArrayList<>();
         return mPhotoList.size();
     }
 
-    public void setPhotoList(List<String> photos) {
+    public void setPhotoList(List<Uri> photos) {
         mPhotoList.clear();
         mPhotoList.addAll(photos);
         notifyDataSetChanged();
     }
 
-    public String getPhoto (int position) {
+    public Uri getPhoto (int position) {
         return mPhotoList.get(position);
     }
 //    private void updatePhoto(List<PhotoList> photoList){

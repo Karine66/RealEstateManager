@@ -105,8 +105,11 @@ public abstract class BaseActivity extends AppCompatActivity {
                             Uri photoUri = FileProvider.getUriForFile(getApplicationContext(), "com.openclassrooms.realestatemanager.fileprovider", photoFile);
 
                             takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+//                            takePicture.putExtra("uriCamera", photoUri);
                             Log.d("PhotoUri", "photoUri =" + photoUri);
                             startActivityForResult(takePicture, PICK_IMAGE_CAMERA);
+
+
 
                         }
                     }
@@ -128,7 +131,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private File createImageFile() throws IOException {
+    protected File createImageFile() throws IOException {
         //Create an image file name
         String timeStamp = new SimpleDateFormat("ddMMyyyy", Locale.FRANCE).format(new Date());
         String imageFileName = "JPEG" + timeStamp + "_";

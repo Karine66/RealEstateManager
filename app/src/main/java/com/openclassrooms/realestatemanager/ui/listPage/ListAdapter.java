@@ -48,4 +48,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListViewHolder> {
         this.estateList = estateList;
         this.notifyDataSetChanged();
     }
+
+
 }
