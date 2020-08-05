@@ -101,7 +101,8 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         View view = fragmentDetailBinding.getRoot();
         configureViewModel();
         setMandateID(mandateNumberID);
-        GoogleMapOptions options = new GoogleMapOptions().liteMode(true);
+        GoogleMapOptions options = new GoogleMapOptions();
+        options.liteMode(true);
         mapView = (MapView) fragmentDetailBinding.mapView;
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
@@ -163,7 +164,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
             }, PERMS_CALL_ID);
             return;
         }
-        map.setMyLocationEnabled(true);
+//        map.setMyLocationEnabled(true);
         LatLng sydney = new LatLng(-33.852, 151.211);
         googleMap.addMarker(new MarkerOptions().position(sydney)
                 .title("Marker in Sydney"));
