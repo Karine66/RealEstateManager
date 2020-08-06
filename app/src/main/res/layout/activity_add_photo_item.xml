@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="90dp"
-    android:layout_height="match_parent"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="80dp"
+    android:layout_height="80dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="20dp"
-    android:elevation="15dp"
+    app:strokeWidth="3dp"
+    app:strokeColor="@color/colorPrimaryDark"
     android:orientation="horizontal"
-    android:paddingHorizontal="20dp"
+    app:cardPreventCornerOverlap="false"
+    android:paddingHorizontal="20dp">
 
-    >
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/photo_image"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:scaleType="centerCrop"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="centerInside"
+        app:shapeAppearance="?attr/shapeAppearanceMediumComponent"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card.Media"
+
 
 
         >
 
-    </androidx.appcompat.widget.AppCompatImageView>
+    </com.google.android.material.imageview.ShapeableImageView>
 
 </com.google.android.material.card.MaterialCardView>

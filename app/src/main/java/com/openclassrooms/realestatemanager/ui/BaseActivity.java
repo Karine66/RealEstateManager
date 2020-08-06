@@ -78,73 +78,72 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    //For alert dialog for choose take photo or choose in gallery
-    protected void selectImage() {
-        final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
-
-        builder = new MaterialAlertDialogBuilder(this);
-        builder.setTitle("Add pictures");
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-
-                if (options[item].equals("Take Photo")) {
-                    Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(takePicture, PICK_IMAGE_CAMERA);
-                    if (takePicture.resolveActivity(getPackageManager()) != null) {
-                        //Create the File where the photo should go
-                        File photoFile = null;
-                        try {
-                            photoFile = createImageFile();
-                        } catch (IOException ex) {
-                            Log.e("PhotoFileException", Objects.requireNonNull(ex.getMessage()));
-                        }
-                        //Continue only if the file was successfully created
-                        if (photoFile != null) {
-                            Uri photoUri = FileProvider.getUriForFile(getApplicationContext(), "com.openclassrooms.realestatemanager.fileprovider", photoFile);
-
-                            takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-//                            takePicture.putExtra("uriCamera", photoUri);
-                            Log.d("PhotoUri", "photoUri =" + photoUri);
-                            startActivityForResult(takePicture, PICK_IMAGE_CAMERA);
-
-
-
-                        }
-                    }
-
-                } else if (options[item].equals("Choose from Gallery")) {
-                    Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(pickPhoto, PICK_IMAGE_GALLERY);
-
-
-
-
-                } else if (options[item].equals("Cancel")) {
-                    dialog.dismiss();
-
-                }
-            }
-        });
-
-        builder.show();
-    }
-
-    protected File createImageFile() throws IOException {
-        //Create an image file name
-        String timeStamp = new SimpleDateFormat("ddMMyyyy", Locale.FRANCE).format(new Date());
-        String imageFileName = "JPEG" + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName, /*prefix*/
-                ".jpg", /*suffix*/
-                storageDir /*directory*/
-        );
-        //Save file : path for use with ACTION_VIEW intent
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
+//    //For alert dialog for choose take photo or choose in gallery
+//    protected void selectImage() {
+//        final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
+//
+//        builder = new MaterialAlertDialogBuilder(this);
+//        builder.setTitle("Add pictures");
+//        builder.setItems(options, new DialogInterface.OnClickListener() {
+//
+//            @Override
+//            public void onClick(DialogInterface dialog, int item) {
+//
+//                if (options[item].equals("Take Photo")) {
+//                    Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//                    startActivityForResult(takePicture, PICK_IMAGE_CAMERA);
+//                    if (takePicture.resolveActivity(getPackageManager()) != null) {
+//                        //Create the File where the photo should go
+//                        File photoFile = null;
+//                        try {
+//                            photoFile = createImageFile();
+//                        } catch (IOException ex) {
+//                            Log.e("PhotoFileException", Objects.requireNonNull(ex.getMessage()));
+//                        }
+//                        //Continue only if the file was successfully created
+//                        if (photoFile != null) {
+//                            Uri photoUri = FileProvider.getUriForFile(getApplicationContext(), "com.openclassrooms.realestatemanager.fileprovider", photoFile);
+//
+//                            takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+//                            Log.d("PhotoUri", "photoUri =" + photoUri);
+//                            startActivityForResult(takePicture, PICK_IMAGE_CAMERA);
+//
+//
+//
+//                        }
+//                    }
+//
+//                } else if (options[item].equals("Choose from Gallery")) {
+//                    Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                    startActivityForResult(pickPhoto, PICK_IMAGE_GALLERY);
+//
+//
+//
+//
+//                } else if (options[item].equals("Cancel")) {
+//                    dialog.dismiss();
+//
+//                }
+//            }
+//        });
+//
+//        builder.show();
+//    }
+//
+//    protected File createImageFile() throws IOException {
+//        //Create an image file name
+//        String timeStamp = new SimpleDateFormat("ddMMyyyy", Locale.FRANCE).format(new Date());
+//        String imageFileName = "JPEG" + timeStamp + "_";
+//        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+//        File image = File.createTempFile(
+//                imageFileName, /*prefix*/
+//                ".jpg", /*suffix*/
+//                storageDir /*directory*/
+//        );
+//        //Save file : path for use with ACTION_VIEW intent
+//        currentPhotoPath = image.getAbsolutePath();
+//        return image;
+//    }
 
     //For alert dialog for choose take video or choose video
     protected void selectVideo() {

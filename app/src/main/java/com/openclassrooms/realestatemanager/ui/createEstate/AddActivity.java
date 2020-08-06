@@ -6,13 +6,12 @@ import android.app.DatePickerDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -20,7 +19,6 @@ import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -28,28 +26,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.openclassrooms.realestatemanager.BuildConfig;
-import com.openclassrooms.realestatemanager.database.converters.PhotoListConverter;
-import com.openclassrooms.realestatemanager.models.PhotoList;
-import com.openclassrooms.realestatemanager.ui.BaseActivity;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
 import com.openclassrooms.realestatemanager.databinding.EstateFormBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
+import com.openclassrooms.realestatemanager.models.PhotoList;
+import com.openclassrooms.realestatemanager.ui.BaseActivity;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -89,6 +83,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private Uri uriCamera;
     private String path;
     private Estate estate;
+    private MaterialAlertDialogBuilder builder;
 
 
     @Override
@@ -190,7 +185,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             public void onClick(View v) {
 
                 saveEstates();
-                formatPrice(estate);
 
 //                Snackbar.make(v,"You're new Estate is created", Snackbar.LENGTH_SHORT).show();
 
@@ -202,7 +196,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
     //For save in database
     public void saveEstates() {
-
 
 
         PhotoList photo = new PhotoList();
@@ -234,11 +227,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
         this.estateViewModel.createEstate(estate);
 
-    }
-
-    public void formatPrice(Estate estate) {
-
-        NumberFormat.getInstance(Locale.US).format(estate.getPrice());
     }
 
 
@@ -284,6 +272,68 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
+    //For alert dialog for choose take photo or choose in gallery
+    protected void selectImage() {
+        final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
+
+        builder = new MaterialAlertDialogBuilder(this);
+        builder.setTitle("Add pictures");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                if (options[item].equals("Take Photo")) {
+                    Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(takePicture, PICK_IMAGE_CAMERA);
+                    if (takePicture.resolveActivity(getPackageManager()) != null) {
+                        //Create the File where the photo should go
+                        File photoFile = null;
+                        try {
+                            photoFile = createImageFile();
+                        } catch (IOException ex) {
+                            Log.e("PhotoFileException", Objects.requireNonNull(ex.getMessage()));
+                        }
+                        //Continue only if the file was successfully created
+                        if (photoFile != null) {
+                            Uri photoUri = FileProvider.getUriForFile(getApplicationContext(), "com.openclassrooms.realestatemanager.fileprovider", photoFile);
+
+                            takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                            Log.d("PhotoUri", "photoUri =" + photoUri);
+                            startActivityForResult(takePicture, PICK_IMAGE_CAMERA);
+                            listPhoto.add(photoUri);
+                            adapter.setPhotoList(listPhoto);
+                        }
+                    }
+
+                } else if (options[item].equals("Choose from Gallery")) {
+                    Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(pickPhoto, PICK_IMAGE_GALLERY);
+
+                } else if (options[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        builder.show();
+    }
+
+    protected File createImageFile() throws IOException {
+        //Create an image file name
+        String timeStamp = new SimpleDateFormat("ddMMyyyy", Locale.FRANCE).format(new Date());
+        String imageFileName = "JPEG" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName, /*prefix*/
+                ".jpg", /*suffix*/
+                storageDir /*directory*/
+        );
+        //Save file : path for use with ACTION_VIEW intent
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
     //For photos
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -292,16 +342,15 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         if (requestCode == PICK_IMAGE_CAMERA && data != null && data.getData() != null) {
             if (resultCode == Activity.RESULT_OK) {
 
-                File file = new File(currentPhotoPath);
-//                Objects.requireNonNull(estateFormBinding.cameraView).setImageURI(Uri.fromFile(file));
                 selectedImage = (Bitmap) Objects.requireNonNull(Objects.requireNonNull(data).getExtras()).get("data");
-//
+
                 //For save in gallery
+                File file = new File(currentPhotoPath);
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                Uri contentUri = Uri.fromFile(file);
-                mediaScanIntent.setData(contentUri);
+                Uri uriCamera = Uri.fromFile(file);
+                mediaScanIntent.setData(uriCamera);
                 this.sendBroadcast(mediaScanIntent);
-              
+
             }
 
         }
@@ -346,6 +395,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(contentResolver.getType(contentUri));
     }
+
     //for pick image camera
     public void saveImageInInternalStorage() {
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
@@ -361,13 +411,13 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                     fos.flush();
                     fos.close();
                 }
-                } catch(IOException e){
-                    e.printStackTrace();
-                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
-
     }
+
+}
 
 
 
