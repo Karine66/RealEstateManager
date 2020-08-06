@@ -43,7 +43,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     private MaterialAlertDialogBuilder builderVideo;
     private String currentPhotoPath;
     private Context context;
-    private PhotoList photoList;
     protected ActionBar ab;
 
 

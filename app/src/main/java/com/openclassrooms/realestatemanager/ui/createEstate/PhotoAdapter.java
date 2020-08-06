@@ -19,8 +19,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder>{
 
 private List<Integer> mViewColors;
 private RequestManager glide;
-//private List<PhotoList> mPhotoList;
-//    private List<PhotoList> photoList;
 private List<Uri> mPhotoList = new ArrayList<Uri>();
 
 
@@ -38,8 +36,6 @@ private List<Uri> mPhotoList = new ArrayList<Uri>();
 
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
-//    int color = mViewColors.get(position);
-//    holder.activityAddPhotoItemBinding.photoImage.setBackgroundColor(color);
     holder.updateWithDetails(this.mPhotoList.get(position), this.glide);
     }
 
@@ -54,16 +50,10 @@ private List<Uri> mPhotoList = new ArrayList<Uri>();
         notifyDataSetChanged();
     }
 
-    public Uri getPhoto (int position) {
-        return mPhotoList.get(position);
-    }
-//    private void updatePhoto(List<PhotoList> photoList){
-//        this.mPhotoList = mPhotoList;
-//        this.notifyDataSetChanged();
+//    public Uri getPhoto (int position) {
+//        return mPhotoList.get(position);
 //    }
 
-//    public void updatePhoto(List<String> photoList) {
-//    this.photoList = photoList;
-//    this.notifyDataSetChanged();
-//    }
+
+
 }

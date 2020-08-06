@@ -53,8 +53,7 @@ import java.util.Objects;
 public class AddActivity extends BaseActivity implements View.OnClickListener {
 
     private static final int CAMERA_PERM_CODE = 100;
-//    private static final int CAMERA_REQUEST_CODE = 200;
-//    private static final int GALLERY_REQUEST_CODE = 300;
+
 
     private static final int RC_CAMERA_AND_STORAGE = 100;
     private static final String[] CAM_AND_READ_EXTERNAL_STORAGE =
@@ -84,6 +83,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private String path;
     private Estate estate;
     private MaterialAlertDialogBuilder builder;
+    private PhotoList photoList;
+    private Uri contentUri;
 
 
     @Override
@@ -111,9 +112,11 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         Objects.requireNonNull(ab).setTitle("Create Estate");
         //For date picker
         mDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
-        //For mandate number
+        //For hide mandate number
         estateFormBinding.etMandate.setVisibility(View.INVISIBLE);
         estateFormBinding.inputMandate.setVisibility(View.INVISIBLE);
+
+
 
     }
 
@@ -209,7 +212,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 Integer.parseInt(estateFormBinding.etBedrooms.getText().toString()),
                 Integer.parseInt(estateFormBinding.etBathrooms.getText().toString()),
                 Integer.parseInt(Objects.requireNonNull(estateFormBinding.etGround.getText()).toString()),
-                Double.parseDouble(Objects.requireNonNull((estateFormBinding.etPrice.getText())).toString()),
+                 Double.parseDouble(Objects.requireNonNull((estateFormBinding.etPrice.getText())).toString()),
                 Objects.requireNonNull(estateFormBinding.etDescription.getText()).toString(),
                 Objects.requireNonNull(estateFormBinding.etAddress.getText()).toString(),
                 Integer.parseInt(Objects.requireNonNull(estateFormBinding.etPostalCode.getText()).toString()),
@@ -235,7 +238,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
 
-//        this.estateViewModel.getPhotos().observe(this, this::updatePhotoList);
+
 //        this.estateViewModel.getEstate().observe(this, new Observer<Estate>() {
 //            @Override
 //            public void onChanged(Estate estate) {
@@ -303,6 +306,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                             startActivityForResult(takePicture, PICK_IMAGE_CAMERA);
                             listPhoto.add(photoUri);
                             adapter.setPhotoList(listPhoto);
+
                         }
                     }
 
