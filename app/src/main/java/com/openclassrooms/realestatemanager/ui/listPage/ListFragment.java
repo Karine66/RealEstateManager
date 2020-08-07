@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding;
+import com.openclassrooms.realestatemanager.repositories.EstateDataRepository;
 import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
 
 import com.openclassrooms.realestatemanager.injections.Injection;
@@ -49,6 +50,8 @@ public class ListFragment extends Fragment {
     private ListAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private EstateViewModel estateViewModel;
+    private long mandateNumberID;
+    private EstateDataRepository estateDateRepository;
 
     public ListFragment() {
         // Required empty public constructor
@@ -102,6 +105,8 @@ public class ListFragment extends Fragment {
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
 
         this.estateViewModel.getEstate().observe(this, this::updateEstateList);
+
+
     }
 
 
@@ -134,8 +139,8 @@ public class ListFragment extends Fragment {
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
 
                         Intent intent = new Intent(getContext(), DetailActivity.class);
-                            Estate estate = mAdapter.getEstate(position);
-                            Log.d("Test click Rv", "click on" + estate.getPrice());
+//                            Estate estate = mAdapter.getEstate(position);
+//                            Log.d("Test click Rv", "click on" + estate.getPrice());
                             startActivity(intent);
 
                     }
@@ -152,6 +157,7 @@ public class ListFragment extends Fragment {
     private void updateEstateList(Estate estates) {
         if(estates != null)
             mAdapter.updateData(Collections.singletonList(estates));
+
     }
 
 

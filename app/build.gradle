@@ -32,7 +32,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField "String", "GOOGLE_API_KEY", GOOGLE_API_KEY
+            buildConfigField "String", "GOOGLE_MAP_API_KEY", GOOGLE_MAP_API_KEY
 
         }
     }
