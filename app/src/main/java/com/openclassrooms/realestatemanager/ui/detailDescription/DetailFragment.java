@@ -117,7 +117,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
 
-        this.estateViewModel.getEstate().observe(this, this::updateUi);
+//        this.estateViewModel.getEstate(mandateNumberID).observe(this, this::updateUi);
     }
 
     @SuppressLint("SetTextI18n")

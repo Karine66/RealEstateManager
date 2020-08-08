@@ -104,7 +104,7 @@ public class ListFragment extends Fragment {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
 
-        this.estateViewModel.getEstate().observe(this, this::updateEstateList);
+        this.estateViewModel.getEstates().observe(this, this::updateEstateList);
 
 
     }
@@ -154,9 +154,9 @@ public class ListFragment extends Fragment {
         fragmentListBinding = null;
     }
 
-    private void updateEstateList(Estate estates) {
+    private void updateEstateList(List<Estate> estates) {
         if(estates != null)
-            mAdapter.updateData(Collections.singletonList(estates));
+            mAdapter.updateData(estates);
 
     }
 

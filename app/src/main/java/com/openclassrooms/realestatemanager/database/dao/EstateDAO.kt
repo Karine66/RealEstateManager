@@ -8,11 +8,11 @@ import com.openclassrooms.realestatemanager.models.Estate
 interface EstateDAO {
 
 
-        @Query("SELECT * FROM Estate WHERE mandateNumberID = :mandateNumberID")
-        fun getEstates(mandateNumberID:Long): LiveData<List<Estate>>
-
         @Query("SELECT * FROM Estate")
-        fun getEstate(): LiveData<Estate>
+        fun getEstates(): LiveData<List<Estate>>
+
+        @Query("SELECT * FROM Estate WHERE mandateNumberID = :mandateNumberID")
+        fun getEstate(mandateNumberID: Long): LiveData<Estate>
 
         @Insert
         fun insertEstate(estate: Estate):Long

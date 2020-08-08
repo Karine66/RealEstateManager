@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.listPage;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,7 +40,7 @@ public class ListViewHolder extends RecyclerView.ViewHolder {
 
         }
         if (estate.getSold()) {
-            fragmentListItemBinding.listPhotoSold.setImageResource(R.drawable.sold2);
+            fragmentListItemBinding.listPhotoSold.setImageResource(R.drawable.sold4);
         }
 
     }

@@ -18,11 +18,11 @@ public class EstateDataRepository {
         this.estateDAO = estateDAO;
     }
     //Get
-    public LiveData<List<Estate>> getEstates(long mandateEstateID) {
-        return this.estateDAO.getEstates(mandateEstateID);
+    public LiveData<List<Estate>> getEstates() {
+        return this.estateDAO.getEstates();
     }
-    public LiveData<Estate> getEstate() {
-        return this.estateDAO.getEstate();
+    public LiveData<Estate> getEstate(long mandateNumberID) {
+        return this.estateDAO.getEstate(mandateNumberID);
     }
     //Create
     public void createEstate(Estate estate) {

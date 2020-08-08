@@ -26,11 +26,11 @@ public class EstateViewModel extends ViewModel {
     }
 
 
-    public LiveData<List<Estate>> getEstates (long mandateNumberID) {
-        return estateDataSource.getEstates(mandateNumberID);
+    public LiveData<List<Estate>> getEstates () {
+        return estateDataSource.getEstates();
     }
-    public LiveData<Estate> getEstate () {
-        return estateDataSource.getEstate();
+    public LiveData<Estate> getEstate (long mandateNumberID) {
+        return estateDataSource.getEstate(mandateNumberID);
     }
 
     public void createEstate(Estate estate) {
