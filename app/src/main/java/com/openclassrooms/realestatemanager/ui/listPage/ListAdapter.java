@@ -40,7 +40,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListViewHolder> {
         return this.estateList.size();
     }
 
-    public Estate getEstate (int position) {
+    public Estate getEstates (int position) {
         return this.estateList.get(position);
     }
 

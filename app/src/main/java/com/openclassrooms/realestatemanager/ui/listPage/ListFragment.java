@@ -23,6 +23,7 @@ import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.ui.detailDescription.DetailActivity;
+import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
 import com.openclassrooms.realestatemanager.utils.ItemClickSupport;
 
 import java.util.ArrayList;
@@ -138,9 +139,11 @@ public class ListFragment extends Fragment {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
 
-                        Intent intent = new Intent(getContext(), DetailActivity.class);
-//                            Estate estate = mAdapter.getEstate(position);
-//                            Log.d("Test click Rv", "click on" + estate.getPrice());
+
+                            Intent intent = new Intent(getContext(), DetailActivity.class);
+                              Estate estate = mAdapter.getEstates(position);
+                            intent.putExtra("mandanteNumberID", estate.getMandateNumberID());
+                            Log.d("bundleRV", "mandateID" + estate.getMandateNumberID());
                             startActivity(intent);
 
                     }

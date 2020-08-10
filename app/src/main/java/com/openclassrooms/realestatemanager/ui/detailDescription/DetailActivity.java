@@ -3,12 +3,15 @@ package com.openclassrooms.realestatemanager.ui.detailDescription;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
 import com.openclassrooms.realestatemanager.databinding.ActivityDetailBinding;
+import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
 
 import java.util.Objects;
@@ -17,6 +20,7 @@ public class DetailActivity extends BaseActivity {
 
     private ActivityDetailBinding activityDetailBinding;
     private DetailFragment detailFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,9 @@ public class DetailActivity extends BaseActivity {
         ActionBar ab = getSupportActionBar();
         Objects.requireNonNull(ab).setTitle("Estate Description");
 
+        Intent intent = getIntent();
+        long mandateId = intent.getLongExtra("mandateNumberID", 1);
+        Log.d("IDDetail", "id" + mandateId);
     }
 
 

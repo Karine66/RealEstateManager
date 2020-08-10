@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.ui.detailDescription;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -12,6 +13,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,7 +119,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
 
-//        this.estateViewModel.getEstate(mandateNumberID).observe(this, this::updateUi);
+       this.estateViewModel.getEstate(mandateNumberID).observe(this, this::updateUi);
     }
 
     @SuppressLint("SetTextI18n")
