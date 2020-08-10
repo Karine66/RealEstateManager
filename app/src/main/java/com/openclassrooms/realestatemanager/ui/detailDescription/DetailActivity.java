@@ -20,6 +20,8 @@ public class DetailActivity extends BaseActivity {
 
     private ActivityDetailBinding activityDetailBinding;
     private DetailFragment detailFragment;
+    private Bundle bundle;
+    private Estate estate;
 
 
     @Override
@@ -31,16 +33,13 @@ public class DetailActivity extends BaseActivity {
 
         this.configureToolbar();
         this.configureUpButton();
-
         this.configureAndShowDetailFragment();
 
         //for title toolbar
         ActionBar ab = getSupportActionBar();
         Objects.requireNonNull(ab).setTitle("Estate Description");
 
-        Intent intent = getIntent();
-        long mandateId = intent.getLongExtra("mandateNumberID", 1);
-        Log.d("IDDetail", "id" + mandateId);
+
     }
 
 

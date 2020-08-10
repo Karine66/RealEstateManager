@@ -139,11 +139,12 @@ public class ListFragment extends Fragment {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
 
-
+                        Estate estate = mAdapter.getEstates(position);
                             Intent intent = new Intent(getContext(), DetailActivity.class);
-                              Estate estate = mAdapter.getEstates(position);
-                            intent.putExtra("mandanteNumberID", estate.getMandateNumberID());
-                            Log.d("bundleRV", "mandateID" + estate.getMandateNumberID());
+
+                            intent.putExtra("estate", estate);
+//                            Log.d("bundleRV", "mandateID" + estate.getMandateNumberID());
+                        Log.d("bundleRV", "estate" + estate);
                             startActivity(intent);
 
                     }

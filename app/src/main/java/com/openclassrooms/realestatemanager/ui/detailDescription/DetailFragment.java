@@ -1,15 +1,10 @@
 package com.openclassrooms.realestatemanager.ui.detailDescription;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -27,14 +22,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.snackbar.Snackbar;
-import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
 
-import java.util.Collections;
 import java.util.Objects;
 
 ///**
@@ -102,13 +95,12 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         fragmentDetailBinding = FragmentDetailBinding.inflate(inflater, container, false);
         View view = fragmentDetailBinding.getRoot();
         configureViewModel();
-        setMandateID(mandateNumberID);
+//        setMandateID(mandateNumberID);
         GoogleMapOptions options = new GoogleMapOptions();
         options.liteMode(true);
         mapView = (MapView) fragmentDetailBinding.mapView;
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
-
 
         return view;
 
@@ -119,28 +111,32 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
 
-       this.estateViewModel.getEstate(mandateNumberID).observe(this, this::updateUi);
+       this.estateViewModel.getEstate(mandateNumberID).observe(this, estateDetail -> updateUi());
     }
 
     @SuppressLint("SetTextI18n")
-    public void updateUi(Estate estate) {
-
-        if (estate != null) {
-            fragmentDetailBinding.etSurface.setText(Objects.requireNonNull(estate.getSurface()).toString());
+    public void updateUi() {
+        Intent intent = Objects.requireNonNull(getActivity()).getIntent();
+        Estate estateDetail = (Estate) intent.getSerializableExtra("estate");
+        Log.d("idDetail", "idDetail" + estateDetail);
+        if (estateDetail != null) {
+            fragmentDetailBinding.etMandate.setText(String.valueOf(estateDetail.getMandateNumberID()));
+            fragmentDetailBinding.etMandate.setEnabled(false);
+            fragmentDetailBinding.etSurface.setText(Objects.requireNonNull(estateDetail.getSurface()).toString());
             fragmentDetailBinding.etSurface.setEnabled(false);
-            fragmentDetailBinding.etDescription.setText(estate.getDescription());
+            fragmentDetailBinding.etDescription.setText(estateDetail.getDescription());
             fragmentDetailBinding.etDescription.setEnabled(false);
-            fragmentDetailBinding.etRooms.setText(Objects.requireNonNull(estate.getRooms()).toString());
+            fragmentDetailBinding.etRooms.setText(Objects.requireNonNull(estateDetail.getRooms()).toString());
             fragmentDetailBinding.etRooms.setEnabled(false);
-            fragmentDetailBinding.etBathrooms.setText(Objects.requireNonNull(estate.getBathrooms()).toString());
+            fragmentDetailBinding.etBathrooms.setText(Objects.requireNonNull(estateDetail.getBathrooms()).toString());
             fragmentDetailBinding.etBathrooms.setEnabled(false);
-            fragmentDetailBinding.etBedrooms.setText(Objects.requireNonNull(estate.getBedrooms()).toString());
+            fragmentDetailBinding.etBedrooms.setText(Objects.requireNonNull(estateDetail.getBedrooms()).toString());
             fragmentDetailBinding.etBedrooms.setEnabled(false);
-            fragmentDetailBinding.etAddress.setText(estate.getAddress());
+            fragmentDetailBinding.etAddress.setText(estateDetail.getAddress());
             fragmentDetailBinding.etAddress.setEnabled(false);
-            fragmentDetailBinding.etPostalCode.setText(Objects.requireNonNull(estate.getPostalCode()).toString());
+            fragmentDetailBinding.etPostalCode.setText(Objects.requireNonNull(estateDetail.getPostalCode()).toString());
             fragmentDetailBinding.etPostalCode.setEnabled(false);
-            fragmentDetailBinding.etCity.setText(estate.getCity());
+            fragmentDetailBinding.etCity.setText(estateDetail.getCity());
             fragmentDetailBinding.etCity.setEnabled(false);
         } else {
             Snackbar.make(fragmentDetailBinding.getRoot(), "No Estate create", Snackbar.LENGTH_SHORT).show();

@@ -3,10 +3,11 @@ package com.openclassrooms.realestatemanager.models
 import android.content.ContentValues
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 
 @Entity
-data class Estate(@PrimaryKey (autoGenerate = true) val mandateNumberID: Long,
+data class Estate (@PrimaryKey (autoGenerate = true) val mandateNumberID: Long,
 
                   var estateType:String?,
                   var surface: Int?,
@@ -31,7 +32,7 @@ data class Estate(@PrimaryKey (autoGenerate = true) val mandateNumberID: Long,
 
 
 //var video:ArrayList<String> = TODO())
-) {
+) : Serializable {
     constructor() : this(0, "", null, null, null, null, null, null, "", "",
             null, "", false, false, false, false, false, null, null, "", PhotoList())
 
