@@ -94,7 +94,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         // For viewbinding
         fragmentDetailBinding = FragmentDetailBinding.inflate(inflater, container, false);
         View view = fragmentDetailBinding.getRoot();
-        configureViewModel();
+       updateUi();
 //        setMandateID(mandateNumberID);
         GoogleMapOptions options = new GoogleMapOptions();
         options.liteMode(true);
@@ -107,18 +107,19 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-    private void configureViewModel() {
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());
-        this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
-
-       this.estateViewModel.getEstate(mandateNumberID).observe(this, estateDetail -> updateUi());
-    }
+//    private void configureViewModel() {
+//        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());
+//        this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
+//
+//       this.estateViewModel.getEstate(mandateNumberID).observe(this, estateDetail -> updateUi());
+//    }
 
     @SuppressLint("SetTextI18n")
     public void updateUi() {
         Intent intent = Objects.requireNonNull(getActivity()).getIntent();
         Estate estateDetail = (Estate) intent.getSerializableExtra("estate");
         Log.d("idDetail", "idDetail" + estateDetail);
+
         if (estateDetail != null) {
             fragmentDetailBinding.etMandate.setText(String.valueOf(estateDetail.getMandateNumberID()));
             fragmentDetailBinding.etMandate.setEnabled(false);
@@ -141,12 +142,6 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         } else {
             Snackbar.make(fragmentDetailBinding.getRoot(), "No Estate create", Snackbar.LENGTH_SHORT).show();
         }
-    }
-
-    //For retrieve automatically mandate number in edit text mandate number
-    public void setMandateID(long mandateNumberID) {
-        fragmentDetailBinding.etMandate.setText(String.valueOf(mandateNumberID));
-        fragmentDetailBinding.etMandate.setEnabled(false);
     }
 
 
