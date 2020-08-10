@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.listPage;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,19 +9,23 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding;
+import com.openclassrooms.realestatemanager.repositories.EstateDataRepository;
+import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
+
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
+import com.openclassrooms.realestatemanager.ui.detailDescription.DetailActivity;
+import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
 import com.openclassrooms.realestatemanager.utils.ItemClickSupport;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -46,6 +51,8 @@ public class ListFragment extends Fragment {
     private ListAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private EstateViewModel estateViewModel;
+    private long mandateNumberID;
+    private EstateDataRepository estateDateRepository;
 
     public ListFragment() {
         // Required empty public constructor
@@ -86,10 +93,9 @@ public class ListFragment extends Fragment {
         // For viewBinding
         fragmentListBinding = FragmentListBinding.inflate(inflater, container,false);
         View view = fragmentListBinding.getRoot();
-
         this.configureViewModel();
         this.configureRecyclerView();
-//        this.configureOnClickRecyclerView();
+        this.configureOnClickRecyclerView();
         return view;
 
 
@@ -100,8 +106,13 @@ public class ListFragment extends Fragment {
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
 
         this.estateViewModel.getEstates().observe(this, this::updateEstateList);
+
+
     }
-/**
+
+
+
+    /**
  * Configuration RecyclerView
  * Configure RecyclerView, Adapter, LayoutManager & glue it
  */
@@ -123,10 +134,18 @@ public class ListFragment extends Fragment {
      * Configure item click on RecyclerView
      */
     private void configureOnClickRecyclerView() {
-        ItemClickSupport.addTo(mRecyclerView, R.layout.fragment_list_item)
+        ItemClickSupport.addTo(fragmentListBinding.fragmentListRV, R.layout.fragment_list_item)
                 .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+
+                        Estate estate = mAdapter.getEstates(position);
+                            Intent intent = new Intent(getContext(), DetailActivity.class);
+
+                            intent.putExtra("estate", estate);
+//                            Log.d("bundleRV", "mandateID" + estate.getMandateNumberID());
+                        Log.d("bundleRV", "estate" + estate);
+                            startActivity(intent);
 
                     }
                 });
@@ -142,6 +161,7 @@ public class ListFragment extends Fragment {
     private void updateEstateList(List<Estate> estates) {
         if(estates != null)
             mAdapter.updateData(estates);
+
     }
 
 

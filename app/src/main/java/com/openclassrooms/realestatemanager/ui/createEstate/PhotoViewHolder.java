@@ -5,6 +5,7 @@ import android.net.Uri;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
+
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPhotoItemBinding;
 import com.openclassrooms.realestatemanager.models.PhotoList;
 
@@ -13,7 +14,7 @@ import java.util.Objects;
 
 public class PhotoViewHolder extends RecyclerView.ViewHolder {
 
-   ActivityAddPhotoItemBinding activityAddPhotoItemBinding;
+ private ActivityAddPhotoItemBinding activityAddPhotoItemBinding;
 
 
 
@@ -23,12 +24,12 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    public void updateWithDetails(PhotoList photoList,  RequestManager glide) {
+    public void updateWithDetails(Uri photoList, RequestManager glide) {
 
 //        Uri photoUri = Uri.fromFile( new File(String.valueOf(photoList.getPhotoList())));
 //            glide.load(new File (Objects.requireNonNull(photoUri.getPath()))).into(activityAddPhotoItemBinding.photoImage);
-        if (photoList != null && photoList.getPhotoList().isEmpty()) {
-            glide.load(photoList.getPhotoList().get(0)).into(activityAddPhotoItemBinding.photoImage);
+        if (photoList != null) {
+            glide.load(photoList).into(activityAddPhotoItemBinding.photoImage);
         }
 
 

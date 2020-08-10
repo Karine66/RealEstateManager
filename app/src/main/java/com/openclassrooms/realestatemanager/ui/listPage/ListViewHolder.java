@@ -1,9 +1,11 @@
 package com.openclassrooms.realestatemanager.ui.listPage;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentListItemBinding;
 import com.openclassrooms.realestatemanager.models.Estate;
 
@@ -33,10 +35,14 @@ public class ListViewHolder extends RecyclerView.ViewHolder {
         Objects.requireNonNull(fragmentListItemBinding.City).setText(estate.getCity());
 
         if (estate.getPrice() != null) {
-            Objects.requireNonNull(fragmentListItemBinding.price).setText("$"+ NumberFormat.getInstance(Locale.US).format(estate.getPrice()));
+            Objects.requireNonNull(fragmentListItemBinding.price).setText("$" + NumberFormat.getInstance(Locale.US).format(estate.getPrice()));
+
 
         }
-
+        if (estate.getSold()) {
+            fragmentListItemBinding.listPhotoSold.setImageResource(R.drawable.sold4);
+        }
 
     }
-}
+    }
+

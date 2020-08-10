@@ -29,7 +29,12 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField 'String', "GOOGLE_MAP_API_KEY", GOOGLE_MAP_API_KEY
+            resValue 'string',"google_map_api_key", GOOGLE_MAP_API_KEY
+
         }
     }
     buildToolsVersion = '29.0.3'
@@ -48,6 +53,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     //for recyclerview
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
     //for ROOM
     def room_version = "2.2.5"
 
@@ -73,6 +79,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     //For Glide
     implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+//For Map Google
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
 
 }

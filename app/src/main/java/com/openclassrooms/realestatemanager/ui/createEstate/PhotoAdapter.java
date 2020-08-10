@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPhotoItemBinding;
-import com.openclassrooms.realestatemanager.models.PhotoList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +19,11 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder>{
 
 private List<Integer> mViewColors;
 private RequestManager glide;
-private List<PhotoList> mPhotoList;
-    private List<String> photoList;
+private List<Uri> mPhotoList = new ArrayList<Uri>();
 
 
-    public PhotoAdapter(List<PhotoList> mPhotoList, RequestManager glide) {
-    this.mPhotoList = mPhotoList;
+    public PhotoAdapter( List<Uri> listPhoto, RequestManager glide) {
+
     this.glide = glide;
 }
 
@@ -38,24 +36,24 @@ private List<PhotoList> mPhotoList;
 
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
-//    int color = mViewColors.get(position);
-//    holder.activityAddPhotoItemBinding.photoImage.setBackgroundColor(color);
-    holder.updateWithDetails(mPhotoList.get(position), glide);
+    holder.updateWithDetails(this.mPhotoList.get(position), this.glide);
     }
 
     @Override
     public int getItemCount() {
-//        return mViewColors.size();
         return mPhotoList.size();
     }
 
-//    private void updatePhoto(List<PhotoList> photoList){
-//        this.mPhotoList = mPhotoList;
-//        this.notifyDataSetChanged();
+    public void setPhotoList(List<Uri> photos) {
+        mPhotoList.clear();
+        mPhotoList.addAll(photos);
+        notifyDataSetChanged();
+    }
+
+//    public Uri getPhoto (int position) {
+//        return mPhotoList.get(position);
 //    }
 
-    public void updatePhoto(List<String> photoList) {
-    this.photoList = photoList;
-    this.notifyDataSetChanged();
-    }
+
+
 }

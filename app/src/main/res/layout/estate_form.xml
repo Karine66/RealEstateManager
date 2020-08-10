@@ -496,11 +496,11 @@
             app:rippleColor="@color/colorAccent"
             android:src="@drawable/baseline_done_black_24dp"
             android:layout_marginTop="900dp"
-            android:layout_marginStart="310dp"
+            android:layout_marginStart="300dp"
             android:elevation="15dp"
             android:clickable="true"
             android:focusable="true"
-            app:fabSize="auto"/>
+            app:fabSize="normal"/>
 
     </RelativeLayout>
 

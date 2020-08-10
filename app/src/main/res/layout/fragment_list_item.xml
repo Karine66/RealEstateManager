@@ -36,7 +36,7 @@
             android:textAllCaps="true"
             android:gravity="top"
             android:textColor="#711515"
-            android:textSize="25sp"
+            android:textSize="22sp"
             android:textStyle="bold|italic" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -48,7 +48,7 @@
             android:layout_marginTop="40dp"
             android:textAllCaps="true"
             android:textSize="15sp"
-            android:textStyle="bold"
+            android:textStyle="italic"
             android:layout_marginEnd="110dp" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -59,8 +59,8 @@
             android:gravity="center_vertical"
             android:textColor="#DA13D7"
             android:layout_marginTop="60dp"
-            android:textSize="28sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
+            android:textStyle="italic|bold"
             android:layout_marginEnd="110dp" />
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -68,7 +68,7 @@
             android:layout_width="80dp"
             android:layout_height="70dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="40dp"
             android:layout_centerVertical="true"
             android:scaleType="center"
             android:contentDescription="soldPhoto" />
