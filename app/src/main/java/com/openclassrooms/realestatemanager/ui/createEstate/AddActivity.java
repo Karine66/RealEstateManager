@@ -131,6 +131,12 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         Objects.requireNonNull(estateFormBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
         estateFormBinding.rvPhoto.setAdapter(adapter);
     }
+//        private void updatePhotoList(List<String> photoList) {
+//        if(photoList != null)
+//            adapter.updatePhoto(photoList);
+//        adapter.notifyDataSetChanged();
+//    }
+
 
     //for adapter generic
     private ArrayAdapter<String> factoryAdapter(int resId) {
@@ -238,7 +244,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
 
-
+//        this.estateViewModel.getPhotos().observe(this, this::updatePhotoList);
 //        this.estateViewModel.getEstate().observe(this, new Observer<Estate>() {
 //            @Override
 //            public void onChanged(Estate estate) {

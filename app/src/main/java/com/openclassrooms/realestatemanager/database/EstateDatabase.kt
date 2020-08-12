@@ -29,7 +29,6 @@ abstract class EstateDatabase:RoomDatabase() {
 
                         INSTANCE = Room.databaseBuilder(context.applicationContext,
                                 EstateDatabase::class.java, "Estate.db")
-                                .fallbackToDestructiveMigration()
                                 .build()
                     }
                 }

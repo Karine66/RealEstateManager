@@ -15,7 +15,7 @@ import java.util.Objects;
 public class PhotoViewHolder extends RecyclerView.ViewHolder {
 
  private ActivityAddPhotoItemBinding activityAddPhotoItemBinding;
-
+    private EstateViewModel estateViewModel;
 
 
     public PhotoViewHolder(ActivityAddPhotoItemBinding activityAddPhotoItemBinding) {
@@ -31,6 +31,7 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
         if (photoList != null) {
             glide.load(photoList).into(activityAddPhotoItemBinding.photoImage);
         }
+
 
 
     }

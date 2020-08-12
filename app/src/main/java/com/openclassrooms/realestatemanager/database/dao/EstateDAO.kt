@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.database.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.openclassrooms.realestatemanager.models.Estate
+import com.openclassrooms.realestatemanager.models.PhotoList
 
 @Dao
 interface EstateDAO {
@@ -20,4 +21,16 @@ interface EstateDAO {
         fun updateEstate(estate: Estate):Int
         @Query("DELETE FROM Estate WHERE mandateNumberID = :mandateNumberID")
         fun deleteItem(mandateNumberID:Long):Int
+
+//        @Insert
+//        fun insertPhotoList (photoList: PhotoList) : String
+//
+//        @Query("SELECT * FROM Estate")
+//        fun getPhotoList() : LiveData<List<PhotoList>>
+
+//       @Update
+//       fun updatePhotoList(photoList: PhotoList) : String
+
+//        @Query("DELETE FROM Estate WHERE photoList")
+//                fun deletePhotoList():String
     }
