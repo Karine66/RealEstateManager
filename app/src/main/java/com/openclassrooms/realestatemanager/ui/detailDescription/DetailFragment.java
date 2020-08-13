@@ -172,7 +172,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-//        map.getUiSettings().setMyLocationButtonEnabled(false);
+        map.getUiSettings().setMyLocationButtonEnabled(false);
         map.getUiSettings().setMapToolbarEnabled(false);
         googleMap.moveCamera(CameraUpdateFactory.zoomBy(15));
         if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
@@ -206,6 +206,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         Log.d("createString", "createString" + completeAddress);
     }
 
+    //For retrieve estate position with LatLng and marker
     public void positionMarker(List<Result> resultGeocoding) {
         map.clear();
         for (Result geo : resultGeocoding) {
