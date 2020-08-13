@@ -204,9 +204,26 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         completeAddress = address + "," + postalCode + "," + city;
 
         Log.d("createString", "createString" + completeAddress);
+    }
 
+    public void positionMarker(List<Result> resultGeocoding) {
+        map.clear();
+        for (Result geo : resultGeocoding) {
+
+            LatLng latLng = new LatLng(geo.getGeometry().getLocation().getLat(),
+                    geo.getGeometry().getLocation().getLng()
+            );
+            positionMarker = map.addMarker(new MarkerOptions().position(latLng)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                    .title(geo.getFormattedAddress()));
+            positionMarker.showInfoWindow();
+            map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+            Log.d("detailResultMap", String.valueOf(latLng));
+        }
 
     }
+
     //http request for geocoding
     private void executeHttpRequestWithRetrofit() {
         this.mDisposable = EstateManagerStream.streamFetchGeocode(completeAddress)
@@ -216,26 +233,13 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
                     public void onNext(Geocoding geocoding) {
 
                         resultGeocoding = geocoding.getResults();
-
                     }
 
                     @Override
                     public void onComplete() {
                         if(completeAddress != null) {
-                            for (Result geo : resultGeocoding) {
-                                map.clear();
-                                LatLng latLng = new LatLng(geo.getGeometry().getLocation().getLat(),
-                                        geo.getGeometry().getLocation().getLng()
-                                );
-                                positionMarker = map.addMarker(new MarkerOptions().position(latLng)
-                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
-                                        .title(geo.getFormattedAddress()));
-                                positionMarker.showInfoWindow();
-                                map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
-                                Log.d("detailResultMap", String.valueOf(latLng));
-                            }
-
+                            positionMarker(resultGeocoding);
                         }
                     }
 
