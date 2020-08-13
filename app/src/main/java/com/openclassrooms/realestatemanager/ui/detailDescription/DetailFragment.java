@@ -1,10 +1,16 @@
 package com.openclassrooms.realestatemanager.ui.detailDescription;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Geocoder;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -13,22 +19,34 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.internal.maps.zzt;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.snackbar.Snackbar;
+import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
+import com.openclassrooms.realestatemanager.models.geocodingAPI.Geocoding;
+import com.openclassrooms.realestatemanager.models.geocodingAPI.Result;
 import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
+import com.openclassrooms.realestatemanager.utils.EstateManagerStream;
 
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
+
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
 ///**
 // * A simple {@link Fragment} subclass.
@@ -45,6 +63,10 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
     private SupportMapFragment mapFragment;
     private MapView mapView;
     private GoogleMap map;
+    private Disposable mDisposable;
+    private String completeAddress;
+    private List<Result> resultGeocoding;
+    private Marker positionMarker;
 //
 //    // TODO: Rename parameter arguments, choose names that match
 //    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -95,7 +117,8 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         fragmentDetailBinding = FragmentDetailBinding.inflate(inflater, container, false);
         View view = fragmentDetailBinding.getRoot();
        updateUi();
-//        setMandateID(mandateNumberID);
+        createStringForAddress();
+        //for lite map
         GoogleMapOptions options = new GoogleMapOptions();
         options.liteMode(true);
         mapView = (MapView) fragmentDetailBinding.mapView;
@@ -119,6 +142,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         Intent intent = Objects.requireNonNull(getActivity()).getIntent();
         Estate estateDetail = (Estate) intent.getSerializableExtra("estate");
         Log.d("idDetail", "idDetail" + estateDetail);
+
 
         if (estateDetail != null) {
             fragmentDetailBinding.etMandate.setText(String.valueOf(estateDetail.getMandateNumberID()));
@@ -148,21 +172,18 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        map.getUiSettings().setMyLocationButtonEnabled(false);
+//        map.getUiSettings().setMyLocationButtonEnabled(false);
         map.getUiSettings().setMapToolbarEnabled(false);
-//        if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-//                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions((Activity) getContext(), new String[]{
-//                    Manifest.permission.ACCESS_FINE_LOCATION,
-//                    Manifest.permission.ACCESS_COARSE_LOCATION
-//            }, PERMS_CALL_ID);
-//            return;
-//        }
-//        map.setMyLocationEnabled(true);
-        LatLng sydney = new LatLng(-33.852, 151.211);
-        googleMap.addMarker(new MarkerOptions().position(sydney)
-                .title("Marker in Sydney"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        googleMap.moveCamera(CameraUpdateFactory.zoomBy(15));
+        if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity) getContext(), new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+            }, PERMS_CALL_ID);
+            return;
+        }
+        executeHttpRequestWithRetrofit();
 
     }
 
@@ -172,22 +193,73 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         super.onResume();
     }
 
+    public void createStringForAddress() {
+        Intent intent = Objects.requireNonNull(getActivity()).getIntent();
+        Estate estateDetail = (Estate) intent.getSerializableExtra("estate");
+        Log.d("idDetail", "idDetail" + estateDetail);
 
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        mapView.onPause();
-//    }
-//
-//    @Override
-//    public void onDestroy() {
-//        super.onDestroy();
-//        mapView.onDestroy();
-//    }
-//
-//    @Override
-//    public void onLowMemory() {
-//        super.onLowMemory();
-//        mapView.onLowMemory();
-//    }
+        String address = Objects.requireNonNull(estateDetail).getAddress();
+        String postalCode = String.valueOf(estateDetail.getPostalCode());
+        String city = estateDetail.getCity();
+        completeAddress = address + "," + postalCode + "," + city;
+
+        Log.d("createString", "createString" + completeAddress);
+
+
+    }
+    //http request for geocoding
+    private void executeHttpRequestWithRetrofit() {
+        this.mDisposable = EstateManagerStream.streamFetchGeocode(completeAddress)
+                .subscribeWith(new DisposableObserver<Geocoding>() {
+
+                    @Override
+                    public void onNext(Geocoding geocoding) {
+
+                        resultGeocoding = geocoding.getResults();
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if(completeAddress != null) {
+                            for (Result geo : resultGeocoding) {
+                                map.clear();
+                                LatLng latLng = new LatLng(geo.getGeometry().getLocation().getLat(),
+                                        geo.getGeometry().getLocation().getLng()
+                                );
+                                positionMarker = map.addMarker(new MarkerOptions().position(latLng)
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                                        .title(geo.getFormattedAddress()));
+                                positionMarker.showInfoWindow();
+                                map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+                                Log.d("detailResultMap", String.valueOf(latLng));
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("onErrorGeocoding", Log.getStackTraceString(e));
+                    }
+                });
+    }
+
+
+    /**
+     * Dispose subscription
+     */
+    private void disposeWhenDestroy() {
+        if (this.mDisposable != null && !this.mDisposable.isDisposed())
+            this.mDisposable.dispose();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.disposeWhenDestroy();
+    }
+
+
 }
