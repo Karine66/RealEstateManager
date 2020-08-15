@@ -53,8 +53,6 @@ public class EstateViewModel extends ViewModel {
     }
 
 
-    public MutableLiveData<List<String>> getPhotos () {
-        return mPhotos;
-    }
+
 
 }

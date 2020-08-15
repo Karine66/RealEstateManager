@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.telephony.PhoneStateListener;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -85,6 +86,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private MaterialAlertDialogBuilder builder;
     private PhotoList photoList;
     private Uri contentUri;
+    private PhotoList photo = new PhotoList();
 
 
     @Override
@@ -207,7 +209,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     public void saveEstates() {
 
 
-        PhotoList photo = new PhotoList();
+
         Estate estate = new Estate(
 
                 mandateNumberID,
@@ -310,7 +312,9 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                             takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                             Log.d("PhotoUri", "photoUri =" + photoUri);
                             startActivityForResult(takePicture, PICK_IMAGE_CAMERA);
+
                             listPhoto.add(photoUri);
+                            photo.getPhotoList().add(String.valueOf(photoUri));
                             adapter.setPhotoList(listPhoto);
 
                         }
@@ -393,9 +397,11 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                     e.printStackTrace();
                 }
 
-                listPhoto.add(contentUri);
-                adapter.setPhotoList(listPhoto);
+                    listPhoto.add(contentUri);
+                    photo.getPhotoList().add(String.valueOf(contentUri));
+                    adapter.setPhotoList(listPhoto);
 //                Log.d("listPhotoGallery", "listPhotoGallery" + listPhoto);
+
             }
         }
     }

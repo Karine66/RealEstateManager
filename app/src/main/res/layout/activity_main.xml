@@ -12,11 +12,11 @@
        android:layout_width="match_parent"
        android:layout_marginTop="?attr/actionBarSize"
        android:layout_height="match_parent" />
-   <FrameLayout
-      android:id="@+id/detail_fragment_frameLayout"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:layout_marginTop="?attr/actionBarSize"/>
+<!--   <FrameLayout-->
+<!--      android:id="@+id/detail_fragment_frameLayout"-->
+<!--       android:layout_width="match_parent"-->
+<!--       android:layout_height="match_parent"-->
+<!--       android:layout_marginTop="?attr/actionBarSize"/>-->
 
    <include
       layout="@layout/toolbar"

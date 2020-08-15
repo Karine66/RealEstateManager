@@ -198,11 +198,13 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         Estate estateDetail = (Estate) intent.getSerializableExtra("estate");
         Log.d("idDetail", "idDetail" + estateDetail);
 
-        String address = Objects.requireNonNull(estateDetail).getAddress();
-        String postalCode = String.valueOf(estateDetail.getPostalCode());
-        String city = estateDetail.getCity();
-        completeAddress = address + "," + postalCode + "," + city;
 
+            String address = Objects.requireNonNull(estateDetail).getAddress();
+
+            String postalCode = String.valueOf(estateDetail.getPostalCode());
+            String city = estateDetail.getCity();
+            completeAddress = address + "," + postalCode + "," + city;
+        
         Log.d("createString", "createString" + completeAddress);
     }
 
