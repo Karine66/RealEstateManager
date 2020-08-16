@@ -36,6 +36,7 @@ import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.models.PhotoList;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
+import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -87,6 +88,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private PhotoList photoList;
     private Uri contentUri;
     private PhotoList photo = new PhotoList();
+    private DetailFragment detailFragment;
 
 
     @Override
@@ -194,12 +196,12 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         estateFormBinding.validateFabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                saveEstates();
-
+//                if (detailFragment == null || !detailFragment.isVisible()) {
+                    saveEstates();
+                }
 //                Snackbar.make(v,"You're new Estate is created", Snackbar.LENGTH_SHORT).show();
 
-            }
+//            }
 
 
         });
@@ -207,8 +209,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
     //For save in database
     public void saveEstates() {
-
-
 
         Estate estate = new Estate(
 
@@ -400,7 +400,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                     listPhoto.add(contentUri);
                     photo.getPhotoList().add(String.valueOf(contentUri));
                     adapter.setPhotoList(listPhoto);
-//                Log.d("listPhotoGallery", "listPhotoGallery" + listPhoto);
 
             }
         }

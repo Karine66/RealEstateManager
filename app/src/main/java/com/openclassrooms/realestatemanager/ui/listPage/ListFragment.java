@@ -141,7 +141,7 @@ public class ListFragment extends Fragment {
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
 
 
-                            if(detailFragment == null || !detailFragment.isVisible()) {
+//                            if(detailFragment == null || !detailFragment.isVisible()) {
                                 Estate estate = mAdapter.getEstates(position);
                                 Intent intent = new Intent(getContext(), DetailActivity.class);
 
@@ -150,7 +150,7 @@ public class ListFragment extends Fragment {
                                 Log.d("bundleRV", "estate" + estate);
                                 startActivity(intent);
                             }
-                    }
+//                    }
                 });
 
     }

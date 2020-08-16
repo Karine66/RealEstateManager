@@ -163,8 +163,8 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
             fragmentDetailBinding.etPostalCode.setEnabled(false);
             fragmentDetailBinding.etCity.setText(estateDetail.getCity());
             fragmentDetailBinding.etCity.setEnabled(false);
-        } else {
-            Snackbar.make(fragmentDetailBinding.getRoot(), "No Estate create", Snackbar.LENGTH_SHORT).show();
+//        } else {
+//            Snackbar.make(Objects.requireNonNull(getView()), "No Estate create", Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -198,14 +198,15 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         Estate estateDetail = (Estate) intent.getSerializableExtra("estate");
         Log.d("idDetail", "idDetail" + estateDetail);
 
-
+        if(estateDetail != null) {
             String address = Objects.requireNonNull(estateDetail).getAddress();
 
             String postalCode = String.valueOf(estateDetail.getPostalCode());
             String city = estateDetail.getCity();
             completeAddress = address + "," + postalCode + "," + city;
-        
-        Log.d("createString", "createString" + completeAddress);
+
+            Log.d("createString", "createString" + completeAddress);
+        }
     }
 
     //For retrieve estate position with LatLng and marker

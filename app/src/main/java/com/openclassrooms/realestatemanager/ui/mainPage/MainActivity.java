@@ -36,7 +36,7 @@ public class MainActivity extends BaseActivity {
 ////        this.textViewMain = findViewById(R.id.activity_second_activity_text_view_main);
          this.configureAndShowListFragment();
 //         this.configureAndShowDetailFragment();
-//         this.configureAndShowDetailFragment();
+
          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
              this.configureToolbar();
 
@@ -65,8 +65,10 @@ public class MainActivity extends BaseActivity {
             binding.fabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent fabIntent = new Intent(getApplicationContext(), AddActivity.class);
-                startActivity(fabIntent);
+
+                    Intent fabIntent = new Intent(getApplicationContext(), AddActivity.class);
+                    startActivity(fabIntent);
+
             }
         });
 
@@ -109,17 +111,17 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-//    private void configureAndShowDetailFragment(){
-//        //Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
-//        detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.detail_fragment_frameLayout);
-//
-//        if (detailFragment == null) {
-//            //Create new main fragment
-//            detailFragment = new DetailFragment();
-//            //Add it to FrameLayout container
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.detail_fragment_frameLayout, detailFragment)
-//                    .commit();
-//        }
-//    }
+    private void configureAndShowDetailFragment(){
+        //Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
+        detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.detail_fragment_frameLayout);
+
+        if (detailFragment == null && findViewById(R.id.detail_fragment_frameLayout) !=null) {
+            //Create new main fragment
+            detailFragment = new DetailFragment();
+            //Add it to FrameLayout container
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.detail_fragment_frameLayout, detailFragment)
+                    .commit();
+        }
+    }
 }
