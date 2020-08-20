@@ -28,13 +28,15 @@ data class Estate (@PrimaryKey (autoGenerate = true) val mandateNumberID: Long,
                   var upOfSaleDate: String?,
                   var soldDate:String?,
                   var agentName:String,
-                  var photoList: PhotoList
+                  var photoList: PhotoList,
+                  var photoDescription : PhotoList
+//                  var photoDescription : String?
 
 
 //var video:ArrayList<String> = TODO())
 ) : Serializable {
     constructor() : this(0, "", null, null, null, null, null, null, "", "",
-            null, "", false, false, false, false, false, null, null, "", PhotoList())
+            null, "", false, false, false, false, false, null, null, "", PhotoList(), PhotoList())
 
 }
 

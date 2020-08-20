@@ -37,8 +37,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private static final int RC_CAMERA_AND_STORAGE = 100;
     private static final String[] CAM_AND_READ_EXTERNAL_STORAGE =
             {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
-    protected final int PICK_IMAGE_CAMERA = 1;
-    protected final int PICK_IMAGE_GALLERY = 2;
+
     private MaterialAlertDialogBuilder builder;
     private MaterialAlertDialogBuilder builderVideo;
     private String currentPhotoPath;

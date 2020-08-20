@@ -30,6 +30,7 @@ import com.bumptech.glide.RequestManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
+import com.openclassrooms.realestatemanager.databinding.ActivityAddPhotoItemBinding;
 import com.openclassrooms.realestatemanager.databinding.EstateFormBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
@@ -61,8 +62,10 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private static final String[] CAM_AND_READ_EXTERNAL_STORAGE =
             {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
     private static final int REQUEST_TAKE_PHOTO = 200;
+    protected final int PICK_IMAGE_CAMERA = 1;
+    protected final int PICK_IMAGE_GALLERY = 2;
 
-
+    private ActivityAddPhotoItemBinding activityAddPhotoItemBinding;
     private ActivityAddBinding activityAddBinding;
     private EstateFormBinding estateFormBinding;
     private DatePickerDialog mUpOfSaleDateDialog;
@@ -89,6 +92,9 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private Uri contentUri;
     private PhotoList photo = new PhotoList();
     private DetailFragment detailFragment;
+    private ArrayList<String> descriptionPhoto;
+    private PhotoList photoText = new PhotoList();
+    private List<String> photoDescription;
 
 
     @Override
@@ -97,6 +103,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         //for view binding
         activityAddBinding = ActivityAddBinding.inflate(getLayoutInflater());
         estateFormBinding = activityAddBinding.includeForm;
+
         View view = activityAddBinding.getRoot();
         setContentView(view);
 
@@ -121,26 +128,20 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         estateFormBinding.inputMandate.setVisibility(View.INVISIBLE);
 
 
-
     }
 
 
     public void configureRecyclerView() {
 
         listPhoto = new ArrayList<>();
+        descriptionPhoto = new ArrayList<>();
 
-        adapter = new PhotoAdapter(listPhoto, Glide.with(this));
+        adapter = new PhotoAdapter(listPhoto, Glide.with(this), descriptionPhoto);
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         Objects.requireNonNull(estateFormBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
         estateFormBinding.rvPhoto.setAdapter(adapter);
     }
-//        private void updatePhotoList(List<String> photoList) {
-//        if(photoList != null)
-//            adapter.updatePhoto(photoList);
-//        adapter.notifyDataSetChanged();
-//    }
-
 
     //for adapter generic
     private ArrayAdapter<String> factoryAdapter(int resId) {
@@ -198,6 +199,11 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             public void onClick(View v) {
 //                if (detailFragment == null || !detailFragment.isVisible()) {
                     saveEstates();
+
+                photoText.getPhotoDescription().add(String.valueOf(photoText));
+                descriptionPhoto.add(String.valueOf(photoDescription));
+                adapter.setPhotoDescription(descriptionPhoto);
+
                 }
 //                Snackbar.make(v,"You're new Estate is created", Snackbar.LENGTH_SHORT).show();
 
@@ -233,7 +239,10 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 Objects.requireNonNull(estateFormBinding.upOfSaleDate.getText()).toString(),
                 Objects.requireNonNull(estateFormBinding.soldDate.getText()).toString(),
                 estateFormBinding.etAgent.getText().toString(),
-                photo);
+                photo,
+                photoText);
+
+
 
 
         this.estateViewModel.createEstate(estate);
@@ -295,8 +304,9 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             public void onClick(DialogInterface dialog, int item) {
 
                 if (options[item].equals("Take Photo")) {
-                    Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(takePicture, PICK_IMAGE_CAMERA);
+                    Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+
                     if (takePicture.resolveActivity(getPackageManager()) != null) {
                         //Create the File where the photo should go
                         File photoFile = null;
@@ -311,7 +321,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
                             takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                             Log.d("PhotoUri", "photoUri =" + photoUri);
-                            startActivityForResult(takePicture, PICK_IMAGE_CAMERA);
+                            startActivityForResult(takePicture, 1);
+
 
                             listPhoto.add(photoUri);
                             photo.getPhotoList().add(String.valueOf(photoUri));
@@ -321,8 +332,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                     }
 
                 } else if (options[item].equals("Choose from Gallery")) {
-                    Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(pickPhoto, PICK_IMAGE_GALLERY);
+                    Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(pickPhoto, 2);
 
                 } else if (options[item].equals("Cancel")) {
                     dialog.dismiss();
@@ -333,11 +344,13 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         builder.show();
     }
 
+
+
     protected File createImageFile() throws IOException {
         //Create an image file name
         String timeStamp = new SimpleDateFormat("ddMMyyyy", Locale.FRANCE).format(new Date());
         String imageFileName = "JPEG" + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName, /*prefix*/
                 ".jpg", /*suffix*/
@@ -401,6 +414,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                     photo.getPhotoList().add(String.valueOf(contentUri));
                     adapter.setPhotoList(listPhoto);
 
+
             }
         }
     }
@@ -430,6 +444,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 e.printStackTrace();
             }
         }
+
     }
 
 }

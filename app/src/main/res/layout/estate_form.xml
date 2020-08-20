@@ -420,7 +420,10 @@
             android:layout_marginEnd="20dp"
             android:layout_marginTop="710dp"
             app:startIconDrawable="@drawable/baseline_date_range_black_48dp"
-            android:layout_alignParentTop="true">
+            android:layout_alignParentTop="true"
+            app:helperText="Required"
+            app:helperTextEnabled="true"
+            app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/soldDate"
@@ -441,7 +444,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="760dp"
+            android:layout_marginTop="770dp"
             android:layout_marginEnd="20dp"
             app:helperText="Required"
             app:helperTextEnabled="true"
@@ -472,6 +475,9 @@
             android:layout_marginStart="80dp"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="840dp" />
+
+
+
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/camera_btn"

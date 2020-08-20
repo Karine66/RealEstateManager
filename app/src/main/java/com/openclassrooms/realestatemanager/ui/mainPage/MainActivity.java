@@ -35,7 +35,7 @@ public class MainActivity extends BaseActivity {
 //        //First error id call error
 ////        this.textViewMain = findViewById(R.id.activity_second_activity_text_view_main);
          this.configureAndShowListFragment();
-//         this.configureAndShowDetailFragment();
+        this.configureAndShowDetailFragment();
 
          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
              this.configureToolbar();
