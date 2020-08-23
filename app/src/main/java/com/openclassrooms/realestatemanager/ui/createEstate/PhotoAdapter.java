@@ -26,13 +26,13 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder>{
 
 private ActivityAddPhotoItemBinding activityAddPhotoItemBinding;
 
-    private List<Integer> mViewColors;
+
 private RequestManager glide;
 private List<Uri> mPhotoList = new ArrayList<Uri>();
 private List<String> mPhotoDescription = new ArrayList<>();
 
 
-    public PhotoAdapter(List<Uri> listPhoto, RequestManager glide, List<String> mPhotoDescription) {
+    public PhotoAdapter(List<Uri> listPhoto, RequestManager glide, ArrayList<String> mPhotoDescription) {
 
     this.glide = glide;
 
@@ -52,9 +52,9 @@ private List<String> mPhotoDescription = new ArrayList<>();
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
 
-//    holder.updateWithDetails(this.mPhotoList.get(position), this.glide, mPhotoDescription.get(position));
-        holder.updateWithDetails(this.mPhotoList.get(position), this.glide);
-//        activityAddPhotoItemBinding.photoDescription.setText(mPhotoDescription.get(holder.getAdapterPosition()));
+//   holder.updateWithDetails(this.mPhotoList.get(position), this.glide, this.mPhotoDescription.get(position));
+       holder.updateWithDetails(this.mPhotoList.get(position), this.glide);
+//       activityAddPhotoItemBinding.photoDescription.setText(mPhotoDescription.get(holder.getAdapterPosition()));
 
     }
 

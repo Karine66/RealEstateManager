@@ -1,11 +1,14 @@
 package com.openclassrooms.realestatemanager.ui.mainPage;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import androidx.appcompat.app.ActionBar;
 
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
 import com.openclassrooms.realestatemanager.ui.EditEstate.EditActivity;
@@ -16,6 +19,8 @@ import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
 import com.openclassrooms.realestatemanager.ui.listPage.ListFragment;
 import com.openclassrooms.realestatemanager.ui.mapPage.MapActivity;
 import com.openclassrooms.realestatemanager.ui.searchPage.SearchActivity;
+
+import java.util.Objects;
 
 
 public class MainActivity extends BaseActivity {
@@ -41,7 +46,13 @@ public class MainActivity extends BaseActivity {
              this.configureToolbar();
 
          }
-
+         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+             ActionBar ab = getSupportActionBar();
+             Objects.requireNonNull(ab).setTitle("RealEstateManager");
+         }
+//         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//             getSupportActionBar();
+//         }
      }
 
 //    @SuppressLint("SetTextI18n")

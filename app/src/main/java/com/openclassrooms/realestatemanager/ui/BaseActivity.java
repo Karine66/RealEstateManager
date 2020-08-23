@@ -4,7 +4,11 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -13,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -43,12 +48,16 @@ public abstract class BaseActivity extends AppCompatActivity {
     private String currentPhotoPath;
     private Context context;
     protected ActionBar ab;
+    private LocationManager locationManager;
 
 
     protected void configureToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
     }
+
+
 
     protected void configureUpButton() {
         ab = getSupportActionBar();
@@ -104,6 +113,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         });
         builderVideo.show();
     }
+
+
 
 
 }

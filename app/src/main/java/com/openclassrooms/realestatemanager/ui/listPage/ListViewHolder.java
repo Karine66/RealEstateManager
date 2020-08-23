@@ -2,9 +2,13 @@ package com.openclassrooms.realestatemanager.ui.listPage;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.net.Uri;
+import android.util.Log;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentListItemBinding;
 import com.openclassrooms.realestatemanager.models.Estate;
@@ -24,11 +28,10 @@ public class ListViewHolder extends RecyclerView.ViewHolder {
         this.fragmentListItemBinding = fragmentListItemBinding;
 
 
-
     }
 
     @SuppressLint("SetTextI18n")
-    public void updateWithEstate (Estate estate) {
+    public void updateWithEstate(Estate estate, RequestManager glide) {
 
         Objects.requireNonNull(fragmentListItemBinding.estateType).setText(estate.getEstateType());
 
@@ -43,6 +46,9 @@ public class ListViewHolder extends RecyclerView.ViewHolder {
             fragmentListItemBinding.listPhotoSold.setImageResource(R.drawable.sold4);
         }
 
-    }
-    }
 
+//        glide.load(estate.getPhotoList().getPhotoDescription().get(0)).into(fragmentListItemBinding.listPhoto);
+//
+//        Log.d("photoList", "photolist" + estate.getPhotoList().getPhotoDescription().get(0));
+    }
+}
