@@ -46,10 +46,10 @@ public class MainActivity extends BaseActivity {
              this.configureToolbar();
 
          }
-         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-             ActionBar ab = getSupportActionBar();
-             Objects.requireNonNull(ab).setTitle("RealEstateManager");
-         }
+//         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//             ActionBar ab = getSupportActionBar();
+//             Objects.requireNonNull(ab).setTitle("RealEstateManager");
+//         }
 //         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 //             getSupportActionBar();
 //         }

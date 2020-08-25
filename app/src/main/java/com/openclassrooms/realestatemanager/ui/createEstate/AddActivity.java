@@ -35,9 +35,11 @@ import com.openclassrooms.realestatemanager.databinding.EstateFormBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
+import com.openclassrooms.realestatemanager.models.PhotoDescription;
 import com.openclassrooms.realestatemanager.models.PhotoList;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
 import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -93,7 +95,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private PhotoList photo = new PhotoList();
     private DetailFragment detailFragment;
     private ArrayList<String> descriptionPhoto;
-    private PhotoList photoText = new PhotoList();
+    private PhotoDescription photoText = new PhotoDescription();
     private List<String> photoDescription;
 
 
@@ -136,7 +138,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         listPhoto = new ArrayList<>();
         descriptionPhoto = new ArrayList<>();
 
-        adapter = new PhotoAdapter(listPhoto, Glide.with(this), descriptionPhoto);
+        adapter = new PhotoAdapter(listPhoto, descriptionPhoto, Glide.with(this));
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         Objects.requireNonNull(estateFormBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
@@ -198,11 +200,13 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onClick(View v) {
 //                if (detailFragment == null || !detailFragment.isVisible()) {
-                    saveEstates();
 
-                photoText.getPhotoDescription().add(String.valueOf(photoText));
+
                 descriptionPhoto.add(String.valueOf(photoDescription));
+                photoText.getPhotoDescription().add(String.valueOf(photoDescription));
                 adapter.setPhotoDescription(descriptionPhoto);
+
+                saveEstates();
 
                 }
 //                Snackbar.make(v,"You're new Estate is created", Snackbar.LENGTH_SHORT).show();
@@ -327,6 +331,10 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                             listPhoto.add(photoUri);
                             photo.getPhotoList().add(String.valueOf(photoUri));
                             adapter.setPhotoList(listPhoto);
+
+//                            descriptionPhoto.add(String.valueOf(photoDescription));
+//                            photoText.getPhotoDescription().add(String.valueOf(photoDescription));
+//                            adapter.setPhotoDescription(descriptionPhoto);
 
                         }
                     }

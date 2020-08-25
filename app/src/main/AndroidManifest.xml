@@ -30,6 +30,7 @@
         android:requestLegacyExternalStorage="true"
         tools:targetApi="q">
 
+
 <!--        &lt;!&ndash; Recommended for Android 9 (API level 28) and lower. &ndash;&gt;-->
 <!--        &lt;!&ndash; Required for Android 10 (API level 29). &ndash;&gt;-->
 <!--        <service-->
