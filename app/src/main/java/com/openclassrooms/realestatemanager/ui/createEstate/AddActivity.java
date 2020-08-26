@@ -138,7 +138,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         listPhoto = new ArrayList<>();
         descriptionPhoto = new ArrayList<>();
 
-        adapter = new PhotoAdapter(listPhoto, descriptionPhoto, Glide.with(this));
+        adapter = new PhotoAdapter(listPhoto, Glide.with(this), descriptionPhoto);
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         Objects.requireNonNull(estateFormBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);

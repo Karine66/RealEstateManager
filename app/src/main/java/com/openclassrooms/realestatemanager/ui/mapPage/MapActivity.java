@@ -4,13 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -42,6 +45,7 @@ import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
 import com.openclassrooms.realestatemanager.utils.EstateManagerStream;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -66,21 +70,27 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
     private EstateViewModel estateViewModel;
     private String completeAddress;
-    private List<Estate> estateList;
+    private List<Estate> estateList = new ArrayList<>();
+    private List<String> adressList=new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         configureViewModel();
-        createStringForAddress();
+        createStringForAddress(estateList);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         Objects.requireNonNull(mapFragment).getMapAsync(this);
 
+        this.estateViewModel.getEstates().observe(this,this::createStringForAddress);
+
 
     }
+
+
 
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
@@ -165,6 +175,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
             map.moveCamera(CameraUpdateFactory.newLatLng(googleLocation));
             mPosition = mLatitude + "," + mLongitude;
             Log.d("TestLatLng", mPosition);
+            executeHttpRequestWithRetrofit();
         }
     }
 
@@ -180,8 +191,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        map.moveCamera(CameraUpdateFactory.zoomBy(15));
-        map.getUiSettings().setMapToolbarEnabled(true);
+        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+        googleMap.moveCamera(CameraUpdateFactory.zoomBy(15));
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{
@@ -191,51 +203,53 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
             return;
         }
 
-        map.setMyLocationEnabled(true);
-        executeHttpRequestWithRetrofit();
+        googleMap.setMyLocationEnabled(true);
+
     }
 
-    public void createStringForAddress() {
+    public void createStringForAddress(List<Estate> estateList) {
 
 
-        estateList = estateViewModel.getEstates().getValue();
+        if (!Objects.requireNonNull(estateList).isEmpty()) {
+            for (Estate est : estateList) {
+                String address = est.getAddress();
 
+                String postalCode = String.valueOf(est.getPostalCode());
+                String city = est.getCity();
+                completeAddress = address + "," + postalCode + "," + city;
 
-        if(estateList != null) {
-            String address = estateList.get(0).getAddress();
+                adressList.addAll(Collections.singleton(completeAddress));
+                Log.d("adressList", "adressList"+ adressList);
 
-            String postalCode = String.valueOf(estateList.get(0).getPostalCode());
-            String city = estateList.get(0).getCity();
-            completeAddress = address + "," + postalCode + "," + city;
+                Log.d("createString", "createString" + completeAddress);
 
-            Log.d("createString", "createString" + completeAddress);
+            }
         }
     }
-
     //For retrieve estate position with LatLng and marker
     public void positionMarker(List<Result> resultGeocoding) {
         map.clear();
 
 
-       for (Result geo : resultGeocoding) {
+            for (Result geo : resultGeocoding) {
 
-            LatLng latLng = new LatLng(geo.getGeometry().getLocation().getLat(),
-                    geo.getGeometry().getLocation().getLng()
-            );
-            positionMarker = map.addMarker(new MarkerOptions().position(latLng)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
-                    .title(geo.getFormattedAddress()));
-            positionMarker.showInfoWindow();
-            map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                LatLng latLng = new LatLng(geo.getGeometry().getLocation().getLat(),
+                        geo.getGeometry().getLocation().getLng()
+                );
+                positionMarker = map.addMarker(new MarkerOptions().position(latLng)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                        .title(geo.getFormattedAddress()));
+                positionMarker.showInfoWindow();
+                map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
-            Log.d("detailResultMap", String.valueOf(latLng));
+                Log.d("detailResultMap", String.valueOf(latLng));
+            }
         }
 
-    }
 
     //http request for geocoding
     private void executeHttpRequestWithRetrofit() {
-        this.mDisposable = EstateManagerStream.streamFetchGeocode(completeAddress)
+        this.mDisposable = EstateManagerStream.streamFetchGeocode(String.valueOf(adressList))
                 .subscribeWith(new DisposableObserver<Geocoding>() {
 
                     @Override
@@ -246,11 +260,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
                     @Override
                     public void onComplete() {
-                        if(completeAddress != null) {
+
 
                             positionMarker(resultGeocoding);
                         }
-                    }
+
 
                     @Override
                     public void onError(Throwable e) {

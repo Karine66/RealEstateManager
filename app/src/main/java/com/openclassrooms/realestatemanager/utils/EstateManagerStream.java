@@ -1,7 +1,10 @@
 package com.openclassrooms.realestatemanager.utils;
 
+import android.location.Address;
+
 import com.openclassrooms.realestatemanager.models.geocodingAPI.Geocoding;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -18,4 +21,5 @@ public class EstateManagerStream {
                 .observeOn(AndroidSchedulers.mainThread())
                 .timeout(10, TimeUnit.SECONDS);
     }
+
 }

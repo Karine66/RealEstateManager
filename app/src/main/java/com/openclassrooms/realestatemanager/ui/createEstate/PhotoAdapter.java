@@ -35,7 +35,7 @@ private List<Uri> mPhotoList = new ArrayList<Uri>();
 private List<String> mPhotoDescription = new ArrayList<>();
 
 
-    public PhotoAdapter(List<Uri> listPhoto, ArrayList<String> mPhotoDescription, RequestManager glide) {
+    public PhotoAdapter(List<Uri> listPhoto,  RequestManager glide, ArrayList<String> mPhotoDescription){
         this.glide = glide;
 
 

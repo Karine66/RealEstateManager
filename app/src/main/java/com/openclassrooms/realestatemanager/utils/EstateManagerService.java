@@ -1,7 +1,11 @@
 package com.openclassrooms.realestatemanager.utils;
 
+import android.location.Address;
+
 import com.openclassrooms.realestatemanager.BuildConfig;
 import com.openclassrooms.realestatemanager.models.geocodingAPI.Geocoding;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -14,4 +18,5 @@ public interface EstateManagerService {
     //Geocoding API Request
     @GET("maps/api/geocode/json?key="+GOOGLE_MAP_API_KEY)
     Observable<Geocoding> getGeocode (@Query("address") String address);
+
 }

@@ -40,7 +40,7 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
 
     public void updateWithDetails(Uri photoList, RequestManager glide) {
 
-
+//        description = "";
 
         activityAddPhotoItemBinding.photoDescription.setText("");
 //            glide.load(uriPhoto).apply(RequestOptions.centerCropTransform()).into(activityAddPhotoItemBinding.photoImage);
@@ -64,7 +64,7 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         return false;
                     }
-                }).into(activityAddPhotoItemBinding.photoImage);
+                }).apply(RequestOptions.centerCropTransform()).into(activityAddPhotoItemBinding.photoImage);
 
 
     }
