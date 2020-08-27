@@ -105,7 +105,7 @@
             android:layout_marginTop="500dp"
             android:layout_alignParentTop="true"
             app:startIconDrawable="@drawable/icon_surface"
-            app:startIconTint="@color/colorAccent"
+            app:startIconTint="@color/colorPrimary"
             app:suffixText="m²"
             app:suffixTextColor="#000000">
 
@@ -127,7 +127,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             app:startIconDrawable="@drawable/baseline_house_black_48dp"
-            app:startIconTint="@color/colorAccent"
+            app:startIconTint="@color/colorPrimary"
             android:layout_marginStart="20dp"
             android:layout_marginTop="550dp">
 
@@ -152,7 +152,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="600dp"
             app:startIconDrawable="@drawable/baseline_bathtub_black_48dp"
-            app:startIconTint="@color/colorAccent">
+            app:startIconTint="@color/colorPrimary">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_bathrooms"
@@ -172,7 +172,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             app:startIconDrawable="@drawable/baseline_hotel_black_48dp"
-            app:startIconTint="@color/colorAccent"
+            app:startIconTint="@color/colorPrimary"
             android:layout_marginStart="20dp"
             android:layout_marginTop="650dp">
 
@@ -191,7 +191,7 @@
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/input_surface"
-            android:layout_marginStart="25dp"
+            android:layout_marginStart="18dp"
             android:drawableStart="@drawable/baseline_place_black_48dp"
             android:text="Location"
             android:textStyle="bold|italic"
@@ -204,9 +204,9 @@
             android:id="@+id/input_address"
             app:boxStrokeColor="@color/colorAccent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
+            android:layout_marginStart="18dp"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="530dp"
             android:layout_toEndOf="@+id/input_surface"
@@ -227,9 +227,9 @@
             android:id="@+id/input_postalCode"
             app:boxStrokeColor="@color/colorAccent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="80dp"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
+            android:layout_marginStart="18dp"
             android:layout_marginTop="580dp"
             android:layout_toEndOf="@+id/input_rooms">
 
@@ -247,9 +247,10 @@
             android:id="@+id/input_city"
             app:boxStrokeColor="@color/colorAccent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="120dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginTop="580dp"
             android:layout_toEndOf="@+id/input_postalCode">
 
@@ -270,10 +271,10 @@
             android:layout_width="300dp"
             android:layout_height="250dp"
             android:layout_marginTop="700dp"
-           android:clickable="true"
-            map:liteMode="true"
            android:layout_centerHorizontal="true"
-            android:focusable="true" />
-<!--    </RelativeLayout>-->
+            android:clickable="true"
+            android:focusable="true"
+            map:liteMode="true" />
+        <!--    </RelativeLayout>-->
 
 </RelativeLayout>

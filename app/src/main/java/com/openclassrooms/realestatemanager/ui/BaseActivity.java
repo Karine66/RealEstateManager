@@ -23,6 +23,7 @@ import androidx.core.content.FileProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.models.PhotoList;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -44,7 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
 
     private MaterialAlertDialogBuilder builder;
-    private MaterialAlertDialogBuilder builderVideo;
+
     private String currentPhotoPath;
     private Context context;
     protected ActionBar ab;
@@ -86,33 +87,33 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 
-    //For alert dialog for choose take video or choose video
-    protected void selectVideo() {
-        final CharSequence[] options = {"Take Video", "Choose Video", "Cancel"};
-
-        builderVideo = new MaterialAlertDialogBuilder(this);
-        builderVideo.setTitle("Add video");
-        builderVideo.setItems(options, new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-
-                if (options[item].equals("Take Video")) {
-                    Intent takeVideo = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                    startActivityForResult(takeVideo, 3);
-
-                } else if (options[item].equals("Choose Video")) {
-                    Intent pickVideo = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(pickVideo, 4);
-
-                } else if (options[item].equals("Cancel")) {
-                    dialog.dismiss();
-
-                }
-            }
-        });
-        builderVideo.show();
-    }
+//    //For alert dialog for choose take video or choose video
+//    protected void selectVideo() {
+//        final CharSequence[] options = {"Take Video", "Choose Video", "Cancel"};
+//
+//        builderVideo = new MaterialAlertDialogBuilder(this);
+//        builderVideo.setTitle("Add video");
+//        builderVideo.setItems(options, new DialogInterface.OnClickListener() {
+//
+//            @Override
+//            public void onClick(DialogInterface dialog, int item) {
+//
+//                if (options[item].equals("Take Video")) {
+//                    Intent takeVideo = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+//                    startActivityForResult(takeVideo, 3);
+//
+//                } else if (options[item].equals("Choose Video")) {
+//                    Intent pickVideo = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+//                    startActivityForResult(pickVideo, 4);
+//
+//                } else if (options[item].equals("Cancel")) {
+//                    dialog.dismiss();
+//
+//                }
+//            }
+//        });
+//        builderVideo.show();
+//    }
 
 
 

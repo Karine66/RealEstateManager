@@ -8,11 +8,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
 import com.openclassrooms.realestatemanager.databinding.ActivityDetailBinding;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.util.Objects;
 
@@ -38,6 +40,11 @@ public class DetailActivity extends BaseActivity {
         //for title toolbar
         ActionBar ab = getSupportActionBar();
         Objects.requireNonNull(ab).setTitle("Estate Description");
+
+
+        if (!Utils.isInternetAvailable(this)) {
+            Snackbar.make(activityDetailBinding.getRoot(), "No internet",Snackbar.LENGTH_SHORT).show();
+        }
 
 
     }

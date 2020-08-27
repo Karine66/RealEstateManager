@@ -32,6 +32,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityDetailBinding;
 import com.openclassrooms.realestatemanager.databinding.ActivityMapBinding;
@@ -42,12 +43,17 @@ import com.openclassrooms.realestatemanager.models.geocodingAPI.Geocoding;
 import com.openclassrooms.realestatemanager.models.geocodingAPI.Result;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
 import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
+import com.openclassrooms.realestatemanager.ui.detailDescription.DetailActivity;
+import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
 import com.openclassrooms.realestatemanager.utils.EstateManagerStream;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
@@ -72,6 +78,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
     private String completeAddress;
     private List<Estate> estateList = new ArrayList<>();
     private List<String> adressList=new ArrayList<>();
+    private String estateType;
+    private String snippetInfo;
+    private List<String> snippetList = new ArrayList<>();
 
 
     @Override
@@ -85,7 +94,12 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
                 .findFragmentById(R.id.map);
         Objects.requireNonNull(mapFragment).getMapAsync(this);
 
+//        if (!Utils.isInternetAvailable(this)) {
+//            Snackbar.make(getContext(), "No internet",Snackbar.LENGTH_SHORT).show();
+//        }
+
         this.estateViewModel.getEstates().observe(this,this::createStringForAddress);
+        this.estateViewModel.getEstates().observe(this,this::createStringForSnippet);
 
 
     }
@@ -192,6 +206,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.moveCamera(CameraUpdateFactory.zoomBy(15));
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
@@ -209,16 +224,16 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
     public void createStringForAddress(List<Estate> estateList) {
 
-
         if (!Objects.requireNonNull(estateList).isEmpty()) {
             for (Estate est : estateList) {
+                est.getMandateNumberID();
                 String address = est.getAddress();
-
                 String postalCode = String.valueOf(est.getPostalCode());
                 String city = est.getCity();
                 completeAddress = address + "," + postalCode + "," + city;
 
                 adressList.addAll(Collections.singleton(completeAddress));
+
                 Log.d("adressList", "adressList"+ adressList);
 
                 Log.d("createString", "createString" + completeAddress);
@@ -226,26 +241,89 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
             }
         }
     }
+
+    public void createStringForSnippet(List<Estate> estateList) {
+        if (!Objects.requireNonNull(estateList).isEmpty()) {
+            for (Estate est : estateList) {
+                est.getMandateNumberID();
+                String estateType = est.getEstateType();
+                String surface = String.valueOf(est.getSurface());
+                String rooms = String.valueOf(est.getRooms());
+                String bedrooms = String.valueOf(est.getBedrooms());
+                String bathrooms = String.valueOf(est.getBathrooms());
+                String price = String.valueOf(est.getPrice());
+
+                snippetInfo = estateType + "," + surface +"," + rooms +"," + bedrooms + "," + bathrooms +"," + price;
+                snippetList.addAll(Collections.singleton(snippetInfo));
+                Log.d("snippetInfo", "snippetInfo" + snippetInfo);
+
+
+            }
+            }
+    }
+
+
     //For retrieve estate position with LatLng and marker
     public void positionMarker(List<Result> resultGeocoding) {
         map.clear();
 
+        for (Result geo : resultGeocoding) {
 
-            for (Result geo : resultGeocoding) {
+            LatLng latLng = new LatLng(geo.getGeometry().getLocation().getLat(),
+                    geo.getGeometry().getLocation().getLng()
+            );
 
-                LatLng latLng = new LatLng(geo.getGeometry().getLocation().getLat(),
-                        geo.getGeometry().getLocation().getLng()
-                );
-                positionMarker = map.addMarker(new MarkerOptions().position(latLng)
+            positionMarker = map.addMarker(new MarkerOptions().position(latLng)
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
-                        .title(geo.getFormattedAddress()));
+                        .title(geo.getFormattedAddress())
+                        .snippet(snippetInfo));
+
                 positionMarker.showInfoWindow();
+
                 map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-
                 Log.d("detailResultMap", String.valueOf(latLng));
-            }
-        }
 
+              positionMarker.setTag(adressList);
+
+//            if (estateType.contains("House")) {
+//                positionMarker = map.addMarker(new MarkerOptions().position(latLng)
+//                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+//                        .title(geo.getFormattedAddress())
+//                        .snippet(estateType));
+//
+//                positionMarker.showInfoWindow();
+//
+//                map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+//                Log.d("detailResultMap", String.valueOf(latLng));
+//            }
+//                if (estateType.contains("Flat")) {
+//                    positionMarker = map.addMarker(new MarkerOptions().position(latLng)
+//                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))
+//                            .title(geo.getFormattedAddress())
+//                    .snippet(estateType));
+//
+//                    positionMarker.showInfoWindow();
+//                    positionMarker.setTag(estateType);
+//                    map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+//                }
+//                    if (estateType.contains("Duplex")) {
+//                        positionMarker = map.addMarker(new MarkerOptions().position(latLng)
+//                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+//                                .title(geo.getFormattedAddress())
+//                        .snippet(estateType));
+//                        positionMarker.showInfoWindow();
+//                        positionMarker.setTag(estateType);
+//
+//                    } if (estateType.contains("Penthouse")) {
+//                            positionMarker = map.addMarker(new MarkerOptions().position(latLng)
+//                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+//                                    .title(geo.getFormattedAddress())
+//                            .snippet(estateType));
+//                            positionMarker.showInfoWindow();
+//                            positionMarker.setTag(estateType);
+//                        }
+                    }
+                }
 
     //http request for geocoding
     private void executeHttpRequestWithRetrofit() {
@@ -271,7 +349,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
                         Log.d("onErrorGeocoding", Log.getStackTraceString(e));
                     }
                 });
+
     }
+
 
 
     /**

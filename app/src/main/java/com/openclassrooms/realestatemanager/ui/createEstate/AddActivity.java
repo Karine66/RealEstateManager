@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.createEstate;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ContentResolver;
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +20,8 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
+import android.widget.MediaController;
+import android.widget.VideoView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -42,9 +46,12 @@ import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -66,6 +73,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private static final int REQUEST_TAKE_PHOTO = 200;
     protected final int PICK_IMAGE_CAMERA = 1;
     protected final int PICK_IMAGE_GALLERY = 2;
+    protected final int PICK_VIDEO_CAMERA = 3;
+    protected final int PICK_VIDEO_GALLERY = 4;
 
     private ActivityAddPhotoItemBinding activityAddPhotoItemBinding;
     private ActivityAddBinding activityAddBinding;
@@ -77,7 +86,9 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private Context context;
 
     private EstateViewModel estateViewModel;
-
+    private VideoView videoView;
+    private static final String VIDEO_DIRECTORY = "/realEstateManager";
+    private int GALLERY = 1, CAMERA = 2;
 
     private PhotoAdapter adapter;
     private long mandateNumberID;
@@ -90,6 +101,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private String path;
     private Estate estate;
     private MaterialAlertDialogBuilder builder;
+    private MaterialAlertDialogBuilder builderVideo;
     private PhotoList photoList;
     private Uri contentUri;
     private PhotoList photo = new PhotoList();
@@ -373,60 +385,92 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_CANCELED) {
+            if (requestCode == PICK_IMAGE_CAMERA && data != null && data.getData() != null) {
+                if (resultCode == Activity.RESULT_OK) {
 
-        if (requestCode == PICK_IMAGE_CAMERA && data != null && data.getData() != null) {
-            if (resultCode == Activity.RESULT_OK) {
+                    selectedImage = (Bitmap) Objects.requireNonNull(Objects.requireNonNull(data).getExtras()).get("data");
 
-                selectedImage = (Bitmap) Objects.requireNonNull(Objects.requireNonNull(data).getExtras()).get("data");
+                    //For save in gallery
+                    File file = new File(currentPhotoPath);
+                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    Uri uriCamera = Uri.fromFile(file);
+                    mediaScanIntent.setData(uriCamera);
+                    this.sendBroadcast(mediaScanIntent);
 
-                //For save in gallery
-                File file = new File(currentPhotoPath);
-                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                Uri uriCamera = Uri.fromFile(file);
-                mediaScanIntent.setData(uriCamera);
-                this.sendBroadcast(mediaScanIntent);
+                }
 
             }
+            if (requestCode == PICK_IMAGE_GALLERY && data != null && data.getData() != null) {
+                if (resultCode == Activity.RESULT_OK) {
 
-        }
-        if (requestCode == PICK_IMAGE_GALLERY && data != null && data.getData() != null) {
-            if (resultCode == Activity.RESULT_OK) {
+                    Uri contentUri = Objects.requireNonNull(data).getData();
+                    String timeStamp = new SimpleDateFormat("ddMMyyyy", Locale.FRANCE).format(new Date());
+                    String imageFileName = "JPEG" + timeStamp + "." + getFileExt(contentUri);
+                    Log.d("Test uri gallery", "onActivityResult : Gallery Image Uri:" + imageFileName);
 
-                Uri contentUri = Objects.requireNonNull(data).getData();
-                String timeStamp = new SimpleDateFormat("ddMMyyyy", Locale.FRANCE).format(new Date());
-                String imageFileName = "JPEG" + timeStamp + "." + getFileExt(contentUri);
-                Log.d("Test uri gallery", "onActivityResult : Gallery Image Uri:" + imageFileName);
-
-                //For save image in internal storage
-                FileOutputStream fOut = null;
-                try {
-                    fOut = openFileOutput("imageGallery", MODE_PRIVATE);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                OutputStreamWriter osw = new OutputStreamWriter(Objects.requireNonNull(fOut));
-                try {
-                    osw.write(imageFileName);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                int len = imageFileName.length();
-                try {
-                    osw.flush();
-                    osw.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    //For save image in internal storage
+                    FileOutputStream fOut = null;
+                    try {
+                        fOut = openFileOutput("imageGallery", MODE_PRIVATE);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    OutputStreamWriter osw = new OutputStreamWriter(Objects.requireNonNull(fOut));
+                    try {
+                        osw.write(imageFileName);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    int len = imageFileName.length();
+                    try {
+                        osw.flush();
+                        osw.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                     listPhoto.add(contentUri);
                     photo.getPhotoList().add(String.valueOf(contentUri));
                     adapter.setPhotoList(listPhoto);
 
 
+                }
+            }
+            if (requestCode == PICK_VIDEO_CAMERA && data != null && data.getData() != null) {
+                if (resultCode == Activity.RESULT_OK) {
+//                displayVideo();
+                    Uri contentURI = data.getData();
+                    String recordedVideoPath = getPath(contentURI);
+                    Log.d("frrr", recordedVideoPath);
+//                saveVideoToInternalStorage(recordedVideoPath);
+                    Objects.requireNonNull(activityAddBinding.includeForm.videoView).setVideoURI(contentURI);
+                    activityAddBinding.includeForm.videoView.requestFocus();
+                    MediaController mediaController = new MediaController(this);
+                    activityAddBinding.includeForm.videoView.setMediaController(mediaController);
+                    mediaController.setAnchorView(activityAddBinding.includeForm.videoView);
+                    activityAddBinding.includeForm.videoView.start();
+                }
+            }
+            if (requestCode == PICK_VIDEO_GALLERY && data != null && data.getData() != null) {
+                if (resultCode == Activity.RESULT_OK) {
+
+                    Uri contentURI = data.getData();
+
+                    String selectedVideoPath = getPath(contentURI);
+                    Log.d("path", selectedVideoPath);
+//                    saveVideoToInternalStorage(selectedVideoPath);
+                    Objects.requireNonNull(activityAddBinding.includeForm.videoView).setVideoURI(contentURI);
+                    activityAddBinding.includeForm.videoView.requestFocus();
+                    MediaController mediaController = new MediaController(this);
+                    activityAddBinding.includeForm.videoView.setMediaController(mediaController);
+                    mediaController.setAnchorView(activityAddBinding.includeForm.videoView);
+                    activityAddBinding.includeForm.videoView.start();
+
+                }
             }
         }
     }
-
     private String getFileExt(Uri contentUri) {
         ContentResolver contentResolver = getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
@@ -454,6 +498,90 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         }
 
     }
+    //For alert dialog for choose take video or choose video
+    protected void selectVideo() {
+        final CharSequence[] options = {"Take Video", "Choose Video", "Cancel"};
+
+        builderVideo = new MaterialAlertDialogBuilder(this);
+        builderVideo.setTitle("Add video");
+        builderVideo.setItems(options, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                if (options[item].equals("Take Video")) {
+                    Intent takeVideo = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                    startActivityForResult(takeVideo, PICK_VIDEO_CAMERA);
+
+
+
+                } else if (options[item].equals("Choose Video")) {
+                    Intent pickVideo = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(pickVideo, PICK_VIDEO_GALLERY);
+
+
+                } else if (options[item].equals("Cancel")) {
+                    dialog.dismiss();
+
+                }
+            }
+        });
+        builderVideo.show();
+    }
+
+    //for video
+    private void saveVideoToInternalStorage (String filePath) {
+
+        File newfile;
+
+        try {
+
+            File currentFile = new File(filePath);
+            File wallpaperDirectory = new File(Environment.getExternalStorageDirectory() + VIDEO_DIRECTORY);
+            newfile = new File(wallpaperDirectory, Calendar.getInstance().getTimeInMillis() + ".mp4");
+
+            if (!wallpaperDirectory.exists()) {
+                wallpaperDirectory.mkdirs();
+            }
+
+            if(currentFile.exists()){
+
+                InputStream in = new FileInputStream(currentFile);
+                OutputStream out = new FileOutputStream(newfile);
+
+                // Copy the bits from instream to outstream
+                byte[] buf = new byte[1024];
+                int len;
+
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+                in.close();
+                out.close();
+                Log.v("vii", "Video file saved successfully.");
+            }else{
+                Log.v("vii", "Video saving failed. Source file missing.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    //For video
+    public String getPath(Uri uri) {
+        String[] projection = { MediaStore.Video.Media.DATA };
+        @SuppressLint("Recycle") Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null) {
+            // HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
+            // THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
+            int column_index = ((Cursor) cursor)
+                    .getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } else
+            return null;
+    }
+
 
 }
 

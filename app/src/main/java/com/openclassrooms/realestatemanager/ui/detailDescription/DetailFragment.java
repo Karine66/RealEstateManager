@@ -40,6 +40,7 @@ import com.openclassrooms.realestatemanager.models.geocodingAPI.Geocoding;
 import com.openclassrooms.realestatemanager.models.geocodingAPI.Result;
 import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
 import com.openclassrooms.realestatemanager.utils.EstateManagerStream;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.util.List;
 import java.util.Locale;
@@ -124,6 +125,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         mapView = (MapView) fragmentDetailBinding.mapView;
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
+
 
         return view;
 

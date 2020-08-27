@@ -22,17 +22,17 @@ public class VideoActivity extends AppCompatActivity {
         View view = activityVideoBinding.getRoot();
         setContentView(view);
 
-        displayVideo();
+//        displayVideo();
     }
 
-       public void displayVideo() {
-        String videoPath = "android.resource://"+ getPackageName() + "/";
-        Uri uri = Uri.parse(videoPath);
-       activityVideoBinding.videoView.setVideoURI(uri);
-
-        MediaController mediaController = new MediaController(this);
-        activityVideoBinding.videoView.setMediaController(mediaController);
-        mediaController.setAnchorView(activityVideoBinding.videoView);
-
-    }
+//       public void displayVideo() {
+//        String videoPath = "android.resource://"+ getPackageName() + "/";
+//        Uri uri = Uri.parse(videoPath);
+//       activityVideoBinding.videoView.setVideoURI(uri);
+//
+//        MediaController mediaController = new MediaController(this);
+//        activityVideoBinding.videoView.setMediaController(mediaController);
+//        mediaController.setAnchorView(activityVideoBinding.videoView);
+//
+//    }
 }
