@@ -107,9 +107,9 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private Uri contentUri;
     private PhotoList photo = new PhotoList();
     private DetailFragment detailFragment;
-//    private ArrayList<String> descriptionPhoto;
+
     private PhotoDescription photoText = new PhotoDescription();
-//    private List<String> photoDescription;
+    private PhotoList video = new PhotoList();
 
 
     @Override
@@ -258,7 +258,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 Objects.requireNonNull(estateFormBinding.soldDate.getText()).toString(),
                 estateFormBinding.etAgent.getText().toString(),
                 photo,
-                photoText);
+                photoText,
+                video);
 
 
 
@@ -457,6 +458,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                     activityAddBinding.includeForm.videoView.setMediaController(mediaController);
                     mediaController.setAnchorView(activityAddBinding.includeForm.videoView);
                     activityAddBinding.includeForm.videoView.start();
+                    video.getPhotoList().add(String.valueOf(contentURI));
                 }
             }
             if (requestCode == PICK_VIDEO_GALLERY && data != null && data.getData() != null) {
@@ -473,7 +475,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                     activityAddBinding.includeForm.videoView.setMediaController(mediaController);
                     mediaController.setAnchorView(activityAddBinding.includeForm.videoView);
                     activityAddBinding.includeForm.videoView.start();
-
+                    video.getPhotoList().add(String.valueOf(contentURI));
                 }
             }
         }

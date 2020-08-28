@@ -99,7 +99,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 //        }
 
         this.estateViewModel.getEstates().observe(this,this::createStringForAddress);
-        this.estateViewModel.getEstates().observe(this,this::createStringForSnippet);
+        
 
 
     }
@@ -226,7 +226,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
         if (!Objects.requireNonNull(estateList).isEmpty()) {
             for (Estate est : estateList) {
-                est.getMandateNumberID();
+               estateType = est.getEstateType();
                 String address = est.getAddress();
                 String postalCode = String.valueOf(est.getPostalCode());
                 String city = est.getCity();
@@ -240,26 +240,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
             }
         }
-    }
-
-    public void createStringForSnippet(List<Estate> estateList) {
-        if (!Objects.requireNonNull(estateList).isEmpty()) {
-            for (Estate est : estateList) {
-                est.getMandateNumberID();
-                String estateType = est.getEstateType();
-                String surface = String.valueOf(est.getSurface());
-                String rooms = String.valueOf(est.getRooms());
-                String bedrooms = String.valueOf(est.getBedrooms());
-                String bathrooms = String.valueOf(est.getBathrooms());
-                String price = String.valueOf(est.getPrice());
-
-                snippetInfo = estateType + "," + surface +"," + rooms +"," + bedrooms + "," + bathrooms +"," + price;
-                snippetList.addAll(Collections.singleton(snippetInfo));
-                Log.d("snippetInfo", "snippetInfo" + snippetInfo);
-
-
-            }
-            }
     }
 
 

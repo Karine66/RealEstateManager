@@ -1,9 +1,11 @@
 package com.openclassrooms.realestatemanager.models
 
 import android.content.ContentValues
+import android.net.Uri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
+import java.net.URI
 
 
 @Entity
@@ -29,14 +31,14 @@ data class Estate (@PrimaryKey (autoGenerate = true) val mandateNumberID: Long,
                   var soldDate:String?,
                   var agentName:String,
                   var photoList: PhotoList,
-                  var photoDescription : PhotoDescription
-
+                  var photoDescription : PhotoDescription,
+                   var video:PhotoList
 
 
 //var video:ArrayList<String> = TODO())
 ) : Serializable {
     constructor() : this(0, "", null, null, null, null, null, null, "", "",
-            null, "", false, false, false, false, false, null, null, "", PhotoList(), PhotoDescription())
+            null, "", false, false, false, false, false, null, null, "", PhotoList(), PhotoDescription(), PhotoList())
 
 }
 

@@ -9,23 +9,11 @@ import java.lang.reflect.Type
 
 
 class PhotoDescriptionConverter {
-//2ème solution
-//    fun toListOfStrings(list: String): List<String> {
-//        return list.split(",")
-//    }
+
 //    @TypeConverter
-//    fun fromListOfStrings(list: List<String>): String {
-//        return list.joinToString(",")
+//    fun fromPhotoDescription(photoDescription: List<String>): String {
+//        return photoDescription.joinToString("|")
 //    }
-//    1er converter
-//    @TypeConverter
-//    fun toPhotoDescription(flatStringList: String): List<String> {
-//        return flatStringList.split(",")
-//    }
-    @TypeConverter
-    fun fromPhotoDescription(photoDescription: List<String>): String {
-        return photoDescription.joinToString(",")
-    }
 
     @TypeConverter
     fun toPhotoDescription(value: String?): PhotoDescription {
@@ -33,7 +21,7 @@ class PhotoDescriptionConverter {
             return PhotoDescription()
         }
 
-        val list: List<String> = value.split(",")
+        val list: List<String> = value.split(";")
         val photoDescription = ArrayList<String>()
         for (item in list) {
             if (item.isNotEmpty()) {
