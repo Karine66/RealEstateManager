@@ -25,6 +25,7 @@ import android.widget.VideoView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -106,9 +107,9 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private Uri contentUri;
     private PhotoList photo = new PhotoList();
     private DetailFragment detailFragment;
-    private ArrayList<String> descriptionPhoto;
+//    private ArrayList<String> descriptionPhoto;
     private PhotoDescription photoText = new PhotoDescription();
-    private List<String> photoDescription;
+//    private List<String> photoDescription;
 
 
     @Override
@@ -121,15 +122,16 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         View view = activityAddBinding.getRoot();
         setContentView(view);
 
+
         this.configureToolbar();
         this.configureUpButton();
         this.dropDownAdapters();
         this.setDateField();
-        this.onClickValidateBtn();
         this.configureViewModel();
+        this.configureRecyclerView();
         this.onClickPhotoBtn();
         this.onClickVideoBtn();
-        this.configureRecyclerView();
+        this.onClickValidateBtn();
 
 
         //for title toolbar
@@ -148,9 +150,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     public void configureRecyclerView() {
 
         listPhoto = new ArrayList<>();
-        descriptionPhoto = new ArrayList<>();
 
-        adapter = new PhotoAdapter(listPhoto, Glide.with(this), descriptionPhoto);
+        adapter = new PhotoAdapter(listPhoto, Glide.with(this), photoText.getPhotoDescription());
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         Objects.requireNonNull(estateFormBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
@@ -211,16 +212,18 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         estateFormBinding.validateFabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (detailFragment == null || !detailFragment.isVisible()) {
 
-
-                descriptionPhoto.add(String.valueOf(photoDescription));
-                photoText.getPhotoDescription().add(String.valueOf(photoDescription));
-                adapter.setPhotoDescription(descriptionPhoto);
-
+                ArrayList<String> photoDescriptionList = new ArrayList<>();
+                for (int i = 0; i < photoText.getPhotoDescription().size(); i++) {
+                    AppCompatEditText editText = Objects.requireNonNull(Objects.requireNonNull(activityAddBinding.includeForm.rvPhoto.getLayoutManager()).findViewByPosition(i)).findViewById(R.id.photo_description);
+                    String desc = Objects.requireNonNull(editText.getText()).toString();
+                    photoDescriptionList.add(desc);
+                }
+                photoText.setPhotoDescription(photoDescriptionList);
                 saveEstates();
 
-                }
+            }
+
 //                Snackbar.make(v,"You're new Estate is created", Snackbar.LENGTH_SHORT).show();
 
 //            }
@@ -235,7 +238,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         Estate estate = new Estate(
 
                 mandateNumberID,
-//                Long.parseLong(Objects.requireNonNull(estateFormBinding.etMandate.getText()).toString()),
                 estateFormBinding.etEstate.getText().toString(),
                 Integer.parseInt(Objects.requireNonNull(estateFormBinding.etSurface.getText()).toString()),
                 Integer.parseInt(estateFormBinding.etRooms.getText().toString()),
@@ -320,8 +322,9 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             public void onClick(DialogInterface dialog, int item) {
 
                 if (options[item].equals("Take Photo")) {
-                    Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
+
+                   Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
                     if (takePicture.resolveActivity(getPackageManager()) != null) {
                         //Create the File where the photo should go
@@ -331,24 +334,26 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                         } catch (IOException ex) {
                             Log.e("PhotoFileException", Objects.requireNonNull(ex.getMessage()));
                         }
+
                         //Continue only if the file was successfully created
                         if (photoFile != null) {
-                            Uri photoUri = FileProvider.getUriForFile(getApplicationContext(), "com.openclassrooms.realestatemanager.fileprovider", photoFile);
 
-                            takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-                            Log.d("PhotoUri", "photoUri =" + photoUri);
-                            startActivityForResult(takePicture, 1);
+                                Uri photoUri = FileProvider.getUriForFile(getApplicationContext(), "com.openclassrooms.realestatemanager.fileprovider", photoFile);
+
+                                takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                                Log.d("PhotoUri", "photoUri =" + photoUri);
 
 
-                            listPhoto.add(photoUri);
-                            photo.getPhotoList().add(String.valueOf(photoUri));
-                            adapter.setPhotoList(listPhoto);
+                                startActivityForResult(takePicture, 1);
 
-//                            descriptionPhoto.add(String.valueOf(photoDescription));
-//                            photoText.getPhotoDescription().add(String.valueOf(photoDescription));
-//                            adapter.setPhotoDescription(descriptionPhoto);
+
+                                        listPhoto.add(photoUri);
+                                        photo.getPhotoList().add(String.valueOf(photoUri));
+                                        photoText.getPhotoDescription().add("");
+                                        adapter.setPhotoList(listPhoto);
 
                         }
+
                     }
 
                 } else if (options[item].equals("Choose from Gallery")) {
@@ -365,7 +370,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
-
     protected File createImageFile() throws IOException {
         //Create an image file name
         String timeStamp = new SimpleDateFormat("ddMMyyyy", Locale.FRANCE).format(new Date());
@@ -376,8 +380,9 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 ".jpg", /*suffix*/
                 storageDir /*directory*/
         );
-        //Save file : path for use with ACTION_VIEW intent
+//        Save file : path for use with ACTION_VIEW intent
         currentPhotoPath = image.getAbsolutePath();
+
         return image;
     }
 
@@ -398,7 +403,9 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                     mediaScanIntent.setData(uriCamera);
                     this.sendBroadcast(mediaScanIntent);
 
+
                 }
+
 
             }
             if (requestCode == PICK_IMAGE_GALLERY && data != null && data.getData() != null) {
@@ -432,6 +439,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
                     listPhoto.add(contentUri);
                     photo.getPhotoList().add(String.valueOf(contentUri));
+                    photoText.getPhotoDescription().add("");
                     adapter.setPhotoList(listPhoto);
 
 
@@ -439,10 +447,9 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             }
             if (requestCode == PICK_VIDEO_CAMERA && data != null && data.getData() != null) {
                 if (resultCode == Activity.RESULT_OK) {
-//                displayVideo();
                     Uri contentURI = data.getData();
                     String recordedVideoPath = getPath(contentURI);
-                    Log.d("frrr", recordedVideoPath);
+                    Log.d("recordedVideoPaht", recordedVideoPath);
 //                saveVideoToInternalStorage(recordedVideoPath);
                     Objects.requireNonNull(activityAddBinding.includeForm.videoView).setVideoURI(contentURI);
                     activityAddBinding.includeForm.videoView.requestFocus();

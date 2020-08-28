@@ -1,20 +1,31 @@
 package com.openclassrooms.realestatemanager.database.converters
 
 import androidx.room.TypeConverter
+import com.google.gson.Gson
+
+import com.google.gson.reflect.TypeToken
 import com.openclassrooms.realestatemanager.models.PhotoDescription
-import com.openclassrooms.realestatemanager.models.PhotoList
-import java.util.ArrayList
+import java.lang.reflect.Type
+
 
 class PhotoDescriptionConverter {
-
+//2ème solution
+//    fun toListOfStrings(list: String): List<String> {
+//        return list.split(",")
+//    }
+//    @TypeConverter
+//    fun fromListOfStrings(list: List<String>): String {
+//        return list.joinToString(",")
+//    }
+//    1er converter
 //    @TypeConverter
 //    fun toPhotoDescription(flatStringList: String): List<String> {
 //        return flatStringList.split(",")
 //    }
-//    @TypeConverter
-//    fun fromListOfStrings(listOfString: List<String>): String {
-//        return listOfString.joinToString(",")
-//    }
+    @TypeConverter
+    fun fromPhotoDescription(photoDescription: List<String>): String {
+        return photoDescription.joinToString(",")
+    }
 
     @TypeConverter
     fun toPhotoDescription(value: String?): PhotoDescription {

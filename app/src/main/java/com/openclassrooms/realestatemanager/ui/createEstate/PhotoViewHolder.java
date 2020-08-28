@@ -38,11 +38,11 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    public void updateWithDetails(Uri photoList, RequestManager glide) {
+    public void updateWithDetails(Uri photoList, RequestManager glide, String photoDescription) {
 
-//        description = "";
+//
 
-        activityAddPhotoItemBinding.photoDescription.setText("");
+        activityAddPhotoItemBinding.photoDescription.setText(photoDescription);
 //            glide.load(uriPhoto).apply(RequestOptions.centerCropTransform()).into(activityAddPhotoItemBinding.photoImage);
 
                 glide.load(photoList).listener(new RequestListener<Drawable>() {

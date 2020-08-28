@@ -27,6 +27,7 @@ import java.util.Objects;
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder>{
 
 
+
     private ActivityAddPhotoItemBinding activityAddPhotoItemBinding;
 
 
@@ -35,8 +36,9 @@ private List<Uri> mPhotoList = new ArrayList<Uri>();
 private List<String> mPhotoDescription = new ArrayList<>();
 
 
-    public PhotoAdapter(List<Uri> listPhoto,  RequestManager glide, ArrayList<String> mPhotoDescription){
+    public PhotoAdapter(List<Uri> listPhoto,  RequestManager glide, ArrayList<String> photoDescription){
         this.glide = glide;
+        this.mPhotoDescription = photoDescription;
 
 
 //    ArrayAdapter<String> adapterEstates = new ArrayAdapter<String>(context, R.layout.dropdown_menu_popup_item,
@@ -56,7 +58,7 @@ private List<String> mPhotoDescription = new ArrayList<>();
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
 
 //   holder.updateWithDetails(this.mPhotoList.get(position), this.glide, this.mPhotoDescription.get(position));
-       holder.updateWithDetails(this.mPhotoList.get(position), this.glide);
+       holder.updateWithDetails(this.mPhotoList.get(position), this.glide, this.mPhotoDescription.get(position));
 //       activityAddPhotoItemBinding.photoDescription.setText(mPhotoDescription.get(holder.getAdapterPosition()));
 
     }
