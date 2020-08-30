@@ -19,4 +19,7 @@ public interface EstateManagerService {
     @GET("maps/api/geocode/json?key="+GOOGLE_MAP_API_KEY)
     Observable<Geocoding> getGeocode (@Query("address") String address);
 
+    //Geocoding API Request
+    @GET("maps/api/geocode/json?key="+GOOGLE_MAP_API_KEY)
+    Observable<Geocoding> getGeocodeList (@Query("address") List<String> address);
 }

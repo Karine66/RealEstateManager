@@ -85,6 +85,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
     private Marker marker;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -186,7 +187,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
             map.moveCamera(CameraUpdateFactory.newLatLng(googleLocation));
             mPosition = mLatitude + "," + mLongitude;
             Log.d("TestLatLng", mPosition);
-            executeHttpRequestWithRetrofit();
+            executeHttpRequestWithRetrofit(adressList);
         }
     }
 
@@ -223,7 +224,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
         if (!Objects.requireNonNull(estateList).isEmpty()) {
             for (Estate est : estateList) {
-//                 id = est.getMandateNumberID();
+                 id = est.getMandateNumberID();
 //               estateType = est.getEstateType();
                 String address = est.getAddress();
                 String postalCode = String.valueOf(est.getPostalCode());
@@ -306,8 +307,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
                 }
 
     //http request for geocoding
-    private void executeHttpRequestWithRetrofit() {
-        this.mDisposable = EstateManagerStream.streamFetchGeocode(String.valueOf(adressList))
+    private void executeHttpRequestWithRetrofit(List<String> adressList) {
+        this.mDisposable = EstateManagerStream.streamFetchGeocodeList(adressList)
                 .subscribeWith(new DisposableObserver<Geocoding>() {
 
                     @Override
@@ -318,7 +319,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
                     @Override
                     public void onComplete() {
-                        if(adressList != null) {
+
+                        for (int i = 0; i < adressList.size(); i++) {
 
                             positionMarker(resultGeocoding);
                         }

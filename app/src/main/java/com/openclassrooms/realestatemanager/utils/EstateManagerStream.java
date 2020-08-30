@@ -7,6 +7,7 @@ import com.openclassrooms.realestatemanager.models.geocodingAPI.Geocoding;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -22,4 +23,12 @@ public class EstateManagerStream {
                 .timeout(10, TimeUnit.SECONDS);
     }
 
+    //Create stream for geocoding list
+    public static Observable<Geocoding> streamFetchGeocodeList (List<String> addressList) {
+        EstateManagerService estateManagerService = EstateManagerRetrofitObject.retrofit.create(EstateManagerService.class);
+        return estateManagerService.getGeocodeList(addressList)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .timeout(10, TimeUnit.SECONDS);
+    }
 }
