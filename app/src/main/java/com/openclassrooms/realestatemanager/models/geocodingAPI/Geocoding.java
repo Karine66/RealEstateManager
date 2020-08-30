@@ -1,12 +1,13 @@
 
 package com.openclassrooms.realestatemanager.models.geocodingAPI;
 
+import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
 
 @SuppressWarnings("unused")
-public class Geocoding {
+public class Geocoding implements Serializable {
 
     @SerializedName("results")
     private List<Result> mResults;

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.RequestManager;
 import com.openclassrooms.realestatemanager.databinding.FragmentListItemBinding;
 import com.openclassrooms.realestatemanager.models.Estate;
+import com.openclassrooms.realestatemanager.models.PhotoList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +19,14 @@ public class ListAdapter extends RecyclerView.Adapter<ListViewHolder> {
     //For data
     private List<Estate> estateList;
     private RequestManager glide;
+    private List<PhotoList> photoLists;
 
     //constructor
-    public ListAdapter(List<Estate> estateList, RequestManager glide) {
+    public ListAdapter(List<Estate> estateList, RequestManager glide, PhotoList photoLists) {
 
         this.estateList = new ArrayList<>();
         this.glide = glide;
+        this.photoLists = new ArrayList<>();
     }
 
     @NonNull

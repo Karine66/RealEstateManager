@@ -61,7 +61,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 
 import static java.security.AccessController.getContext;
 
-public class MapActivity extends BaseActivity implements OnMapReadyCallback, LocationListener {
+public class MapActivity extends BaseActivity implements OnMapReadyCallback, LocationListener, Serializable {
 
     private ActivityMapBinding activityMapBinding;
     protected static final int PERMS_CALL_ID = 200;
@@ -79,14 +79,17 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
     private List<Estate> estateList = new ArrayList<>();
     private List<String> adressList=new ArrayList<>();
     private String estateType;
-    private String snippetInfo;
-    private List<String> snippetList = new ArrayList<>();
+    private Geocoding geocoding;
+    private Estate est;
+    private Long id;
+    private Marker marker;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
         configureViewModel();
         createStringForAddress(estateList);
 
@@ -94,14 +97,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
                 .findFragmentById(R.id.map);
         Objects.requireNonNull(mapFragment).getMapAsync(this);
 
-//        if (!Utils.isInternetAvailable(this)) {
-//            Snackbar.make(getContext(), "No internet",Snackbar.LENGTH_SHORT).show();
-//        }
-
         this.estateViewModel.getEstates().observe(this,this::createStringForAddress);
-        
-
-
+//        onInfoClickMarker(positionMarker);
     }
 
 
@@ -129,8 +126,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
         }
 
         locationManager = (LocationManager) (getSystemService(Context.LOCATION_SERVICE));
-        assert locationManager != null;
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+
+        if (Objects.requireNonNull(locationManager).isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER, 15000, 10, this);
             Log.e("GPSProvider", "testGPS");
@@ -226,7 +223,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
         if (!Objects.requireNonNull(estateList).isEmpty()) {
             for (Estate est : estateList) {
-               estateType = est.getEstateType();
+//                 id = est.getMandateNumberID();
+//               estateType = est.getEstateType();
                 String address = est.getAddress();
                 String postalCode = String.valueOf(est.getPostalCode());
                 String city = est.getCity();
@@ -247,7 +245,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
     public void positionMarker(List<Result> resultGeocoding) {
         map.clear();
 
-        for (Result geo : resultGeocoding) {
+
+            for (Result geo : resultGeocoding) {
 
             LatLng latLng = new LatLng(geo.getGeometry().getLocation().getLat(),
                     geo.getGeometry().getLocation().getLng()
@@ -255,15 +254,16 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
             positionMarker = map.addMarker(new MarkerOptions().position(latLng)
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
-                        .title(geo.getFormattedAddress())
-                        .snippet(snippetInfo));
+                        .title(geo.getFormattedAddress()));
+
 
                 positionMarker.showInfoWindow();
+                positionMarker.setTag(id);
+                Log.d("idMarker", String.valueOf(id));
 
-                map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                Log.d("detailResultMap", String.valueOf(latLng));
-
-              positionMarker.setTag(adressList);
+//                Log.d("detailResultMap", String.valueOf(latLng));
+//                Result markerResult = (Result) est.getMandateNumberID();
+//              positionMarker.setTag(markerResult);
 
 //            if (estateType.contains("House")) {
 //                positionMarker = map.addMarker(new MarkerOptions().position(latLng)
@@ -318,11 +318,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
                     @Override
                     public void onComplete() {
-
+                        if(adressList != null) {
 
                             positionMarker(resultGeocoding);
                         }
-
+                    }
 
                     @Override
                     public void onError(Throwable e) {
@@ -332,7 +332,14 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
     }
 
-
+//public void onInfoClickMarker(Marker positionMarker) {
+//
+//
+//        long estateId = Long.parseLong(Objects.requireNonNull(positionMarker.getTag()).toString());
+//    Intent intent = new Intent(this, DetailActivity.class);
+//    intent.putExtra("estateId",estateId);
+//    startActivity(intent);
+//}
 
     /**
      * Dispose subscription

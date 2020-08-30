@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding;
+import com.openclassrooms.realestatemanager.models.PhotoList;
 import com.openclassrooms.realestatemanager.repositories.EstateDataRepository;
 import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
 
@@ -54,6 +55,7 @@ public class ListFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private List<Estate> estateList;
+    private PhotoList photoLists = new PhotoList();
     private ListAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private EstateViewModel estateViewModel;
@@ -138,8 +140,9 @@ public class ListFragment extends Fragment {
     private void configureRecyclerView() {
 
         this.estateList = new ArrayList<>();
+
         //Create adapter
-        this.mAdapter = new ListAdapter(this.estateList, Glide.with(this));
+        this.mAdapter = new ListAdapter(this.estateList, Glide.with(this), this.photoLists);
         // Attach the adapter to the recyclerview
 //        this.mRecyclerView.setAdapter(this.mAdapter);
         //Set Layout manager
@@ -158,17 +161,13 @@ public class ListFragment extends Fragment {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
 
-
-//                            if(detailFragment == null || !detailFragment.isVisible()) {
                                 Estate estate = mAdapter.getEstates(position);
                                 Intent intent = new Intent(getContext(), DetailActivity.class);
-
                                 intent.putExtra("estate", estate);
-//                            Log.d("bundleRV", "mandateID" + estate.getMandateNumberID());
+
                                 Log.d("bundleRV", "estate" + estate);
                                 startActivity(intent);
                             }
-//                    }
                 });
 
     }

@@ -12,6 +12,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentListItemBinding;
 import com.openclassrooms.realestatemanager.models.Estate;
+import com.openclassrooms.realestatemanager.models.PhotoList;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -46,7 +47,9 @@ public class ListViewHolder extends RecyclerView.ViewHolder {
             fragmentListItemBinding.listPhotoSold.setImageResource(R.drawable.sold4);
         }
 
+//        String photo = photoList.getPhotoList().get(0);
 
+//        glide.load(photo).into(fragmentListItemBinding.listPhoto);
 //        glide.load(estate.getPhotoList().getPhotoDescription().get(0)).into(fragmentListItemBinding.listPhoto);
 //
 //        Log.d("photoList", "photolist" + estate.getPhotoList().getPhotoDescription().get(0));

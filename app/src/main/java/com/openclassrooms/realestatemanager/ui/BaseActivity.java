@@ -72,6 +72,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         // 2 - Forward results to EasyPermissions
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+
     }
 
     @AfterPermissionGranted(RC_CAMERA_AND_STORAGE)

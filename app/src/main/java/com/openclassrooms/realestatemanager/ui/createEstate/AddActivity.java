@@ -15,7 +15,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.telephony.PhoneStateListener;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -44,7 +43,6 @@ import com.openclassrooms.realestatemanager.models.PhotoDescription;
 import com.openclassrooms.realestatemanager.models.PhotoList;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
 import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -122,7 +120,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         View view = activityAddBinding.getRoot();
         setContentView(view);
 
-
+        this.methodRequiresTwoPermission();
         this.configureToolbar();
         this.configureUpButton();
         this.dropDownAdapters();
@@ -220,9 +218,12 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                     photoDescriptionList.add(desc);
                 }
                 photoText.setPhotoDescription(photoDescriptionList);
+
+//                fieldsRequired();
                 saveEstates();
 
             }
+
 
 //                Snackbar.make(v,"You're new Estate is created", Snackbar.LENGTH_SHORT).show();
 
@@ -232,6 +233,21 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
+//    public boolean fieldsRequired() {
+//
+//        String surfaceInput = estateFormBinding.inputSurface.getEditText().getText().toString();
+//
+//        if(surfaceInput.isEmpty()) {
+//            estateFormBinding.etSurface.setError("Required");
+//            return false;
+//        } else {
+//            estateFormBinding.etSurface.setText(null);
+//            return true;
+//        }
+//    }
+
+
+
     //For save in database
     public void saveEstates() {
 
@@ -239,7 +255,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
                 mandateNumberID,
                 estateFormBinding.etEstate.getText().toString(),
-                Integer.parseInt(Objects.requireNonNull(estateFormBinding.etSurface.getText()).toString()),
+                    Integer.parseInt(Objects.requireNonNull(estateFormBinding.etSurface.getText()).toString()),
                 Integer.parseInt(estateFormBinding.etRooms.getText().toString()),
                 Integer.parseInt(estateFormBinding.etBedrooms.getText().toString()),
                 Integer.parseInt(estateFormBinding.etBathrooms.getText().toString()),
@@ -291,7 +307,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         estateFormBinding.photoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                methodRequiresTwoPermission();
+//                methodRequiresTwoPermission();
                 selectImage();
                 saveImageInInternalStorage();
 
@@ -304,7 +320,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         estateFormBinding.cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                methodRequiresTwoPermission();
+//                methodRequiresTwoPermission();
                 selectVideo();
 
             }
@@ -358,6 +374,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                     }
 
                 } else if (options[item].equals("Choose from Gallery")) {
+
                     Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(pickPhoto, 2);
 

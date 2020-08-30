@@ -41,6 +41,10 @@ public class DetailActivity extends BaseActivity {
         ActionBar ab = getSupportActionBar();
         Objects.requireNonNull(ab).setTitle("Estate Description");
 
+        //for retrieve estate from marker
+        Intent intent = this.getIntent();
+        Bundle bundle = intent.getExtras();
+
 
         if (!Utils.isInternetAvailable(this)) {
             Snackbar.make(activityDetailBinding.getRoot(), "No internet",Snackbar.LENGTH_SHORT).show();

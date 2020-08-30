@@ -69,7 +69,6 @@
             app:suffixText="m²"
             app:suffixTextColor="#000000"
             app:helperText="Required"
-            app:helperTextEnabled="true"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -505,8 +504,7 @@
             <VideoView
                 android:id="@+id/videoView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#75D7BEFB"/>
+                android:layout_height="wrap_content" />
         </FrameLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
