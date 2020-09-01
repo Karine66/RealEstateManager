@@ -40,17 +40,14 @@ import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.models.PhotoDescription;
-import com.openclassrooms.realestatemanager.models.PhotoList;
+import com.openclassrooms.realestatemanager.models.UriList;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
 import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,13 +60,6 @@ import java.util.Objects;
 
 public class AddActivity extends BaseActivity implements View.OnClickListener {
 
-    private static final int CAMERA_PERM_CODE = 100;
-
-
-    private static final int RC_CAMERA_AND_STORAGE = 100;
-    private static final String[] CAM_AND_READ_EXTERNAL_STORAGE =
-            {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
-    private static final int REQUEST_TAKE_PHOTO = 200;
     protected final int PICK_IMAGE_CAMERA = 1;
     protected final int PICK_IMAGE_GALLERY = 2;
     protected final int PICK_VIDEO_CAMERA = 3;
@@ -81,14 +71,10 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private DatePickerDialog mUpOfSaleDateDialog;
     private DatePickerDialog mSoldDate;
     private SimpleDateFormat mDateFormat;
-    private View view;
-    private Context context;
-
     private EstateViewModel estateViewModel;
     private VideoView videoView;
     private static final String VIDEO_DIRECTORY = "/realEstateManager";
     private int GALLERY = 1, CAMERA = 2;
-
     private PhotoAdapter adapter;
     private long mandateNumberID;
     private List<Uri> listPhoto;
@@ -96,18 +82,13 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private Bitmap selectedImage;
     private String currentPhotoPath;
     private Uri photoUri;
-    private Uri uriCamera;
-    private String path;
-    private Estate estate;
     private MaterialAlertDialogBuilder builder;
     private MaterialAlertDialogBuilder builderVideo;
-    private PhotoList photoList;
-    private Uri contentUri;
-    private PhotoList photo = new PhotoList();
+    private UriList photo = new UriList();
     private DetailFragment detailFragment;
 
     private PhotoDescription photoText = new PhotoDescription();
-    private PhotoList video = new PhotoList();
+    private UriList video = new UriList();
 
 
     @Override
@@ -364,10 +345,10 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                                 startActivityForResult(takePicture, 1);
 
 
-                                        listPhoto.add(photoUri);
-                                        photo.getPhotoList().add(String.valueOf(photoUri));
-                                        photoText.getPhotoDescription().add("");
-                                        adapter.setPhotoList(listPhoto);
+//                                        listPhoto.add(photoUri);
+//                                        photo.getPhotoList().add(String.valueOf(photoUri));
+//                                        photoText.getPhotoDescription().add("");
+//                                        adapter.setPhotoList(listPhoto);
 
                         }
 
@@ -421,7 +402,10 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                     mediaScanIntent.setData(uriCamera);
                     this.sendBroadcast(mediaScanIntent);
 
-
+                    listPhoto.add(photoUri);
+                    photo.getPhotoList().add(String.valueOf(photoUri));
+                    photoText.getPhotoDescription().add("");
+                    adapter.setPhotoList(listPhoto);
                 }
 
 
@@ -468,7 +452,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                     Uri contentURI = data.getData();
                     String recordedVideoPath = getPath(contentURI);
                     Log.d("recordedVideoPaht", recordedVideoPath);
-//                saveVideoToInternalStorage(recordedVideoPath);
                     Objects.requireNonNull(activityAddBinding.includeForm.videoView).setVideoURI(contentURI);
                     activityAddBinding.includeForm.videoView.requestFocus();
                     MediaController mediaController = new MediaController(this);
@@ -555,44 +538,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         builderVideo.show();
     }
 
-    //for video
-    private void saveVideoToInternalStorage (String filePath) {
-
-        File newfile;
-
-        try {
-
-            File currentFile = new File(filePath);
-            File wallpaperDirectory = new File(Environment.getExternalStorageDirectory() + VIDEO_DIRECTORY);
-            newfile = new File(wallpaperDirectory, Calendar.getInstance().getTimeInMillis() + ".mp4");
-
-            if (!wallpaperDirectory.exists()) {
-                wallpaperDirectory.mkdirs();
-            }
-
-            if(currentFile.exists()){
-
-                InputStream in = new FileInputStream(currentFile);
-                OutputStream out = new FileOutputStream(newfile);
-
-                // Copy the bits from instream to outstream
-                byte[] buf = new byte[1024];
-                int len;
-
-                while ((len = in.read(buf)) > 0) {
-                    out.write(buf, 0, len);
-                }
-                in.close();
-                out.close();
-                Log.v("vii", "Video file saved successfully.");
-            }else{
-                Log.v("vii", "Video saving failed. Source file missing.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
     //For video
     public String getPath(Uri uri) {
         String[] projection = { MediaStore.Video.Media.DATA };

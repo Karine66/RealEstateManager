@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.models.Estate;
-import com.openclassrooms.realestatemanager.models.PhotoList;
 import com.openclassrooms.realestatemanager.repositories.EstateDataRepository;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.detailDescription;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,12 +10,15 @@ import android.view.View;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
 import com.openclassrooms.realestatemanager.databinding.ActivityDetailBinding;
+import com.openclassrooms.realestatemanager.injections.Injection;
+import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
+import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
 import com.openclassrooms.realestatemanager.utils.Utils;
 
+import java.util.List;
 import java.util.Objects;
 
 public class DetailActivity extends BaseActivity {
@@ -24,6 +27,9 @@ public class DetailActivity extends BaseActivity {
     private DetailFragment detailFragment;
     private Bundle bundle;
     private Estate estate;
+    private long estateId;
+    private EstateViewModel estateViewModel;
+    private List<Estate> estateList;
 
 
     @Override
@@ -36,24 +42,37 @@ public class DetailActivity extends BaseActivity {
         this.configureToolbar();
         this.configureUpButton();
         this.configureAndShowDetailFragment();
-
+        this.configureViewModel();
+//        this.retrieveDataMap();
         //for title toolbar
         ActionBar ab = getSupportActionBar();
         Objects.requireNonNull(ab).setTitle("Estate Description");
 
-        //for retrieve estate from marker
-        Intent intent = this.getIntent();
-        Bundle bundle = intent.getExtras();
+
+       
 
 
-        if (!Utils.isInternetAvailable(this)) {
-            Snackbar.make(activityDetailBinding.getRoot(), "No internet",Snackbar.LENGTH_SHORT).show();
-        }
+//        if (!Utils.isInternetAvailable(this)) {
+//            Snackbar.make(activityDetailBinding.getRoot(), "No internet",Snackbar.LENGTH_SHORT).show();
+//        }
 
 
     }
+//    //for retrieve data marker
+//    private void retrieveDataMap() {
+//
+//        this.getIntent().getLongExtra("estateId", estateId);
+//
+//        Log.d("idBundle", String.valueOf(bundle));
+//    }
 
-
+    //Configuring ViewModel
+    private void configureViewModel() {
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
+        this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
+    }
+   
+   
 
         //for detailFragment
         private void configureAndShowDetailFragment(){

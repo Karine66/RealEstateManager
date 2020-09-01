@@ -24,9 +24,9 @@ public class EstateManagerStream {
     }
 
     //Create stream for geocoding list
-    public static Observable<Geocoding> streamFetchGeocodeList (List<String> addressList) {
+    public static Observable<Geocoding> streamFetchGeocodeList (List<String> address) {
         EstateManagerService estateManagerService = EstateManagerRetrofitObject.retrofit.create(EstateManagerService.class);
-        return estateManagerService.getGeocodeList(addressList)
+        return estateManagerService.getGeocodeList(address)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .timeout(10, TimeUnit.SECONDS);

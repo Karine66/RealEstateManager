@@ -2,29 +2,22 @@ package com.openclassrooms.realestatemanager.ui.mapPage;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -32,9 +25,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.databinding.ActivityDetailBinding;
 import com.openclassrooms.realestatemanager.databinding.ActivityMapBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
@@ -46,20 +37,15 @@ import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
 import com.openclassrooms.realestatemanager.ui.detailDescription.DetailActivity;
 import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
 import com.openclassrooms.realestatemanager.utils.EstateManagerStream;
-import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
-import pub.devrel.easypermissions.AfterPermissionGranted;
-
-import static java.security.AccessController.getContext;
 
 public class MapActivity extends BaseActivity implements OnMapReadyCallback, LocationListener, Serializable {
 
@@ -73,7 +59,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
     private Marker positionMarker;
     private Disposable mDisposable;
     private List<Result> resultGeocoding;
-
     private EstateViewModel estateViewModel;
     private String completeAddress;
     private List<Estate> estateList = new ArrayList<>();
@@ -82,7 +67,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
     private Geocoding geocoding;
     private Estate est;
     private Long id;
-    private Marker marker;
+
 
 
 
@@ -99,7 +84,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
         Objects.requireNonNull(mapFragment).getMapAsync(this);
 
         this.estateViewModel.getEstates().observe(this,this::createStringForAddress);
-//        onInfoClickMarker(positionMarker);
+
     }
 
 
@@ -314,17 +299,45 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
                     @Override
                     public void onNext(Geocoding geocoding) {
 
-                        resultGeocoding = geocoding.getResults();
+                        for (int i = 0; i < adressList.size(); i++) {
+
+                            resultGeocoding = geocoding.getResults();
+
+                        }
                     }
 
                     @Override
                     public void onComplete() {
 
-                        for (int i = 0; i < adressList.size(); i++) {
 
-                            positionMarker(resultGeocoding);
+                        for ( Result geo: resultGeocoding) {
+                            map.clear();
+                            LatLng latLng = new LatLng(geo.getGeometry().getLocation().getLat(),
+                                    geo.getGeometry().getLocation().getLng()
+                            );
+
+                            positionMarker = map.addMarker(new MarkerOptions().position(latLng)
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                                    .title(geo.getFormattedAddress()));
+
+
+                            positionMarker.showInfoWindow();
+                            positionMarker.setTag(id);
+                            Log.d("idMarker", String.valueOf(id));
+
+                            map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                                @Override
+                                public void onInfoWindowClick(Marker marker) {
+
+                                    long estateId = Long.parseLong(Objects.requireNonNull(positionMarker.getTag()).toString());
+                                    Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                                    intent.putExtra("estateId",estateId);
+                                    startActivity(intent);
+
+                                }
+                            });
                         }
-                    }
+                        }
 
                     @Override
                     public void onError(Throwable e) {
@@ -334,14 +347,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
     }
 
-//public void onInfoClickMarker(Marker positionMarker) {
-//
-//
-//        long estateId = Long.parseLong(Objects.requireNonNull(positionMarker.getTag()).toString());
-//    Intent intent = new Intent(this, DetailActivity.class);
-//    intent.putExtra("estateId",estateId);
-//    startActivity(intent);
-//}
 
     /**
      * Dispose subscription

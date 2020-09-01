@@ -3,7 +3,6 @@ package com.openclassrooms.realestatemanager.database.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.openclassrooms.realestatemanager.models.Estate
-import com.openclassrooms.realestatemanager.models.PhotoList
 
 @Dao
 interface EstateDAO {

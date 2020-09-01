@@ -1,12 +1,10 @@
 package com.openclassrooms.realestatemanager.ui.listPage;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +17,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding;
-import com.openclassrooms.realestatemanager.models.PhotoList;
+import com.openclassrooms.realestatemanager.models.UriList;
 import com.openclassrooms.realestatemanager.repositories.EstateDataRepository;
 import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
 
@@ -28,14 +26,10 @@ import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.ui.detailDescription.DetailActivity;
 import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
-import com.openclassrooms.realestatemanager.ui.mapPage.MapActivity;
 import com.openclassrooms.realestatemanager.utils.ItemClickSupport;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 ///**
 // * A simple {@link Fragment} subclass.
@@ -55,7 +49,7 @@ public class ListFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private List<Estate> estateList;
-    private PhotoList photoLists = new PhotoList();
+    private UriList photoLists = new UriList();
     private ListAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private EstateViewModel estateViewModel;

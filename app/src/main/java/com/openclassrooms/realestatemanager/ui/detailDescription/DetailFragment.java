@@ -68,6 +68,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
     private String completeAddress;
     private List<Result> resultGeocoding;
     private Marker positionMarker;
+    private long estateId;
 //
 //    // TODO: Rename parameter arguments, choose names that match
 //    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -118,6 +119,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         fragmentDetailBinding = FragmentDetailBinding.inflate(inflater, container, false);
         View view = fragmentDetailBinding.getRoot();
        updateUi();
+       retrieveDataMap();
         createStringForAddress();
         //for lite map
         GoogleMapOptions options = new GoogleMapOptions();
@@ -138,6 +140,15 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
 //
 //       this.estateViewModel.getEstate(mandateNumberID).observe(this, estateDetail -> updateUi());
 //    }
+//for retrieve data marker
+private void retrieveDataMap() {
+        Intent intent = new Intent(Objects.requireNonNull(getActivity()).getIntent());
+        long estateMap = intent.getLongExtra("estateId", estateId);
+
+    Log.d("idBundle", String.valueOf(estateMap));
+}
+
+
 
     @SuppressLint("SetTextI18n")
     public void updateUi() {

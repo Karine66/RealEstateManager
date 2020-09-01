@@ -20,8 +20,8 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/list_photo"
-            android:layout_width="110dp"
-            android:layout_height="85dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:scaleType="center"
@@ -31,11 +31,10 @@
             android:id="@+id/estateType"
             android:layout_width="150dp"
             android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
             android:layout_marginTop="5dp"
-            android:layout_marginEnd="110dp"
+            android:layout_marginStart="15dp"
+          android:layout_toEndOf="@+id/list_photo"
             android:textAllCaps="true"
-            android:gravity="top"
             android:textColor="#711515"
             android:textSize="22sp"
             android:textStyle="bold|italic" />
@@ -44,26 +43,24 @@
             android:id="@+id/City"
             android:layout_width="150dp"
             android:layout_height="20dp"
-            android:layout_alignParentEnd="true"
-            android:gravity="center_vertical"
-            android:layout_marginTop="40dp"
+           android:layout_below="@+id/estateType"
+            android:layout_toEndOf="@+id/list_photo"
+            android:layout_marginStart="15dp"
             android:textAllCaps="true"
             android:textSize="15sp"
             android:textStyle="italic"
-            android:textColor="#000000"
-            android:layout_marginEnd="110dp" />
+            android:textColor="#000000" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/price"
             android:layout_width="150dp"
             android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
-            android:gravity="center_vertical"
+           android:layout_toEndOf="@+id/list_photo"
+            android:layout_below="@+id/City"
             android:textColor="#DA13D7"
-            android:layout_marginTop="60dp"
+            android:layout_marginStart="15dp"
             android:textSize="22sp"
-            android:textStyle="italic|bold"
-            android:layout_marginEnd="110dp" />
+            android:textStyle="italic|bold" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/list_photo_sold"

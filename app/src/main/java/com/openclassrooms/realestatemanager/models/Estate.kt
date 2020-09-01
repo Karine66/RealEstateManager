@@ -1,44 +1,41 @@
 package com.openclassrooms.realestatemanager.models
 
-import android.content.ContentValues
-import android.net.Uri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
-import java.net.URI
 
 
 @Entity
 data class Estate (@PrimaryKey (autoGenerate = true) val mandateNumberID: Long,
 
-                  var estateType:String?,
-                  var surface: Int?,
-                  var rooms:Int?,
-                  var bedrooms:Int?,
-                  var bathrooms:Int?,
-                  var ground:Int?,
-                  var price: Double?,
-                  var description:String?,
-                  var address:String?,
-                  var postalCode:Int?,
-                  var city:String?,
-                  var schools:Boolean,
-                  var stores:Boolean,
-                  var park:Boolean,
-                  var restaurants:Boolean,
-                  var sold:Boolean,
-                  var upOfSaleDate: String?,
-                  var soldDate:String?,
-                  var agentName:String,
-                  var photoList: PhotoList,
-                  var photoDescription : PhotoDescription,
-                   var video:PhotoList
+                   var estateType:String?,
+                   var surface: Int?,
+                   var rooms:Int?,
+                   var bedrooms:Int?,
+                   var bathrooms:Int?,
+                   var ground:Int?,
+                   var price: Double?,
+                   var description:String?,
+                   var address:String?,
+                   var postalCode:Int?,
+                   var city:String?,
+                   var schools:Boolean,
+                   var stores:Boolean,
+                   var park:Boolean,
+                   var restaurants:Boolean,
+                   var sold:Boolean,
+                   var upOfSaleDate: String?,
+                   var soldDate:String?,
+                   var agentName:String,
+                   var photoList: UriList,
+                   var photoDescription : PhotoDescription,
+                   var video:UriList
 
 
 //var video:ArrayList<String> = TODO())
 ) : Serializable {
     constructor() : this(0, "", null, null, null, null, null, null, "", "",
-            null, "", false, false, false, false, false, null, null, "", PhotoList(), PhotoDescription(), PhotoList())
+            null, "", false, false, false, false, false, null, null, "", UriList(), PhotoDescription(), UriList())
 
 }
 

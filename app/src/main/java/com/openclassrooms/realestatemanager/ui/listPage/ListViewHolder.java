@@ -1,18 +1,13 @@
 package com.openclassrooms.realestatemanager.ui.listPage;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
-import android.net.Uri;
-import android.util.Log;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentListItemBinding;
 import com.openclassrooms.realestatemanager.models.Estate;
-import com.openclassrooms.realestatemanager.models.PhotoList;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -50,8 +45,13 @@ public class ListViewHolder extends RecyclerView.ViewHolder {
 //        String photo = photoList.getPhotoList().get(0);
 
 //        glide.load(photo).into(fragmentListItemBinding.listPhoto);
-//        glide.load(estate.getPhotoList().getPhotoDescription().get(0)).into(fragmentListItemBinding.listPhoto);
+        if(!estate.getPhotoList().getPhotoList().isEmpty()) {
+            glide.load(estate.getPhotoList().getPhotoList().get(0)).into(fragmentListItemBinding.listPhoto);
 //
 //        Log.d("photoList", "photolist" + estate.getPhotoList().getPhotoDescription().get(0));
+
+        }else {
+            fragmentListItemBinding.listPhoto.setImageResource(R.drawable.icon_no_image);
+        }
     }
 }

@@ -10,10 +10,6 @@ import java.lang.reflect.Type
 
 class PhotoDescriptionConverter {
 
-//    @TypeConverter
-//    fun fromPhotoDescription(photoDescription: List<String>): String {
-//        return photoDescription.joinToString("|")
-//    }
 
     @TypeConverter
     fun toPhotoDescription(value: String?): PhotoDescription {
