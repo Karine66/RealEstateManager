@@ -44,6 +44,7 @@ import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
 import com.openclassrooms.realestatemanager.utils.EstateManagerStream;
 import com.openclassrooms.realestatemanager.utils.Utils;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -72,6 +73,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
     private Marker positionMarker;
     private long estateId;
     private long estateMap;
+    private DetailFragment detailFragment;
 //
 //    // TODO: Rename parameter arguments, choose names that match
 //    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -191,7 +193,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
     public void updateUi() {
         Intent intent = Objects.requireNonNull(getActivity()).getIntent();
         Estate estateDetail = (Estate) intent.getSerializableExtra("estate");
-        Log.d("idDetail", "idDetail" + estateDetail);
+        Log.d("estateDetail", "estateDetail" + estateDetail);
 
 //        Intent intentMap = Objects.requireNonNull(getActivity()).getIntent();
 //        long estateMap = intentMap.getLongExtra("estateId", estateId);
@@ -217,6 +219,35 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
             fragmentDetailBinding.etPostalCode.setText(Objects.requireNonNull(estateDetail.getPostalCode()).toString());
             fragmentDetailBinding.etPostalCode.setEnabled(false);
             fragmentDetailBinding.etCity.setText(estateDetail.getCity());
+            fragmentDetailBinding.etCity.setEnabled(false);
+//        } else {
+//            Snackbar.make(Objects.requireNonNull(getView()), "No Estate create", Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void updateUiForTablet(Estate estate) {
+
+
+
+        if (estate != null) {
+            fragmentDetailBinding.etMandate.setText(String.valueOf(estate.getMandateNumberID()));
+            fragmentDetailBinding.etMandate.setEnabled(false);
+            fragmentDetailBinding.etSurface.setText(Objects.requireNonNull(estate.getSurface()).toString());
+            fragmentDetailBinding.etSurface.setEnabled(false);
+            fragmentDetailBinding.etDescription.setText(estate.getDescription());
+            fragmentDetailBinding.etDescription.setEnabled(false);
+            fragmentDetailBinding.etRooms.setText(Objects.requireNonNull(estate.getRooms()).toString());
+            fragmentDetailBinding.etRooms.setEnabled(false);
+            fragmentDetailBinding.etBathrooms.setText(Objects.requireNonNull(estate.getBathrooms()).toString());
+            fragmentDetailBinding.etBathrooms.setEnabled(false);
+            fragmentDetailBinding.etBedrooms.setText(Objects.requireNonNull(estate.getBedrooms()).toString());
+            fragmentDetailBinding.etBedrooms.setEnabled(false);
+            fragmentDetailBinding.etAddress.setText(estate.getAddress());
+            fragmentDetailBinding.etAddress.setEnabled(false);
+            fragmentDetailBinding.etPostalCode.setText(Objects.requireNonNull(estate.getPostalCode()).toString());
+            fragmentDetailBinding.etPostalCode.setEnabled(false);
+            fragmentDetailBinding.etCity.setText(estate.getCity());
             fragmentDetailBinding.etCity.setEnabled(false);
 //        } else {
 //            Snackbar.make(Objects.requireNonNull(getView()), "No Estate create", Snackbar.LENGTH_SHORT).show();
@@ -322,6 +353,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         super.onDestroy();
         this.disposeWhenDestroy();
     }
+
 
 
 }

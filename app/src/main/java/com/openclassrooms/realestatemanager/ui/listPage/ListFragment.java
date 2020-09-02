@@ -56,6 +56,7 @@ public class ListFragment extends Fragment {
     private long mandateNumberID;
     private EstateDataRepository estateDateRepository;
     private DetailFragment detailFragment;
+    private Estate estate;
 
     public ListFragment() {
         // Required empty public constructor
@@ -155,13 +156,20 @@ public class ListFragment extends Fragment {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
 
-                                Estate estate = mAdapter.getEstates(position);
-                                Intent intent = new Intent(getContext(), DetailActivity.class);
-                                intent.putExtra("estate", estate);
+                        if (detailFragment != null && detailFragment.isVisible()) {
+                            Estate estate = mAdapter.getEstates(position);
+                            detailFragment.updateUiForTablet(estate);
+                            Log.d("bundleListFragment", "bundleFragment" + estate);
 
-                                Log.d("bundleRV", "estate" + estate);
-                                startActivity(intent);
-                            }
+                        }else{
+                            Estate estate = mAdapter.getEstates(position);
+                            Intent intent = new Intent(getContext(), DetailActivity.class);
+                            intent.putExtra("estate", estate);
+
+                            Log.d("bundleRV", "estate" + estate);
+                            startActivity(intent);
+                        }
+                    }
                 });
 
     }

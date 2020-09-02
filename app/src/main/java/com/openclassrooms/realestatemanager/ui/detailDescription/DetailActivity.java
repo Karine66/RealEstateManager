@@ -43,6 +43,7 @@ public class DetailActivity extends BaseActivity {
         this.configureUpButton();
         this.configureAndShowDetailFragment();
         this.configureViewModel();
+
 //        this.retrieveDataMap();
         //for title toolbar
         ActionBar ab = getSupportActionBar();
@@ -66,6 +67,12 @@ public class DetailActivity extends BaseActivity {
 //        Log.d("idBundle", String.valueOf(bundle));
 //    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Call update method here because we are sure that DetailFragment is visible
+        this.updateDetailUiForFragment();
+    }
     //Configuring ViewModel
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
@@ -87,5 +94,13 @@ public class DetailActivity extends BaseActivity {
                     .add(R.id.detail_fragment_frameLayout, detailFragment)
                     .commit();
         }
+    }
+
+    private void updateDetailUiForFragment() {
+
+        Intent intentTablet = Objects.requireNonNull(this).getIntent();
+        estate = (Estate) intentTablet.getSerializableExtra("estate");
+        Log.d("estateDetail", "estateDetail" + estate);
+
     }
 }
