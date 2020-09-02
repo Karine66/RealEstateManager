@@ -172,7 +172,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
             map.moveCamera(CameraUpdateFactory.newLatLng(googleLocation));
             mPosition = mLatitude + "," + mLongitude;
             Log.d("TestLatLng", mPosition);
-            executeHttpRequestWithRetrofit(adressList);
+            executeHttpRequestWithRetrofit();
         }
     }
 
@@ -292,8 +292,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
                 }
 
     //http request for geocoding
-    private void executeHttpRequestWithRetrofit(List<String> adressList) {
-        this.mDisposable = EstateManagerStream.streamFetchGeocodeList(adressList)
+    private void executeHttpRequestWithRetrofit() {
+        this.mDisposable = EstateManagerStream.streamFetchGeocode(String.valueOf(adressList))
                 .subscribeWith(new DisposableObserver<Geocoding>() {
 
                     @Override
@@ -341,7 +341,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("onErrorGeocoding", Log.getStackTraceString(e));
+                        Log.e("onErrorGeocoding", Log.getStackTraceString(e));
                     }
                 });
 

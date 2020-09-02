@@ -344,7 +344,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
                                 startActivityForResult(takePicture, 1);
 
-
+//
 //                                        listPhoto.add(photoUri);
 //                                        photo.getPhotoList().add(String.valueOf(photoUri));
 //                                        photoText.getPhotoDescription().add("");

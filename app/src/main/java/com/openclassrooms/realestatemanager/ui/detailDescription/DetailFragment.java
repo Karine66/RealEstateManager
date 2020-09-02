@@ -7,9 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -69,6 +71,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
     private List<Result> resultGeocoding;
     private Marker positionMarker;
     private long estateId;
+    private long estateMap;
 //
 //    // TODO: Rename parameter arguments, choose names that match
 //    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -112,6 +115,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -119,8 +123,9 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         fragmentDetailBinding = FragmentDetailBinding.inflate(inflater, container, false);
         View view = fragmentDetailBinding.getRoot();
        updateUi();
-       retrieveDataMap();
+//       retrieveDataMap();
         createStringForAddress();
+        configureViewModel();
         //for lite map
         GoogleMapOptions options = new GoogleMapOptions();
         options.liteMode(true);
@@ -128,25 +133,57 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
+//        Intent intent = new Intent(Objects.requireNonNull(getActivity()).getIntent());
+//        long estateMap = intent.getLongExtra("estateId", estateId);
+//        Log.d("idBundle", String.valueOf(estateMap));
 
         return view;
 
     }
 
 
-//    private void configureViewModel() {
-//        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());
-//        this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
-//
-//       this.estateViewModel.getEstate(mandateNumberID).observe(this, estateDetail -> updateUi());
-//    }
-//for retrieve data marker
-private void retrieveDataMap() {
-        Intent intent = new Intent(Objects.requireNonNull(getActivity()).getIntent());
-        long estateMap = intent.getLongExtra("estateId", estateId);
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void configureViewModel() {
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());
+        this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
 
-    Log.d("idBundle", String.valueOf(estateMap));
-}
+        this.estateViewModel.getEstate(estateMap).observe(this, this::updateUIfromMarker);
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @SuppressLint("SetTextI18n")
+    private void updateUIfromMarker(Estate estate) {
+        Intent intent = new Intent(Objects.requireNonNull(getActivity()).getIntent());
+        estateMap = intent.getLongExtra("estateId", estateId);
+        Log.d("idBundle", String.valueOf(estateMap));
+
+        if (estate != null) {
+            fragmentDetailBinding.etMandate.setText(String.valueOf(estate.getMandateNumberID()));
+            fragmentDetailBinding.etMandate.setEnabled(false);
+            fragmentDetailBinding.etSurface.setText(Objects.requireNonNull(estate.getSurface()).toString());
+            fragmentDetailBinding.etSurface.setEnabled(false);
+            fragmentDetailBinding.etDescription.setText(estate.getDescription());
+            fragmentDetailBinding.etDescription.setEnabled(false);
+            fragmentDetailBinding.etRooms.setText(Objects.requireNonNull(estate.getRooms()).toString());
+            fragmentDetailBinding.etRooms.setEnabled(false);
+            fragmentDetailBinding.etBathrooms.setText(Objects.requireNonNull(estate.getBathrooms()).toString());
+            fragmentDetailBinding.etBathrooms.setEnabled(false);
+            fragmentDetailBinding.etBedrooms.setText(Objects.requireNonNull(estate.getBedrooms()).toString());
+            fragmentDetailBinding.etBedrooms.setEnabled(false);
+            fragmentDetailBinding.etAddress.setText(estate.getAddress());
+            fragmentDetailBinding.etAddress.setEnabled(false);
+            fragmentDetailBinding.etPostalCode.setText(Objects.requireNonNull(estate.getPostalCode()).toString());
+            fragmentDetailBinding.etPostalCode.setEnabled(false);
+            fragmentDetailBinding.etCity.setText(estate.getCity());
+            fragmentDetailBinding.etCity.setEnabled(false);
+//        } else {
+//            Snackbar.make(Objects.requireNonNull(getView()), "No Estate create", Snackbar.LENGTH_SHORT).show();
+        }
+
+
+    }
+
 
 
 
@@ -155,6 +192,11 @@ private void retrieveDataMap() {
         Intent intent = Objects.requireNonNull(getActivity()).getIntent();
         Estate estateDetail = (Estate) intent.getSerializableExtra("estate");
         Log.d("idDetail", "idDetail" + estateDetail);
+
+//        Intent intentMap = Objects.requireNonNull(getActivity()).getIntent();
+//        long estateMap = intentMap.getLongExtra("estateId", estateId);
+//
+//        Log.d("idBundle", String.valueOf(estateMap));
 
 
         if (estateDetail != null) {
@@ -231,8 +273,7 @@ private void retrieveDataMap() {
                     geo.getGeometry().getLocation().getLng()
             );
             positionMarker = map.addMarker(new MarkerOptions().position(latLng)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
-                    .title(geo.getFormattedAddress()));
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
             positionMarker.showInfoWindow();
             map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
