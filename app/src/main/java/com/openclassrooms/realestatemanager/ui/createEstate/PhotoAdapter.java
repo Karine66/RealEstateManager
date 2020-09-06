@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.RequestManager;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPhotoItemBinding;
-import com.squareup.picasso.Request;
 
 import java.util.ArrayList;
 import java.util.List;

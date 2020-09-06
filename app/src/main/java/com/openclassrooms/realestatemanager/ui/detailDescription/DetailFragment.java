@@ -135,10 +135,6 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
-//        Intent intent = new Intent(Objects.requireNonNull(getActivity()).getIntent());
-//        long estateMap = intent.getLongExtra("estateId", estateId);
-//        Log.d("idBundle", String.valueOf(estateMap));
-
         return view;
 
     }
@@ -149,6 +145,9 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
 
+        Intent intent = new Intent(Objects.requireNonNull(getActivity()).getIntent());
+        estateMap = intent.getLongExtra("estateId", estateId);
+        Log.d("idBundle", String.valueOf(estateMap));
         this.estateViewModel.getEstate(estateMap).observe(this, this::updateUIfromMarker);
 
     }
@@ -156,9 +155,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
     @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressLint("SetTextI18n")
     private void updateUIfromMarker(Estate estate) {
-        Intent intent = new Intent(Objects.requireNonNull(getActivity()).getIntent());
-        estateMap = intent.getLongExtra("estateId", estateId);
-        Log.d("idBundle", String.valueOf(estateMap));
+
 
         if (estate != null) {
             fragmentDetailBinding.etMandate.setText(String.valueOf(estate.getMandateNumberID()));
@@ -194,12 +191,6 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         Intent intent = Objects.requireNonNull(getActivity()).getIntent();
         Estate estateDetail = (Estate) intent.getSerializableExtra("estate");
         Log.d("estateDetail", "estateDetail" + estateDetail);
-
-//        Intent intentMap = Objects.requireNonNull(getActivity()).getIntent();
-//        long estateMap = intentMap.getLongExtra("estateId", estateId);
-//
-//        Log.d("idBundle", String.valueOf(estateMap));
-
 
         if (estateDetail != null) {
             fragmentDetailBinding.etMandate.setText(String.valueOf(estateDetail.getMandateNumberID()));
