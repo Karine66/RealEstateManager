@@ -6,7 +6,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.Manifest;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -34,14 +33,11 @@ import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.models.geocodingAPI.Geocoding;
 import com.openclassrooms.realestatemanager.models.geocodingAPI.Result;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
-import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
+import com.openclassrooms.realestatemanager.ui.EstateViewModel;
 import com.openclassrooms.realestatemanager.ui.detailDescription.DetailActivity;
-import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
 import com.openclassrooms.realestatemanager.utils.EstateManagerStream;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -50,9 +46,6 @@ import java.util.Objects;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
-import okhttp3.ResponseBody;
-import retrofit2.Converter;
-import retrofit2.HttpException;
 
 public class MapActivity extends BaseActivity implements OnMapReadyCallback, LocationListener, Serializable {
 
@@ -77,6 +70,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
     private String adress;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,21 +78,17 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
         configureViewModel();
 
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         Objects.requireNonNull(mapFragment).getMapAsync(this);
 
         this.estateViewModel.getEstates().observe(this,this::createStringForAddress);
-
     }
-
 
 
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
-
 
     }
 
@@ -194,6 +184,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.moveCamera(CameraUpdateFactory.zoomBy(15));
@@ -210,16 +201,24 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
         googleMap.setMyLocationEnabled(true);
 
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+
             @Override
             public void onInfoWindowClick(Marker marker) {
-                long estateId = Long.parseLong(Objects.requireNonNull(marker.getTag()).toString());
-                Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-                intent.putExtra("estateId",estateId);
-                startActivity(intent);
+                long estateId  = Long.parseLong(Objects.requireNonNull(marker.getTag()).toString());
+
+                for( Estate estate : estateList)
+                    if(estate.getMandateNumberID() == estateId) {
+
+                        Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                        intent.putExtra("estate",estate);
+                        startActivity(intent);
+                    }
             }
         });
 
     }
+
+
 
     public void createStringForAddress(List<Estate> estateList) {
 

@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.createEstate;
+package com.openclassrooms.realestatemanager.ui;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -46,12 +46,8 @@ public class EstateViewModel extends ViewModel {
     }
 
     public void updateEstate(Estate estate) {
-        executor.execute(()-> {
+        executor.execute(() -> {
             estateDataSource.updateEstate(estate);
         });
     }
-
-
-
-
 }

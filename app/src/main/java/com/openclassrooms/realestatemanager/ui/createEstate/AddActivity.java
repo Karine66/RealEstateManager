@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.ui.createEstate;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -21,16 +20,13 @@ import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 import android.widget.MediaController;
 import android.widget.VideoView;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
@@ -42,7 +38,8 @@ import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.models.PhotoDescription;
 import com.openclassrooms.realestatemanager.models.UriList;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
-import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
+import com.openclassrooms.realestatemanager.ui.EstateViewModel;
+import com.openclassrooms.realestatemanager.ui.PhotoAdapter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -78,15 +75,12 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private PhotoAdapter adapter;
     private long mandateNumberID;
     private List<Uri> listPhoto;
-    private RequestManager glide;
     private Bitmap selectedImage;
     private String currentPhotoPath;
     private Uri photoUri;
     private MaterialAlertDialogBuilder builder;
     private MaterialAlertDialogBuilder builderVideo;
     private UriList photo = new UriList();
-    private DetailFragment detailFragment;
-
     private PhotoDescription photoText = new PhotoDescription();
     private UriList video = new UriList();
 
@@ -112,7 +106,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         this.onClickVideoBtn();
         this.onClickValidateBtn();
 
-
         //for title toolbar
         ActionBar ab = getSupportActionBar();
         Objects.requireNonNull(ab).setTitle("Create Estate");
@@ -121,10 +114,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         //For hide mandate number
         estateFormBinding.etMandate.setVisibility(View.INVISIBLE);
         estateFormBinding.inputMandate.setVisibility(View.INVISIBLE);
-
-
     }
-
 
     public void configureRecyclerView() {
 
@@ -185,7 +175,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     }
 
 // for click on fab validate btn
-
     public void onClickValidateBtn() {
 
         estateFormBinding.validateFabBtn.setOnClickListener(new View.OnClickListener() {
@@ -301,9 +290,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         estateFormBinding.cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                methodRequiresTwoPermission();
                 selectVideo();
-
             }
         });
     }
@@ -332,26 +319,16 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                         } catch (IOException ex) {
                             Log.e("PhotoFileException", Objects.requireNonNull(ex.getMessage()));
                         }
-
                         //Continue only if the file was successfully created
                         if (photoFile != null) {
 
-                                Uri photoUri = FileProvider.getUriForFile(getApplicationContext(), "com.openclassrooms.realestatemanager.fileprovider", photoFile);
+                               photoUri = FileProvider.getUriForFile(getApplicationContext(), "com.openclassrooms.realestatemanager.fileprovider", photoFile);
 
                                 takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                                 Log.d("PhotoUri", "photoUri =" + photoUri);
 
-
                                 startActivityForResult(takePicture, 1);
-
-//
-//                                        listPhoto.add(photoUri);
-//                                        photo.getPhotoList().add(String.valueOf(photoUri));
-//                                        photoText.getPhotoDescription().add("");
-//                                        adapter.setPhotoList(listPhoto);
-
                         }
-
                     }
 
                 } else if (options[item].equals("Choose from Gallery")) {
@@ -390,25 +367,14 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != Activity.RESULT_CANCELED) {
-            if (requestCode == PICK_IMAGE_CAMERA && data != null && data.getData() != null) {
+            if (requestCode == PICK_IMAGE_CAMERA && data != null) {
                 if (resultCode == Activity.RESULT_OK) {
-
-                    selectedImage = (Bitmap) Objects.requireNonNull(Objects.requireNonNull(data).getExtras()).get("data");
-
-                    //For save in gallery
-                    File file = new File(currentPhotoPath);
-                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                    Uri uriCamera = Uri.fromFile(file);
-                    mediaScanIntent.setData(uriCamera);
-                    this.sendBroadcast(mediaScanIntent);
 
                     listPhoto.add(photoUri);
                     photo.getPhotoList().add(String.valueOf(photoUri));
                     photoText.getPhotoDescription().add("");
                     adapter.setPhotoList(listPhoto);
                 }
-
-
             }
             if (requestCode == PICK_IMAGE_GALLERY && data != null && data.getData() != null) {
                 if (resultCode == Activity.RESULT_OK) {
@@ -552,8 +518,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         } else
             return null;
     }
-
-
 }
 
 

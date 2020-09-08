@@ -8,15 +8,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityDetailBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
-import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
-import com.openclassrooms.realestatemanager.utils.Utils;
+import com.openclassrooms.realestatemanager.ui.EstateViewModel;
 
 import java.util.List;
 import java.util.Objects;
@@ -59,13 +57,7 @@ public class DetailActivity extends BaseActivity {
 
 
     }
-//    //for retrieve data marker
-//    private void retrieveDataMap() {
-//
-//        this.getIntent().getLongExtra("estateId", estateId);
-//
-//        Log.d("idBundle", String.valueOf(bundle));
-//    }
+
 
     @Override
     public void onResume() {
@@ -78,8 +70,6 @@ public class DetailActivity extends BaseActivity {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
     }
-   
-   
 
         //for detailFragment
         private void configureAndShowDetailFragment(){

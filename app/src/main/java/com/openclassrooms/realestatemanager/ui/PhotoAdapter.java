@@ -1,27 +1,17 @@
-package com.openclassrooms.realestatemanager.ui.createEstate;
+package com.openclassrooms.realestatemanager.ui;
 
-import android.app.DownloadManager;
-import android.content.Context;
 import android.net.Uri;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
-import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPhotoItemBinding;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder>{
 
@@ -38,11 +28,6 @@ private List<String> mPhotoDescription = new ArrayList<>();
     public PhotoAdapter(List<Uri> listPhoto,  RequestManager glide, ArrayList<String> photoDescription){
         this.glide = glide;
         this.mPhotoDescription = photoDescription;
-
-
-//    ArrayAdapter<String> adapterEstates = new ArrayAdapter<String>(context, R.layout.dropdown_menu_popup_item,
-//            .getStringArray(R.array.DESCRIPTION);
-
 }
 
     @NonNull
@@ -56,9 +41,8 @@ private List<String> mPhotoDescription = new ArrayList<>();
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
 
-//   holder.updateWithDetails(this.mPhotoList.get(position), this.glide, this.mPhotoDescription.get(position));
+
        holder.updateWithDetails(this.mPhotoList.get(position), this.glide, this.mPhotoDescription.get(position));
-//       activityAddPhotoItemBinding.photoDescription.setText(mPhotoDescription.get(holder.getAdapterPosition()));
 
     }
 

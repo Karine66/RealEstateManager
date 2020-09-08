@@ -19,7 +19,7 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding;
 import com.openclassrooms.realestatemanager.models.UriList;
 import com.openclassrooms.realestatemanager.repositories.EstateDataRepository;
-import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
+import com.openclassrooms.realestatemanager.ui.EstateViewModel;
 
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
@@ -30,6 +30,7 @@ import com.openclassrooms.realestatemanager.utils.ItemClickSupport;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 ///**
 // * A simple {@link Fragment} subclass.
@@ -155,6 +156,8 @@ public class ListFragment extends Fragment {
                 .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+
+                        detailFragment = (DetailFragment) Objects.requireNonNull(getFragmentManager()).findFragmentById(R.id.detail_fragment_frameLayout);
 
                         if (detailFragment != null && detailFragment.isVisible()) {
                             Estate estate = mAdapter.getEstates(position);

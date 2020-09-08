@@ -3,10 +3,8 @@ package com.openclassrooms.realestatemanager.ui.detailDescription;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Geocoder;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -21,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.internal.maps.zzt;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
@@ -32,21 +29,17 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.snackbar.Snackbar;
-import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.models.geocodingAPI.Geocoding;
 import com.openclassrooms.realestatemanager.models.geocodingAPI.Result;
-import com.openclassrooms.realestatemanager.ui.createEstate.EstateViewModel;
+import com.openclassrooms.realestatemanager.ui.EstateViewModel;
 import com.openclassrooms.realestatemanager.utils.EstateManagerStream;
-import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import io.reactivex.disposables.Disposable;
@@ -72,8 +65,8 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
     private List<Result> resultGeocoding;
     private Marker positionMarker;
     private long estateId;
-    private long estateMap;
     private DetailFragment detailFragment;
+    private Serializable estateMap;
 //
 //    // TODO: Rename parameter arguments, choose names that match
 //    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -146,11 +139,15 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
 
         Intent intent = new Intent(Objects.requireNonNull(getActivity()).getIntent());
-        estateMap = intent.getLongExtra("estateId", estateId);
+        Estate estateMap = (Estate) intent.getSerializableExtra("estate");
+        estateId = Objects.requireNonNull(estateMap).getMandateNumberID();
         Log.d("idBundle", String.valueOf(estateMap));
-        this.estateViewModel.getEstate(estateMap).observe(this, this::updateUIfromMarker);
 
-    }
+            this.estateViewModel.getEstate(estateId).observe(this, this::updateUIfromMarker);
+        }
+
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressLint("SetTextI18n")
@@ -244,7 +241,6 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
 //            Snackbar.make(Objects.requireNonNull(getView()), "No Estate create", Snackbar.LENGTH_SHORT).show();
         }
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {

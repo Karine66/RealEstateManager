@@ -9,10 +9,15 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.lifecycle.ViewModelProviders;
 
+import com.openclassrooms.realestatemanager.injections.Injection;
+import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
+import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
 import com.openclassrooms.realestatemanager.ui.EditEstate.EditActivity;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.ui.EstateViewModel;
 import com.openclassrooms.realestatemanager.ui.createEstate.AddActivity;
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding;
 import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
@@ -28,8 +33,10 @@ public class MainActivity extends BaseActivity {
     private ActivityMainBinding binding;
     private ListFragment listFragment;
     private DetailFragment detailFragment;
+    private Estate estate;
+    private EstateViewModel estateViewModel;
 
-     @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //for view binding
@@ -46,13 +53,6 @@ public class MainActivity extends BaseActivity {
              this.configureToolbar();
 
          }
-//         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//             ActionBar ab = getSupportActionBar();
-//             Objects.requireNonNull(ab).setTitle("RealEstateManager");
-//         }
-//         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//             getSupportActionBar();
-//         }
      }
 
 //    @SuppressLint("SetTextI18n")
@@ -85,15 +85,28 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    //Configuring ViewModel
+    private void configureViewModel() {
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
+        this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
+    }
     //for click on buttons in toolbar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
          //Handle actions on menu items
         switch (item.getItemId()) {
             case R.id.edit_btn :
+//                if(estate != null) {
+//
+//                    Intent editIntent = new Intent(this, AddActivity.class);
+//                    startActivity(editIntent);
+//                } if (estate == null) {
                 Intent editIntent = new Intent(this, EditActivity.class);
                 startActivity(editIntent);
                 return true;
+//            }
+
+
             case R.id.search_btn :
                 Intent searchIntent = new Intent(this, SearchActivity.class);
                 startActivity(searchIntent);
