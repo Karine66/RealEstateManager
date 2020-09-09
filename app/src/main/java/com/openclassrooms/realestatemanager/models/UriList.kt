@@ -4,7 +4,7 @@ import java.io.Serializable
 
 
 data class UriList(
-        val photoList: java.util.ArrayList<String> = ArrayList(),
-        var photoDescription : java.util.ArrayList<String> = ArrayList()
+        val photoList: java.util.ArrayList<String> = ArrayList()
+//        var photoDescription : java.util.ArrayList<String> = ArrayList()
 ) : Serializable
 

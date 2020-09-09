@@ -67,33 +67,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 
-//    //For alert dialog for choose take video or choose video
-//    protected void selectVideo() {
-//        final CharSequence[] options = {"Take Video", "Choose Video", "Cancel"};
-//
-//        builderVideo = new MaterialAlertDialogBuilder(this);
-//        builderVideo.setTitle("Add video");
-//        builderVideo.setItems(options, new DialogInterface.OnClickListener() {
-//
-//            @Override
-//            public void onClick(DialogInterface dialog, int item) {
-//
-//                if (options[item].equals("Take Video")) {
-//                    Intent takeVideo = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-//                    startActivityForResult(takeVideo, 3);
-//
-//                } else if (options[item].equals("Choose Video")) {
-//                    Intent pickVideo = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-//                    startActivityForResult(pickVideo, 4);
-//
-//                } else if (options[item].equals("Cancel")) {
-//                    dialog.dismiss();
-//
-//                }
-//            }
-//        });
-//        builderVideo.show();
-//    }
+
 
 
 

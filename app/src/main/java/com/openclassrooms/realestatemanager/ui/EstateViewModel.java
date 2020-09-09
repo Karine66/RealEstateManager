@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.models.Estate;
+import com.openclassrooms.realestatemanager.models.UriList;
 import com.openclassrooms.realestatemanager.repositories.EstateDataRepository;
 
 import java.util.List;
@@ -25,10 +26,10 @@ public class EstateViewModel extends ViewModel {
         this.executor = executor;
     }
 
-
     public LiveData<List<Estate>> getEstates () {
         return estateDataSource.getEstates();
     }
+
     public LiveData<Estate> getEstate (long mandateNumberID) {
         return estateDataSource.getEstate(mandateNumberID);
     }
@@ -50,4 +51,8 @@ public class EstateViewModel extends ViewModel {
             estateDataSource.updateEstate(estate);
         });
     }
+
+
+
+
 }

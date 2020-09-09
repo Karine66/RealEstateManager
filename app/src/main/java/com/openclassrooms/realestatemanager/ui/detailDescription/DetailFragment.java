@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -13,12 +14,14 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
@@ -33,12 +36,16 @@ import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
+import com.openclassrooms.realestatemanager.models.PhotoDescription;
+import com.openclassrooms.realestatemanager.models.UriList;
 import com.openclassrooms.realestatemanager.models.geocodingAPI.Geocoding;
 import com.openclassrooms.realestatemanager.models.geocodingAPI.Result;
 import com.openclassrooms.realestatemanager.ui.EstateViewModel;
+import com.openclassrooms.realestatemanager.ui.PhotoAdapter;
 import com.openclassrooms.realestatemanager.utils.EstateManagerStream;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -67,6 +74,10 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
     private long estateId;
     private DetailFragment detailFragment;
     private Serializable estateMap;
+    private PhotoAdapter adapter;
+    private List<Uri> listPhoto;
+    private PhotoDescription photoText = new PhotoDescription();
+
 //
 //    // TODO: Rename parameter arguments, choose names that match
 //    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -121,6 +132,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
 //       retrieveDataMap();
         createStringForAddress();
         configureViewModel();
+        configureRecyclerView();
         //for lite map
         GoogleMapOptions options = new GoogleMapOptions();
         options.liteMode(true);
@@ -146,7 +158,16 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
             this.estateViewModel.getEstate(estateId).observe(this, this::updateUIfromMarker);
         }
 
+    public void configureRecyclerView() {
 
+       listPhoto = new ArrayList<>();
+
+        adapter = new PhotoAdapter(listPhoto, Glide.with(this), photoText.getPhotoDescription());
+        LinearLayoutManager horizontalLayoutManager
+                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        Objects.requireNonNull(fragmentDetailBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
+        fragmentDetailBinding.rvPhoto.setAdapter(adapter);
+    }
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -208,6 +229,9 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
             fragmentDetailBinding.etPostalCode.setEnabled(false);
             fragmentDetailBinding.etCity.setText(estateDetail.getCity());
             fragmentDetailBinding.etCity.setEnabled(false);
+//            photoText.setPhotoDescription(estateDetail.getPhotoDescription().getPhotoDescription());
+//            listPhoto.getPhotoList();
+
 //        } else {
 //            Snackbar.make(Objects.requireNonNull(getView()), "No Estate create", Snackbar.LENGTH_SHORT).show();
         }

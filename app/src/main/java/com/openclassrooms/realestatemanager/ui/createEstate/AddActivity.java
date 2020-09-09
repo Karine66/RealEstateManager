@@ -8,17 +8,24 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.MediaController;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.VideoView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -28,9 +35,11 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPhotoItemBinding;
+import com.openclassrooms.realestatemanager.databinding.DropdownMenuPopupItemBinding;
 import com.openclassrooms.realestatemanager.databinding.EstateFormBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
@@ -83,6 +92,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private UriList photo = new UriList();
     private PhotoDescription photoText = new PhotoDescription();
     private UriList video = new UriList();
+    private View view;
 
 
     @Override
@@ -106,6 +116,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         this.onClickVideoBtn();
         this.onClickValidateBtn();
 
+
         //for title toolbar
         ActionBar ab = getSupportActionBar();
         Objects.requireNonNull(ab).setTitle("Create Estate");
@@ -114,6 +125,18 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         //For hide mandate number
         estateFormBinding.etMandate.setVisibility(View.INVISIBLE);
         estateFormBinding.inputMandate.setVisibility(View.INVISIBLE);
+        //for textWatcher
+        estateFormBinding.etSurface.addTextChangedListener(estateWatcher);
+        estateFormBinding.etRooms.addTextChangedListener(estateWatcher);
+        estateFormBinding.etBedrooms.addTextChangedListener(estateWatcher);
+        estateFormBinding.etBathrooms.addTextChangedListener(estateWatcher);
+        estateFormBinding.etPrice.addTextChangedListener(estateWatcher);
+        estateFormBinding.etDescription.addTextChangedListener(estateWatcher);
+        estateFormBinding.etAddress.addTextChangedListener(estateWatcher);
+        estateFormBinding.etPostalCode.addTextChangedListener(estateWatcher);
+        estateFormBinding.etCity.addTextChangedListener(estateWatcher);
+        estateFormBinding.etAgent.addTextChangedListener(estateWatcher);
+
     }
 
     public void configureRecyclerView() {
@@ -141,6 +164,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         estateFormBinding.etBathrooms.setAdapter(factoryAdapter(R.array.BATHROOMS));
         estateFormBinding.etAgent.setAdapter(factoryAdapter(R.array.AGENT));
     }
+
+
 
     // for date picker
     private void setDateField() {
@@ -174,7 +199,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
-// for click on fab validate btn
+    // for click on fab validate btn
     public void onClickValidateBtn() {
 
         estateFormBinding.validateFabBtn.setOnClickListener(new View.OnClickListener() {
@@ -188,73 +213,124 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                     photoDescriptionList.add(desc);
                 }
                 photoText.setPhotoDescription(photoDescriptionList);
-
-//                fieldsRequired();
+                fieldsRequired();
                 saveEstates();
-
+                Snackbar.make(v, "You're new Estate is created", Snackbar.LENGTH_SHORT).show();
             }
-
-
-//                Snackbar.make(v,"You're new Estate is created", Snackbar.LENGTH_SHORT).show();
-
-//            }
-
 
         });
     }
 
-//    public boolean fieldsRequired() {
-//
-//        String surfaceInput = estateFormBinding.inputSurface.getEditText().getText().toString();
-//
-//        if(surfaceInput.isEmpty()) {
-//            estateFormBinding.etSurface.setError("Required");
-//            return false;
-//        } else {
-//            estateFormBinding.etSurface.setText(null);
-//            return true;
-//        }
-//    }
+    public boolean fieldsRequired() {
+
+        String surfaceInput = Objects.requireNonNull(estateFormBinding.inputSurface.getEditText()).getText().toString().trim();
+        String roomsInput = Objects.requireNonNull(estateFormBinding.inputRooms.getEditText()).getText().toString().trim();
+        String bedroomsInput = Objects.requireNonNull(estateFormBinding.inputBedrooms.getEditText()).getText().toString().trim();
+        String bathroomsInput = Objects.requireNonNull(estateFormBinding.inputBathrooms.getEditText()).getText().toString().trim();
+        String priceInput = Objects.requireNonNull(estateFormBinding.inputPrice.getEditText()).getText().toString().trim();
+        String descriptionInput = Objects.requireNonNull(estateFormBinding.inputDescription.getEditText()).getText().toString().trim();
+        String addressInput = Objects.requireNonNull(estateFormBinding.inputAddress.getEditText()).getText().toString().trim();
+        String postalCodeInput = Objects.requireNonNull(estateFormBinding.inputPostalCode.getEditText()).getText().toString().trim();
+        String cityInput = Objects.requireNonNull(estateFormBinding.inputCity.getEditText()).getText().toString().trim();
+        String agentInput = Objects.requireNonNull(estateFormBinding.inputAgent.getEditText()).getText().toString();
+
+        if (surfaceInput.isEmpty() && roomsInput.isEmpty() && bedroomsInput.isEmpty() && bathroomsInput.isEmpty() && priceInput.isEmpty()
+                && descriptionInput.isEmpty() && addressInput.isEmpty() && postalCodeInput.isEmpty() && cityInput.isEmpty() && agentInput.isEmpty()) {
+            estateFormBinding.etSurface.setError("Required");
+            estateFormBinding.etRooms.setError("Required");
+            estateFormBinding.etBedrooms.setError("Required");
+            estateFormBinding.etBathrooms.setError("Required");
+            estateFormBinding.etPrice.setError("Required");
+            estateFormBinding.etDescription.setError("Required");
+            estateFormBinding.etAddress.setError("Required");
+            estateFormBinding.etPostalCode.setError("Required");
+            estateFormBinding.etCity.setError("Required");
+            estateFormBinding.etAgent.setError("Required");
+            return false;
+        }
+        estateFormBinding.etSurface.setError(null);
+        estateFormBinding.etRooms.setError(null);
+        estateFormBinding.etBedrooms.setError(null);
+        estateFormBinding.etBathrooms.setError(null);
+        estateFormBinding.etPrice.setError(null);
+        estateFormBinding.etDescription.setError(null);
+        estateFormBinding.etAddress.setError(null);
+        estateFormBinding.etPostalCode.setError(null);
+        estateFormBinding.etCity.setError(null);
+        estateFormBinding.etAgent.setError(null);
+        return true;
+   }
+
+    private TextWatcher estateWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String surfaceInput = Objects.requireNonNull(estateFormBinding.inputSurface.getEditText()).getText().toString().trim();
+            String roomsInput = Objects.requireNonNull(estateFormBinding.inputRooms.getEditText()).getText().toString().trim();
+            String bedroomsInput = Objects.requireNonNull(estateFormBinding.inputBedrooms.getEditText()).getText().toString().trim();
+            String bathroomsInput = Objects.requireNonNull(estateFormBinding.inputBathrooms.getEditText()).getText().toString().trim();
+            String priceInput = Objects.requireNonNull(estateFormBinding.inputPrice.getEditText()).getText().toString().trim();
+            String descriptionInput = Objects.requireNonNull(estateFormBinding.inputDescription.getEditText()).getText().toString().trim();
+            String addressInput = Objects.requireNonNull(estateFormBinding.inputAddress.getEditText()).getText().toString().trim();
+            String postalCodeInput = Objects.requireNonNull(estateFormBinding.inputPostalCode.getEditText()).getText().toString().trim();
+            String cityInput = Objects.requireNonNull(estateFormBinding.inputCity.getEditText()).getText().toString().trim();
+            String agentInput = Objects.requireNonNull(estateFormBinding.inputAgent.getEditText()).getText().toString();
+
+            estateFormBinding.validateFabBtn.setEnabled(!surfaceInput.isEmpty() && !roomsInput.isEmpty() && !bedroomsInput.isEmpty()
+                    && !bathroomsInput.isEmpty() && !priceInput.isEmpty() && !descriptionInput.isEmpty() && !addressInput.isEmpty() && !postalCodeInput.isEmpty()
+                    && !cityInput.isEmpty() && !agentInput.isEmpty());
 
 
+        }
+
+
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
+    }
+};
 
     //For save in database
     public void saveEstates() {
 
-        Estate estate = new Estate(
+        if (!Objects.requireNonNull(estateFormBinding.etSurface.getText()).toString().isEmpty()) {
+            Estate estate = new Estate(
 
-                mandateNumberID,
-                estateFormBinding.etEstate.getText().toString(),
+                    mandateNumberID,
+                    estateFormBinding.etEstate.getText().toString(),
                     Integer.parseInt(Objects.requireNonNull(estateFormBinding.etSurface.getText()).toString()),
-                Integer.parseInt(estateFormBinding.etRooms.getText().toString()),
-                Integer.parseInt(estateFormBinding.etBedrooms.getText().toString()),
-                Integer.parseInt(estateFormBinding.etBathrooms.getText().toString()),
-                Integer.parseInt(Objects.requireNonNull(estateFormBinding.etGround.getText()).toString()),
-                 Double.parseDouble(Objects.requireNonNull((estateFormBinding.etPrice.getText())).toString()),
-                Objects.requireNonNull(estateFormBinding.etDescription.getText()).toString(),
-                Objects.requireNonNull(estateFormBinding.etAddress.getText()).toString(),
-                Integer.parseInt(Objects.requireNonNull(estateFormBinding.etPostalCode.getText()).toString()),
-                Objects.requireNonNull(estateFormBinding.etCity.getText()).toString(),
-                estateFormBinding.boxSchools.isChecked(),
-                estateFormBinding.boxStores.isChecked(),
-                estateFormBinding.boxPark.isChecked(),
-                estateFormBinding.boxRestaurants.isChecked(),
-                estateFormBinding.availableRadiobtn.isChecked(),
-                Objects.requireNonNull(estateFormBinding.upOfSaleDate.getText()).toString(),
-                Objects.requireNonNull(estateFormBinding.soldDate.getText()).toString(),
-                estateFormBinding.etAgent.getText().toString(),
-                photo,
-                photoText,
-                video);
+                    Integer.parseInt(estateFormBinding.etRooms.getText().toString()),
+                    Integer.parseInt(estateFormBinding.etBedrooms.getText().toString()),
+                    Integer.parseInt(estateFormBinding.etBathrooms.getText().toString()),
+                    Integer.parseInt(Objects.requireNonNull(estateFormBinding.etGround.getText()).toString()),
+                    Double.parseDouble(Objects.requireNonNull((estateFormBinding.etPrice.getText())).toString()),
+                    Objects.requireNonNull(estateFormBinding.etDescription.getText()).toString(),
+                    Objects.requireNonNull(estateFormBinding.etAddress.getText()).toString(),
+                    Integer.parseInt(Objects.requireNonNull(estateFormBinding.etPostalCode.getText()).toString()),
+                    Objects.requireNonNull(estateFormBinding.etCity.getText()).toString(),
+                    estateFormBinding.boxSchools.isChecked(),
+                    estateFormBinding.boxStores.isChecked(),
+                    estateFormBinding.boxPark.isChecked(),
+                    estateFormBinding.boxRestaurants.isChecked(),
+                    estateFormBinding.availableRadiobtn.isChecked(),
+                    Objects.requireNonNull(estateFormBinding.upOfSaleDate.getText()).toString(),
+                    Objects.requireNonNull(estateFormBinding.soldDate.getText()).toString(),
+                    estateFormBinding.etAgent.getText().toString(),
+                    photo,
+                    photoText,
+                    video);
 
 
+            this.estateViewModel.createEstate(estate);
 
-
-        this.estateViewModel.createEstate(estate);
+        }
 
     }
-
-
     //Configuring ViewModel
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
@@ -518,6 +594,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         } else
             return null;
     }
+
+
 }
 
 
