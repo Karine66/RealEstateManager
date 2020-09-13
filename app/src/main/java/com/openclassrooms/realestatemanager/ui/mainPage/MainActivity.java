@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -96,15 +97,18 @@ public class MainActivity extends BaseActivity {
          //Handle actions on menu items
         switch (item.getItemId()) {
             case R.id.edit_btn :
-//                if(estate != null) {
-//
-//                    Intent editIntent = new Intent(this, AddActivity.class);
-//                    startActivity(editIntent);
+                if(estate != null) {
+
+                    Intent editIntent = new Intent(this, AddActivity.class);
+                   // Intent intent = this.getIntent();
+//                    Estate estateDetail = (Estate) editIntent.getSerializableExtra("estate");
+                    startActivity(editIntent);
+//                    Log.d("estateMain", "estateMain"+estateDetail);
 //                } if (estate == null) {
-                Intent editIntent = new Intent(this, EditActivity.class);
-                startActivity(editIntent);
+//                Intent editIntent = new Intent(this, AddActivity.class);
+//                startActivity(editIntent);
                 return true;
-//            }
+            }
 
 
             case R.id.search_btn :

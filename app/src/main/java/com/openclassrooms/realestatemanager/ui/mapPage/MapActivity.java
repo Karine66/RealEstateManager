@@ -221,7 +221,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
 
     public void createStringForAddress(List<Estate> estateList) {
-
+        this.estateList = estateList;
         if (!Objects.requireNonNull(estateList).isEmpty()) {
             for (Estate est : estateList) {
                  id = est.getMandateNumberID();

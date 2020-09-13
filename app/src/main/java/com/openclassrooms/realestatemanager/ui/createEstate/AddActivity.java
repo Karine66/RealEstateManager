@@ -18,9 +18,11 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.MediaController;
@@ -71,7 +73,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     protected final int PICK_VIDEO_CAMERA = 3;
     protected final int PICK_VIDEO_GALLERY = 4;
 
-    private ActivityAddPhotoItemBinding activityAddPhotoItemBinding;
     private ActivityAddBinding activityAddBinding;
     private EstateFormBinding estateFormBinding;
     private DatePickerDialog mUpOfSaleDateDialog;
@@ -93,6 +94,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private PhotoDescription photoText = new PhotoDescription();
     private UriList video = new UriList();
     private View view;
+    private InputMethodManager imm;
+    private int resId;
 
 
     @Override
@@ -136,6 +139,16 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         estateFormBinding.etPostalCode.addTextChangedListener(estateWatcher);
         estateFormBinding.etCity.addTextChangedListener(estateWatcher);
         estateFormBinding.etAgent.addTextChangedListener(estateWatcher);
+
+
+//        AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.et_Estate);
+//        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
+//            {
+//                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                Objects.requireNonNull(in).hideSoftInputFromWindow(arg1.getApplicationWindowToken(), 0);
+//            } });
 
     }
 
@@ -286,8 +299,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
 
 
         }
-
-
 
     @Override
     public void afterTextChanged(Editable s) {

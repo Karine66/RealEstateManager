@@ -128,8 +128,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         // For viewbinding
         fragmentDetailBinding = FragmentDetailBinding.inflate(inflater, container, false);
         View view = fragmentDetailBinding.getRoot();
-       updateUi();
-//       retrieveDataMap();
+        updateUi();
         createStringForAddress();
         configureViewModel();
         configureRecyclerView();
@@ -150,11 +149,12 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
 
-        Intent intent = new Intent(Objects.requireNonNull(getActivity()).getIntent());
-        Estate estateMap = (Estate) intent.getSerializableExtra("estate");
-        estateId = Objects.requireNonNull(estateMap).getMandateNumberID();
-        Log.d("idBundle", String.valueOf(estateMap));
-
+        if(estateMap!=null) {
+            Intent intent = new Intent(Objects.requireNonNull(getActivity()).getIntent());
+            Estate estateMap = (Estate) intent.getSerializableExtra("estate");
+            estateId = Objects.requireNonNull(estateMap).getMandateNumberID();
+            Log.d("idBundle", String.valueOf(estateMap));
+        }
             this.estateViewModel.getEstate(estateId).observe(this, this::updateUIfromMarker);
         }
 
@@ -261,8 +261,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
             fragmentDetailBinding.etPostalCode.setEnabled(false);
             fragmentDetailBinding.etCity.setText(estate.getCity());
             fragmentDetailBinding.etCity.setEnabled(false);
-//        } else {
-//            Snackbar.make(Objects.requireNonNull(getView()), "No Estate create", Snackbar.LENGTH_SHORT).show();
+
         }
     }
 
