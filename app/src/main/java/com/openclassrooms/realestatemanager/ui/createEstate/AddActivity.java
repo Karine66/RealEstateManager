@@ -139,17 +139,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         estateFormBinding.etPostalCode.addTextChangedListener(estateWatcher);
         estateFormBinding.etCity.addTextChangedListener(estateWatcher);
         estateFormBinding.etAgent.addTextChangedListener(estateWatcher);
-
-
-//        AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.et_Estate);
-//        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
-//            {
-//                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                Objects.requireNonNull(in).hideSoftInputFromWindow(arg1.getApplicationWindowToken(), 0);
-//            } });
-
     }
 
     public void configureRecyclerView() {

@@ -178,6 +178,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
         super.onResume();
         checkPermissions();
 
+
     }
 
 

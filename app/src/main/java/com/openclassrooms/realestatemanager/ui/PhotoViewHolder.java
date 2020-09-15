@@ -8,11 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.RequestManager;
 
 import com.bumptech.glide.request.RequestOptions;
+import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPhotoItemBinding;
 
 public class PhotoViewHolder extends RecyclerView.ViewHolder {
 
- private ActivityAddPhotoItemBinding activityAddPhotoItemBinding;
+    private ActivityAddPhotoItemBinding activityAddPhotoItemBinding;
     private EstateViewModel estateViewModel;
     private Context context;
 
@@ -28,11 +29,10 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
 
 //
 
-        activityAddPhotoItemBinding.photoDescription.setText(photoDescription);
+            activityAddPhotoItemBinding.photoDescription.setText(photoDescription);
 
 
-                glide.load(photoList).apply(RequestOptions.centerCropTransform()).into(activityAddPhotoItemBinding.photoImage);
-
+            glide.load(photoList).apply(RequestOptions.centerCropTransform()).into(activityAddPhotoItemBinding.photoImage);
 
     }
 }

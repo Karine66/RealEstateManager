@@ -56,7 +56,10 @@
                 android:hint="Estate Type"
                 android:inputType="none"
                 android:paddingBottom="8dp"
-                android:textSize="@dimen/size_edit_text" />
+                android:textSize="@dimen/size_edit_text"
+                android:focusable="true"
+                android:clickable="false"
+                android:focusableInTouchMode="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -110,7 +113,10 @@
                 android:paddingBottom="8dp"
                 android:hint="Rooms"
                 android:textSize="@dimen/size_edit_text"
-                android:inputType="none" />
+                android:inputType="none"
+                android:focusable="true"
+                android:clickable="false"
+                android:focusableInTouchMode="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -134,7 +140,10 @@
                 android:paddingBottom="8dp"
                 android:hint="Bedrooms"
                 android:textSize="@dimen/size_edit_text"
-                android:inputType="none" />
+                android:inputType="none"
+                android:focusable="true"
+                android:clickable="false"
+                android:focusableInTouchMode="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -159,7 +168,10 @@
                 android:paddingBottom="8dp"
                 android:hint="Bathrooms"
                 android:textSize="@dimen/size_edit_text"
-                android:inputType="none" />
+                android:inputType="none"
+                android:focusable="true"
+                android:clickable="false"
+                android:focusableInTouchMode="false"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -469,7 +481,10 @@
                 android:paddingBottom="8dp"
                 android:hint="Real Estate Agent Name"
                 android:textSize="@dimen/size_edit_text"
-                android:inputType="none" />
+                android:inputType="none"
+                android:focusable="true"
+                android:clickable="false"
+                android:focusableInTouchMode="false"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
