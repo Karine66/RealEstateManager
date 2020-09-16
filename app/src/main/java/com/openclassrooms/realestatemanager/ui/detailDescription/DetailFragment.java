@@ -167,7 +167,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         Objects.requireNonNull(fragmentDetailBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
         fragmentDetailBinding.rvPhoto.setAdapter(adapter);
-        if (!estate.getPhotoList().getPhotoList().isEmpty()&&estate.getPhotoList().getPhotoList().size()>0) {
+        if (estate!= null &&!estate.getPhotoList().getPhotoList().isEmpty() && estate.getPhotoList().getPhotoList().size()>0) {
             for (String photoStr : estate.getPhotoList().getPhotoList()) {
 
                 listPhoto.add(Uri.parse(photoStr));

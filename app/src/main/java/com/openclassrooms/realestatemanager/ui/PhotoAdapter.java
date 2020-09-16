@@ -41,10 +41,16 @@ private List<String> mPhotoDescription = new ArrayList<>();
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
 
+        Uri photoUri = null;
+        String photoDescription ="";
+        if(mPhotoList.size()>position) {
+            photoUri = mPhotoList.get(position);
+        }
+        if(mPhotoDescription.size()>position) {
+            photoDescription = mPhotoDescription.get(position);
+        }
             try {
-
-//         if(!mPhotoList.isEmpty() && !mPhotoDescription.isEmpty()){
-                holder.updateWithDetails(this.mPhotoList.get(position), this.glide, this.mPhotoDescription.get(position));
+                holder.updateWithDetails(photoUri, this.glide, photoDescription);
             }catch (Exception e) {
                 e.getMessage();
             }

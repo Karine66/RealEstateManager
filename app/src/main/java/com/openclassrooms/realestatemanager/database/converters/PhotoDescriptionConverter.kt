@@ -17,11 +17,16 @@ class PhotoDescriptionConverter {
             return PhotoDescription()
         }
 
-        val list: List<String> = value.split(";")
+        val list: List<String> = value.split(",")
+        val mutableList = mutableListOf<String>()
+        mutableList.addAll(list)
+        mutableList.removeAt(list.size -1)
         val photoDescription = ArrayList<String>()
-        for (item in list) {
+        for(item in mutableList) {
             if (item.isNotEmpty()) {
                 photoDescription.add(item.toString())
+            }else{
+                photoDescription.add("")
             }
         }
         return PhotoDescription(photoDescription)

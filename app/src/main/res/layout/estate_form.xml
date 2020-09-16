@@ -73,8 +73,6 @@
             android:nextFocusUp="@id/input_mandate"
             app:suffixText="m²"
             app:suffixTextColor="#000000"
-            app:errorTextColor="@color/design_default_color_error"
-            app:boxStrokeErrorColor="@color/design_default_color_error"
             app:helperText="Required"
             app:errorEnabled="true">
 

@@ -240,7 +240,7 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         String postalCodeInput = Objects.requireNonNull(estateFormBinding.inputPostalCode.getEditText()).getText().toString().trim();
         String cityInput = Objects.requireNonNull(estateFormBinding.inputCity.getEditText()).getText().toString().trim();
         String agentInput = Objects.requireNonNull(estateFormBinding.inputAgent.getEditText()).getText().toString();
-        
+
         if (surfaceInput.isEmpty() && roomsInput.isEmpty() && bedroomsInput.isEmpty() && bathroomsInput.isEmpty() && priceInput.isEmpty()
                 && descriptionInput.isEmpty() && addressInput.isEmpty() && postalCodeInput.isEmpty() && cityInput.isEmpty() && agentInput.isEmpty()) {
             estateFormBinding.etSurface.setError("Required");
