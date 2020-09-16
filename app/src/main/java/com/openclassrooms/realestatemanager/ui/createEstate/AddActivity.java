@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -18,16 +17,11 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.MediaController;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.VideoView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -40,8 +34,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
-import com.openclassrooms.realestatemanager.databinding.ActivityAddPhotoItemBinding;
-import com.openclassrooms.realestatemanager.databinding.DropdownMenuPopupItemBinding;
 import com.openclassrooms.realestatemanager.databinding.EstateFormBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
@@ -139,6 +131,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         estateFormBinding.etPostalCode.addTextChangedListener(estateWatcher);
         estateFormBinding.etCity.addTextChangedListener(estateWatcher);
         estateFormBinding.etAgent.addTextChangedListener(estateWatcher);
+
+
     }
 
     public void configureRecyclerView() {
@@ -215,12 +209,23 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                     photoDescriptionList.add(desc);
                 }
                 photoText.setPhotoDescription(photoDescriptionList);
-                fieldsRequired();
+
+                validateFieldsRequired();
+//                fieldsRequired();
                 saveEstates();
-                Snackbar.make(v, "You're new Estate is created", Snackbar.LENGTH_SHORT).show();
+//               Snackbar.make(v, "You're new Estate is created", Snackbar.LENGTH_SHORT).show();
             }
 
         });
+    }
+
+    public boolean soldDateRequired() {
+        String soldDateInput = Objects.requireNonNull(estateFormBinding.inputSoldDate.getEditText()).getText().toString();
+        if (estateFormBinding.availableRadiobtn.isChecked()&& soldDateInput.isEmpty()) {
+            estateFormBinding.soldDate.setError("Required");
+            return false;
+        }
+            return true;
     }
 
     public boolean fieldsRequired() {
@@ -235,11 +240,13 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         String postalCodeInput = Objects.requireNonNull(estateFormBinding.inputPostalCode.getEditText()).getText().toString().trim();
         String cityInput = Objects.requireNonNull(estateFormBinding.inputCity.getEditText()).getText().toString().trim();
         String agentInput = Objects.requireNonNull(estateFormBinding.inputAgent.getEditText()).getText().toString();
-
+        
         if (surfaceInput.isEmpty() && roomsInput.isEmpty() && bedroomsInput.isEmpty() && bathroomsInput.isEmpty() && priceInput.isEmpty()
                 && descriptionInput.isEmpty() && addressInput.isEmpty() && postalCodeInput.isEmpty() && cityInput.isEmpty() && agentInput.isEmpty()) {
             estateFormBinding.etSurface.setError("Required");
+            estateFormBinding.etSurface.requestFocus();
             estateFormBinding.etRooms.setError("Required");
+            estateFormBinding.etRooms.requestFocus();
             estateFormBinding.etBedrooms.setError("Required");
             estateFormBinding.etBathrooms.setError("Required");
             estateFormBinding.etPrice.setError("Required");
@@ -248,20 +255,34 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             estateFormBinding.etPostalCode.setError("Required");
             estateFormBinding.etCity.setError("Required");
             estateFormBinding.etAgent.setError("Required");
+
             return false;
         }
-        estateFormBinding.etSurface.setError(null);
-        estateFormBinding.etRooms.setError(null);
-        estateFormBinding.etBedrooms.setError(null);
-        estateFormBinding.etBathrooms.setError(null);
-        estateFormBinding.etPrice.setError(null);
-        estateFormBinding.etDescription.setError(null);
-        estateFormBinding.etAddress.setError(null);
-        estateFormBinding.etPostalCode.setError(null);
-        estateFormBinding.etCity.setError(null);
-        estateFormBinding.etAgent.setError(null);
+//        estateFormBinding.etSurface.setError(null);
+//        estateFormBinding.etRooms.setError(null);
+//        estateFormBinding.etBedrooms.setError(null);
+//        estateFormBinding.etBathrooms.setError(null);
+//        estateFormBinding.etPrice.setError(null);
+//        estateFormBinding.etDescription.setError(null);
+//        estateFormBinding.etAddress.setError(null);
+//        estateFormBinding.etPostalCode.setError(null);
+//        estateFormBinding.etCity.setError(null);
+//        estateFormBinding.etAgent.setError(null);
+//        estateFormBinding.soldDate.setError(null);
         return true;
    }
+
+    public void validateFieldsRequired() {
+        if(!fieldsRequired()){
+            return;
+        }
+        if (!soldDateRequired()){
+            return;
+        }
+
+        Snackbar.make(activityAddBinding.getRoot(), "You're new Estate is created", Snackbar.LENGTH_SHORT).show();
+    }
+
 
     private TextWatcher estateWatcher = new TextWatcher() {
         @Override
@@ -285,8 +306,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
             estateFormBinding.validateFabBtn.setEnabled(!surfaceInput.isEmpty() && !roomsInput.isEmpty() && !bedroomsInput.isEmpty()
                     && !bathroomsInput.isEmpty() && !priceInput.isEmpty() && !descriptionInput.isEmpty() && !addressInput.isEmpty() && !postalCodeInput.isEmpty()
                     && !cityInput.isEmpty() && !agentInput.isEmpty());
-
-
         }
 
     @Override
