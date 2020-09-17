@@ -27,6 +27,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
@@ -88,6 +89,11 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
     private View view;
     private InputMethodManager imm;
     private int resId;
+    private long editId;
+    private Estate estateEdit;
+    private long idEstate;
+    private Uri contentUri;
+    private Estate estate;
 
 
     @Override
@@ -133,7 +139,9 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         estateFormBinding.etAgent.addTextChangedListener(estateWatcher);
 
 
+
     }
+
 
     public void configureRecyclerView() {
 
@@ -144,6 +152,15 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         Objects.requireNonNull(estateFormBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
         estateFormBinding.rvPhoto.setAdapter(adapter);
+        if (estate!= null &&!estate.getPhotoList().getPhotoList().isEmpty() && estate.getPhotoList().getPhotoList().size()>0) {
+            for (String photoStr : estate.getPhotoList().getPhotoList()) {
+
+                listPhoto.add(Uri.parse(photoStr));
+            }
+
+            adapter.setPhotoList(listPhoto);
+            adapter.setPhotoDescription(estate.getPhotoDescription().getPhotoDescription());
+        }
     }
 
     //for adapter generic
@@ -355,14 +372,48 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
 
-//        this.estateViewModel.getPhotos().observe(this, this::updatePhotoList);
-//        this.estateViewModel.getEstate().observe(this, new Observer<Estate>() {
-//            @Override
-//            public void onChanged(Estate estate) {
-//
-//
-//            }
-//        });
+        Intent intent = new Intent(Objects.requireNonNull(this.getIntent()));
+        long estateEdit = intent.getLongExtra("iDEstate",idEstate);
+
+        Log.d("idEdit", String.valueOf(estateEdit));
+
+        this.estateViewModel.getEstate(estateEdit).observe(this, this::updateUIfromEdit);
+
+
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void updateUIfromEdit(Estate estate) {
+
+        if (estate != null) {
+            estateFormBinding.etMandate.setText(String.valueOf(estate.getMandateNumberID()));
+            estateFormBinding.etEstate.setText(estate.getEstateType());
+            estateFormBinding.etSurface.setText(Objects.requireNonNull(estate.getSurface()).toString());
+            estateFormBinding.etDescription.setText(estate.getDescription());
+            estateFormBinding.etRooms.setText(Objects.requireNonNull(estate.getRooms()).toString());
+            estateFormBinding.etBathrooms.setText(Objects.requireNonNull(estate.getBathrooms()).toString());
+            estateFormBinding.etBedrooms.setText(Objects.requireNonNull(estate.getBedrooms()).toString());
+            estateFormBinding.etGround.setText(Objects.requireNonNull(estate.getGround()).toString());
+            estateFormBinding.etPrice.setText(Objects.requireNonNull(estate.getPrice()).toString());
+            estateFormBinding.etAddress.setText(estate.getAddress());
+            estateFormBinding.etPostalCode.setText(Objects.requireNonNull(estate.getPostalCode()).toString());
+            estateFormBinding.etCity.setText(estate.getCity());
+            estateFormBinding.boxSchools.setChecked(estate.getSchools());
+            estateFormBinding.boxPark.setChecked(estate.getPark());
+            estateFormBinding.boxRestaurants.setChecked(estate.getRestaurants());
+            estateFormBinding.boxStores.setChecked(estate.getStores());
+            estateFormBinding.availableRadiobtn.setChecked(estate.getSold());
+            estateFormBinding.upOfSaleDate.setText(estate.getUpOfSaleDate());
+            estateFormBinding.soldDate.setText(estate.getSoldDate());
+            estateFormBinding.etAgent.setText(estate.getAgentName());
+
+
+
+
+
+
+        }
+
     }
 
 
@@ -372,10 +423,8 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         estateFormBinding.photoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                methodRequiresTwoPermission();
                 selectImage();
                 saveImageInInternalStorage();
-
             }
         });
     }

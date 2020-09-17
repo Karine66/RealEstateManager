@@ -97,20 +97,9 @@ public class MainActivity extends BaseActivity {
          //Handle actions on menu items
         switch (item.getItemId()) {
             case R.id.edit_btn :
-                if(estate != null) {
-
                     Intent editIntent = new Intent(this, AddActivity.class);
-                   // Intent intent = this.getIntent();
-//                    Estate estateDetail = (Estate) editIntent.getSerializableExtra("estate");
                     startActivity(editIntent);
-//                    Log.d("estateMain", "estateMain"+estateDetail);
-//                } if (estate == null) {
-//                Intent editIntent = new Intent(this, AddActivity.class);
-//                startActivity(editIntent);
                 return true;
-            }
-
-
             case R.id.search_btn :
                 Intent searchIntent = new Intent(this, SearchActivity.class);
                 startActivity(searchIntent);

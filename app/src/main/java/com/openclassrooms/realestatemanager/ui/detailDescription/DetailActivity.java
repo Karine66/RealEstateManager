@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.openclassrooms.realestatemanager.R;
@@ -15,6 +17,9 @@ import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
 import com.openclassrooms.realestatemanager.ui.EstateViewModel;
+import com.openclassrooms.realestatemanager.ui.createEstate.AddActivity;
+import com.openclassrooms.realestatemanager.ui.mapPage.MapActivity;
+import com.openclassrooms.realestatemanager.ui.searchPage.SearchActivity;
 
 import java.util.List;
 import java.util.Objects;
@@ -41,8 +46,6 @@ public class DetailActivity extends BaseActivity {
         this.configureUpButton();
         this.configureAndShowDetailFragment();
         this.configureViewModel();
-
-//        this.retrieveDataMap();
         //for title toolbar
         ActionBar ab = getSupportActionBar();
         Objects.requireNonNull(ab).setTitle("Estate Description");
@@ -57,7 +60,30 @@ public class DetailActivity extends BaseActivity {
 
 
     }
+    @Override
+    public boolean onCreateOptionsMenu (Menu menu) {
+        //Inflate the menu and add it to the Toolbar
+        getMenuInflater().inflate(R.menu.description_menu, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //Handle actions on menu items
+        switch (item.getItemId()) {
+            case R.id.edit_btn :
+                    long idEstate = estate.getMandateNumberID();
+                    Intent editIntent = new Intent(this, AddActivity.class);
+                    editIntent.putExtra("iDEstate", idEstate);
+                    Log.d("editEstate", "editEstate"+idEstate);
+                    startActivity(editIntent);
+                    return true;
+
+            default :
+                return
+                        super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     public void onResume() {
