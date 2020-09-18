@@ -2,8 +2,8 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="80dp"
-    android:layout_height="80dp"
+    android:layout_width="120dp"
+    android:layout_height="90dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_add_photo"
     app:strokeWidth="3dp"
@@ -19,7 +19,7 @@
         android:id="@+id/photo_image"
         android:layout_width="140dp"
         android:layout_height="140dp"
-        android:scaleType="centerInside"
+        android:scaleType="centerCrop"
         app:shapeAppearance="?attr/shapeAppearanceMediumComponent"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card.Media"
         >
@@ -30,12 +30,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#1D6200EE"
-            android:layout_marginTop="62dp"
+            android:layout_marginTop="70dp"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:textColor="#000000"
             android:hint="Description"
-            android:textSize="12sp"
+            android:textSize="17sp"
             android:textStyle="italic|bold"/>
 
     </RelativeLayout>

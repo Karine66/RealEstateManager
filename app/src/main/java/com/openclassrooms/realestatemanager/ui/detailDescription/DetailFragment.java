@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.MediaController;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -80,6 +81,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
     private PhotoAdapter adapter;
     private List<Uri> listPhoto;
     private PhotoDescription photoText = new PhotoDescription();
+    private List<Uri> listVideo;
 
 //
 //    // TODO: Rename parameter arguments, choose names that match
@@ -141,6 +143,12 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         mapView = (MapView) fragmentDetailBinding.mapView;
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
+
+        fragmentDetailBinding.videoView.requestFocus();
+        MediaController mediaController = new MediaController(getContext());
+        fragmentDetailBinding.videoView.setMediaController(mediaController);
+        mediaController.setAnchorView(fragmentDetailBinding.videoView);
+        fragmentDetailBinding.videoView.start();
 
 
         return view;
@@ -205,6 +213,17 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
             fragmentDetailBinding.etPostalCode.setEnabled(false);
             fragmentDetailBinding.etCity.setText(estate.getCity());
             fragmentDetailBinding.etCity.setEnabled(false);
+
+            if (!estate.getVideo().getPhotoList().isEmpty() && estate.getVideo().getPhotoList().size()>0) {
+                for (String videoStr : estate.getVideo().getPhotoList()) {
+
+                    fragmentDetailBinding.videoView.setVideoURI(Uri.parse(videoStr));
+
+                }
+            }
+
+
+
         }
 
 
@@ -239,6 +258,13 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
             fragmentDetailBinding.etCity.setText(estateDetail.getCity());
             fragmentDetailBinding.etCity.setEnabled(false);
 
+            if (!estateDetail.getVideo().getPhotoList().isEmpty() && estateDetail.getVideo().getPhotoList().size()>0) {
+                for (String videoStr : estateDetail.getVideo().getPhotoList()) {
+
+                fragmentDetailBinding.videoView.setVideoURI(Uri.parse(videoStr));
+
+                }
+            }
 
 //        } else {
 //            Snackbar.make(Objects.requireNonNull(getView()), "No Estate create", Snackbar.LENGTH_SHORT).show();
@@ -269,6 +295,16 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
             fragmentDetailBinding.etPostalCode.setEnabled(false);
             fragmentDetailBinding.etCity.setText(estate.getCity());
             fragmentDetailBinding.etCity.setEnabled(false);
+
+            if (!estate.getVideo().getPhotoList().isEmpty() && estate.getVideo().getPhotoList().size()>0) {
+                for (String videoStr : estate.getVideo().getPhotoList()) {
+
+                    fragmentDetailBinding.videoView.setVideoURI(Uri.parse(videoStr));
+
+                }
+            }
+
+
         }
     }
 

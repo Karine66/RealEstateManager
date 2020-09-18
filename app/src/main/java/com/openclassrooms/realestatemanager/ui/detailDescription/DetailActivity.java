@@ -17,9 +17,7 @@ import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
 import com.openclassrooms.realestatemanager.ui.EstateViewModel;
-import com.openclassrooms.realestatemanager.ui.createEstate.AddActivity;
-import com.openclassrooms.realestatemanager.ui.mapPage.MapActivity;
-import com.openclassrooms.realestatemanager.ui.searchPage.SearchActivity;
+import com.openclassrooms.realestatemanager.ui.createAndEditEstate.AddEditActivity;
 
 import java.util.List;
 import java.util.Objects;
@@ -73,7 +71,7 @@ public class DetailActivity extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.edit_btn :
                     long idEstate = estate.getMandateNumberID();
-                    Intent editIntent = new Intent(this, AddActivity.class);
+                    Intent editIntent = new Intent(this, AddEditActivity.class);
                     editIntent.putExtra("iDEstate", idEstate);
                     Log.d("editEstate", "editEstate"+idEstate);
                     startActivity(editIntent);

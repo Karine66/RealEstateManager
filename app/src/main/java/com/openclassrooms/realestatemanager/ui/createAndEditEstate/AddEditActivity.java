@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.createEstate;
+package com.openclassrooms.realestatemanager.ui.createAndEditEstate;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -27,7 +27,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.content.FileProvider;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
@@ -59,7 +58,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 
-public class AddActivity extends BaseActivity implements View.OnClickListener {
+public class AddEditActivity extends BaseActivity implements View.OnClickListener {
 
     protected final int PICK_IMAGE_CAMERA = 1;
     protected final int PICK_IMAGE_GALLERY = 2;
@@ -137,7 +136,6 @@ public class AddActivity extends BaseActivity implements View.OnClickListener {
         estateFormBinding.etPostalCode.addTextChangedListener(estateWatcher);
         estateFormBinding.etCity.addTextChangedListener(estateWatcher);
         estateFormBinding.etAgent.addTextChangedListener(estateWatcher);
-
 
 
     }

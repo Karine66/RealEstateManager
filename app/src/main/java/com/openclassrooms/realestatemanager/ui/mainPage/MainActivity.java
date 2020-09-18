@@ -1,32 +1,26 @@
 package com.openclassrooms.realestatemanager.ui.mainPage;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
-import com.openclassrooms.realestatemanager.ui.EditEstate.EditActivity;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.ui.EstateViewModel;
-import com.openclassrooms.realestatemanager.ui.createEstate.AddActivity;
+import com.openclassrooms.realestatemanager.ui.createAndEditEstate.AddEditActivity;
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding;
 import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
 import com.openclassrooms.realestatemanager.ui.listPage.ListFragment;
 import com.openclassrooms.realestatemanager.ui.mapPage.MapActivity;
 import com.openclassrooms.realestatemanager.ui.searchPage.SearchActivity;
-
-import java.util.Objects;
 
 
 public class MainActivity extends BaseActivity {
@@ -78,7 +72,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                    Intent fabIntent = new Intent(getApplicationContext(), AddActivity.class);
+                    Intent fabIntent = new Intent(getApplicationContext(), AddEditActivity.class);
                     startActivity(fabIntent);
 
             }
@@ -97,7 +91,7 @@ public class MainActivity extends BaseActivity {
          //Handle actions on menu items
         switch (item.getItemId()) {
             case R.id.edit_btn :
-                    Intent editIntent = new Intent(this, AddActivity.class);
+                    Intent editIntent = new Intent(this, AddEditActivity.class);
                     startActivity(editIntent);
                 return true;
             case R.id.search_btn :

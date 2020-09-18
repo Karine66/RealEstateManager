@@ -73,7 +73,7 @@
         <activity android:name=".ui.searchPage.SearchActivity" />
         <activity android:name=".ui.EditEstate.EditActivity" />
         <activity
-            android:name=".ui.createEstate.AddActivity"
+            android:name=".ui.createAndEditEstate.AddEditActivity"
             android:parentActivityName=".ui.mainPage.MainActivity" />
         <activity android:name=".ui.mainPage.MainActivity">
             <intent-filter>
