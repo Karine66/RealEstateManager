@@ -50,9 +50,15 @@ public class EstateViewModel extends ViewModel {
         executor.execute(() -> {
             estateDataSource.updateEstate(estate);
         });
+
+
     }
 
-
+//    public void updateEstate(Long mandateNumberID) {
+//        executor.execute(()-> {
+//            estateDataSource.updateEstate(mandateNumberID);
+//        });
+//    }
 
 
 }

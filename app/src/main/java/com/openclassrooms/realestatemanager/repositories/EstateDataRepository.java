@@ -42,5 +42,7 @@ public class EstateDataRepository {
         estateDAO.updateEstate(estate);
     }
 
-
+//    public void updateEstate (Long mandateEstateID) {
+//        estateDAO.updateEstate(mandateEstateID);
+//    }
 }

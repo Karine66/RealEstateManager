@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
@@ -47,6 +48,7 @@ import com.openclassrooms.realestatemanager.models.geocodingAPI.Result;
 import com.openclassrooms.realestatemanager.ui.EstateViewModel;
 import com.openclassrooms.realestatemanager.ui.PhotoAdapter;
 import com.openclassrooms.realestatemanager.utils.EstateManagerStream;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -310,20 +312,23 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-        map.getUiSettings().setMyLocationButtonEnabled(false);
-        map.getUiSettings().setMapToolbarEnabled(false);
-        googleMap.moveCamera(CameraUpdateFactory.zoomBy(15));
-        if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions((Activity) getContext(), new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-            }, PERMS_CALL_ID);
-            return;
+        if (Utils.isInternetAvailable(Objects.requireNonNull(getContext()))) {
+            map = googleMap;
+            map.getUiSettings().setMyLocationButtonEnabled(false);
+            map.getUiSettings().setMapToolbarEnabled(false);
+            googleMap.moveCamera(CameraUpdateFactory.zoomBy(15));
+            if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions((Activity) getContext(), new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                }, PERMS_CALL_ID);
+                return;
+            }
+            executeHttpRequestWithRetrofit();
+        } else {
+            Snackbar.make(fragmentDetailBinding.getRoot(), "No internet", Snackbar.LENGTH_SHORT).show();
         }
-        executeHttpRequestWithRetrofit();
-
     }
 
     @Override

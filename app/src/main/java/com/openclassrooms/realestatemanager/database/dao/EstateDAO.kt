@@ -18,6 +18,8 @@ interface EstateDAO {
         fun insertEstate(estate: Estate):Long
         @Update
         fun updateEstate(estate: Estate):Int
+//        @Update
+//        fun updateEstate(mandateNumberID: Long):Int
         @Query("DELETE FROM Estate WHERE mandateNumberID = :mandateNumberID")
         fun deleteItem(mandateNumberID:Long):Int
 

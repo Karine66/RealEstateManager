@@ -89,10 +89,11 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
     private InputMethodManager imm;
     private int resId;
     private long editId;
-    private Estate estateEdit;
+    private long estateEdit;
     private long idEstate;
     private Uri contentUri;
     private Estate estate;
+
 
 
     @Override
@@ -217,21 +218,37 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onClick(View v) {
 
-                ArrayList<String> photoDescriptionList = new ArrayList<>();
-                for (int i = 0; i < photoText.getPhotoDescription().size(); i++) {
-                    AppCompatEditText editText = Objects.requireNonNull(Objects.requireNonNull(activityAddBinding.includeForm.rvPhoto.getLayoutManager()).findViewByPosition(i)).findViewById(R.id.photo_description);
-                    String desc = Objects.requireNonNull(editText.getText()).toString();
-                    photoDescriptionList.add(desc);
+                if (estate == null) {
+
+                    ArrayList<String> photoDescriptionList = new ArrayList<>();
+                    for (int i = 0; i < photoText.getPhotoDescription().size(); i++) {
+                        AppCompatEditText editText = Objects.requireNonNull(Objects.requireNonNull(activityAddBinding.includeForm.rvPhoto.getLayoutManager()).findViewByPosition(i)).findViewById(R.id.photo_description);
+                        String desc = Objects.requireNonNull(editText.getText()).toString();
+                        photoDescriptionList.add(desc);
+                    }
+                    photoText.setPhotoDescription(photoDescriptionList);
+
+                    validateFieldsRequired();
+                    saveEstates();
+
                 }
-                photoText.setPhotoDescription(photoDescriptionList);
+                if(estate != null) {
 
-                validateFieldsRequired();
-//                fieldsRequired();
-                saveEstates();
-//               Snackbar.make(v, "You're new Estate is created", Snackbar.LENGTH_SHORT).show();
+                    validateFieldsRequired();
+                    observeEditEstate();
+                }
+
             }
-
         });
+    }
+
+    private void observeEditEstate() {
+        this.estateViewModel.getEstate(estateEdit).observe(this, this::editEstate);
+    }
+
+    private void editEstate(Estate estate) {
+
+        this.estateViewModel.updateEstate(estate);
     }
 
     public boolean soldDateRequired() {
@@ -259,9 +276,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         if (surfaceInput.isEmpty() && roomsInput.isEmpty() && bedroomsInput.isEmpty() && bathroomsInput.isEmpty() && priceInput.isEmpty()
                 && descriptionInput.isEmpty() && addressInput.isEmpty() && postalCodeInput.isEmpty() && cityInput.isEmpty() && agentInput.isEmpty()) {
             estateFormBinding.etSurface.setError("Required");
-            estateFormBinding.etSurface.requestFocus();
             estateFormBinding.etRooms.setError("Required");
-            estateFormBinding.etRooms.requestFocus();
             estateFormBinding.etBedrooms.setError("Required");
             estateFormBinding.etBathrooms.setError("Required");
             estateFormBinding.etPrice.setError("Required");
@@ -295,7 +310,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
             return;
         }
 
-        Snackbar.make(activityAddBinding.getRoot(), "You're new Estate is created", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(activityAddBinding.getRoot(), "Your new Estate is created", Snackbar.LENGTH_SHORT).show();
     }
 
 
@@ -331,6 +346,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
 
     //For save in database
     public void saveEstates() {
+
 
         if (!Objects.requireNonNull(estateFormBinding.etSurface.getText()).toString().isEmpty()) {
             Estate estate = new Estate(
@@ -369,28 +385,28 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
-
+        //for retrieve id from click edit button
         Intent intent = new Intent(Objects.requireNonNull(this.getIntent()));
-        long estateEdit = intent.getLongExtra("iDEstate",idEstate);
+        estateEdit = intent.getLongExtra("iDEstate",idEstate);
 
         Log.d("idEdit", String.valueOf(estateEdit));
 
-        this.estateViewModel.getEstate(estateEdit).observe(this, this::updateUIfromEdit);
+        this.estateViewModel.getEstate(estateEdit).observe(this, this::updateUIFromEdit);
 
 
     }
-
+    //for edit
     @SuppressLint("SetTextI18n")
-    private void updateUIfromEdit(Estate estate) {
+    private void updateUIFromEdit(Estate estate) {
 
         if (estate != null) {
             estateFormBinding.etMandate.setText(String.valueOf(estate.getMandateNumberID()));
-            estateFormBinding.etEstate.setText(estate.getEstateType());
+            estateFormBinding.etEstate.setText(estate.getEstateType(), false);
             estateFormBinding.etSurface.setText(Objects.requireNonNull(estate.getSurface()).toString());
             estateFormBinding.etDescription.setText(estate.getDescription());
-            estateFormBinding.etRooms.setText(Objects.requireNonNull(estate.getRooms()).toString());
-            estateFormBinding.etBathrooms.setText(Objects.requireNonNull(estate.getBathrooms()).toString());
-            estateFormBinding.etBedrooms.setText(Objects.requireNonNull(estate.getBedrooms()).toString());
+            estateFormBinding.etRooms.setText(Objects.requireNonNull(estate.getRooms()).toString(), false);
+            estateFormBinding.etBathrooms.setText(Objects.requireNonNull(estate.getBathrooms()).toString(), false);
+            estateFormBinding.etBedrooms.setText(Objects.requireNonNull(estate.getBedrooms()).toString(), false);
             estateFormBinding.etGround.setText(Objects.requireNonNull(estate.getGround()).toString());
             estateFormBinding.etPrice.setText(Objects.requireNonNull(estate.getPrice()).toString());
             estateFormBinding.etAddress.setText(estate.getAddress());
@@ -403,11 +419,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
             estateFormBinding.availableRadiobtn.setChecked(estate.getSold());
             estateFormBinding.upOfSaleDate.setText(estate.getUpOfSaleDate());
             estateFormBinding.soldDate.setText(estate.getSoldDate());
-            estateFormBinding.etAgent.setText(estate.getAgentName());
-
-
-
-
+            estateFormBinding.etAgent.setText(estate.getAgentName(),false);
 
 
         }

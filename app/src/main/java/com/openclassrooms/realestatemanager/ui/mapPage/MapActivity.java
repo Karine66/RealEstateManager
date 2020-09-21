@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.ui.mapPage;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.Manifest;
@@ -15,6 +16,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,6 +27,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityMapBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
@@ -36,6 +39,7 @@ import com.openclassrooms.realestatemanager.ui.BaseActivity;
 import com.openclassrooms.realestatemanager.ui.EstateViewModel;
 import com.openclassrooms.realestatemanager.ui.detailDescription.DetailActivity;
 import com.openclassrooms.realestatemanager.utils.EstateManagerStream;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -184,49 +188,53 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
+        if (Utils.isInternetAvailable(Objects.requireNonNull(this))) {
+            map = googleMap;
 
-        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-        googleMap.getUiSettings().setZoomControlsEnabled(true);
-        googleMap.moveCamera(CameraUpdateFactory.zoomBy(15));
+            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+            googleMap.getUiSettings().setZoomControlsEnabled(true);
+            googleMap.moveCamera(CameraUpdateFactory.zoomBy(15));
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-            }, PERMS_CALL_ID);
-            return;
-        }
-
-        googleMap.setMyLocationEnabled(true);
-
-        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-
-            @Override
-            public void onInfoWindowClick(Marker marker) {
-                long estateId  = Long.parseLong(Objects.requireNonNull(marker.getTag()).toString());
-
-                for( Estate estate : estateList)
-                    if(estate.getMandateNumberID() == estateId) {
-
-                        Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-                        intent.putExtra("estate",estate);
-                        startActivity(intent);
-                    }
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                }, PERMS_CALL_ID);
+                return;
             }
-        });
 
+            googleMap.setMyLocationEnabled(true);
+
+            map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+
+                @Override
+                public void onInfoWindowClick(Marker marker) {
+                    long estateId = Long.parseLong(Objects.requireNonNull(marker.getTag()).toString());
+
+                    for (Estate estate : estateList)
+                        if (estate.getMandateNumberID() == estateId) {
+
+                            Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                            intent.putExtra("estate", estate);
+                            startActivity(intent);
+                        }
+                }
+            });
+
+        } else {
+//            Snackbar.make(, "No internet", Snackbar.LENGTH_SHORT).show();
+            Log.d("noINternet", "noInternet");
+        }
     }
-
 
 
     public void createStringForAddress(List<Estate> estateList) {
         this.estateList = estateList;
         if (!Objects.requireNonNull(estateList).isEmpty()) {
             for (Estate est : estateList) {
-                 id = est.getMandateNumberID();
-              estateType = est.getEstateType();
+                id = est.getMandateNumberID();
+                estateType = est.getEstateType();
                 String address = est.getAddress();
                 String postalCode = String.valueOf(est.getPostalCode());
                 String city = est.getCity();
@@ -235,15 +243,19 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
                 adressList.addAll(Collections.singleton(completeAddress));
                 idList.add(id);
 
-                Log.d("adressList", "adressList"+ adressList);
+                Log.d("adressList", "adressList" + adressList);
 
                 Log.d("createString", "createString" + completeAddress);
 
             }
-            executeHttpRequestWithRetrofit();
+            if (Utils.isInternetAvailable(Objects.requireNonNull(this))) {
+                executeHttpRequestWithRetrofit();
+            } else {
+//            Snackbar.make(, "No internet", Snackbar.LENGTH_SHORT).show();
+                Log.d("noINternetRequest", "noInternetRequest");
+            }
         }
     }
-
     //http request for geocoding
     private void executeHttpRequestWithRetrofit() {
         map.clear();
