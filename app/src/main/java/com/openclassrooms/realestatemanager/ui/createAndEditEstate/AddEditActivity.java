@@ -218,39 +218,28 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onClick(View v) {
 
-                if (estate == null) {
-
-                    ArrayList<String> photoDescriptionList = new ArrayList<>();
-                    for (int i = 0; i < photoText.getPhotoDescription().size(); i++) {
-                        AppCompatEditText editText = Objects.requireNonNull(Objects.requireNonNull(activityAddBinding.includeForm.rvPhoto.getLayoutManager()).findViewByPosition(i)).findViewById(R.id.photo_description);
-                        String desc = Objects.requireNonNull(editText.getText()).toString();
-                        photoDescriptionList.add(desc);
-                    }
-                    photoText.setPhotoDescription(photoDescriptionList);
-
-                    validateFieldsRequired();
-                    saveEstates();
-
+                ArrayList<String> photoDescriptionList = new ArrayList<>();
+                for (int i = 0; i < photoText.getPhotoDescription().size(); i++) {
+                    AppCompatEditText editText = Objects.requireNonNull(Objects.requireNonNull(activityAddBinding.includeForm.rvPhoto.getLayoutManager()).findViewByPosition(i)).findViewById(R.id.photo_description);
+                    String desc = Objects.requireNonNull(editText.getText()).toString();
+                    photoDescriptionList.add(desc);
                 }
-                if(estate != null) {
+                photoText.setPhotoDescription(photoDescriptionList);
 
-                    validateFieldsRequired();
-                    observeEditEstate();
-                }
-
+                validateFieldsRequired();
+                saveEstates();
             }
+
         });
+
+        if(estateEdit == 0) {
+            this.estateViewModel.createEstate(estate);
+        }else{
+            this.estateViewModel.updateEstate(estate);
+        }
     }
 
-    private void observeEditEstate() {
-        this.estateViewModel.getEstate(estateEdit).observe(this, this::editEstate);
-    }
-
-    private void editEstate(Estate estate) {
-
-        this.estateViewModel.updateEstate(estate);
-    }
-
+    //for dates when sold is checked
     public boolean soldDateRequired() {
         String soldDateInput = Objects.requireNonNull(estateFormBinding.inputSoldDate.getEditText()).getText().toString();
         if (estateFormBinding.availableRadiobtn.isChecked()&& soldDateInput.isEmpty()) {
@@ -400,6 +389,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
     private void updateUIFromEdit(Estate estate) {
 
         if (estate != null) {
+            mandateNumberID = estate.getMandateNumberID();
             estateFormBinding.etMandate.setText(String.valueOf(estate.getMandateNumberID()));
             estateFormBinding.etEstate.setText(estate.getEstateType(), false);
             estateFormBinding.etSurface.setText(Objects.requireNonNull(estate.getSurface()).toString());
