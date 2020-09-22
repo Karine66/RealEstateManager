@@ -223,8 +223,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
             });
 
         } else {
-//            Snackbar.make(, "No internet", Snackbar.LENGTH_SHORT).show();
-            Log.d("noINternet", "noInternet");
+            Snackbar.make(findViewById(R.id.map), "No internet avalaible", Snackbar.LENGTH_SHORT).show();
+
         }
     }
 
@@ -251,8 +251,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
             if (Utils.isInternetAvailable(Objects.requireNonNull(this))) {
                 executeHttpRequestWithRetrofit();
             } else {
-//            Snackbar.make(, "No internet", Snackbar.LENGTH_SHORT).show();
-                Log.d("noINternetRequest", "noInternetRequest");
+                Snackbar.make(findViewById(R.id.map), "No internet available", Snackbar.LENGTH_SHORT).show();
+
             }
         }
     }

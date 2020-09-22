@@ -151,15 +151,15 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         Objects.requireNonNull(estateFormBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
         estateFormBinding.rvPhoto.setAdapter(adapter);
-        if (estate!= null &&!estate.getPhotoList().getPhotoList().isEmpty() && estate.getPhotoList().getPhotoList().size()>0) {
-            for (String photoStr : estate.getPhotoList().getPhotoList()) {
-
-                listPhoto.add(Uri.parse(photoStr));
-            }
-
-            adapter.setPhotoList(listPhoto);
-            adapter.setPhotoDescription(estate.getPhotoDescription().getPhotoDescription());
-        }
+//        if (estate!= null &&!estate.getPhotoList().getPhotoList().isEmpty() && estate.getPhotoList().getPhotoList().size()>0) {
+//            for (String photoStr : estate.getPhotoList().getPhotoList()) {
+//
+//                listPhoto.add(Uri.parse(photoStr));
+//            }
+//
+//            adapter.setPhotoList(listPhoto);
+//            adapter.setPhotoDescription(estate.getPhotoDescription().getPhotoDescription());
+//        }
     }
 
     //for adapter generic
@@ -411,6 +411,17 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
             estateFormBinding.soldDate.setText(estate.getSoldDate());
             estateFormBinding.etAgent.setText(estate.getAgentName(),false);
 
+            if (!estate.getPhotoList().getPhotoList().isEmpty()) {
+                listPhoto.clear();
+                photo.getPhotoList().clear();
+                photoText.getPhotoDescription().clear();
+                for (String photoStr : estate.getPhotoList().getPhotoList()) {
+                    listPhoto.add(Uri.parse(photoStr));
+                }
+                adapter.setPhotoList(listPhoto);
+                adapter.setPhotoDescription(estate.getPhotoDescription().getPhotoDescription());
+                photo.getPhotoList().addAll(estate.getPhotoList().getPhotoList());
+            }
 
         }
 

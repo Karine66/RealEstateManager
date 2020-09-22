@@ -152,9 +152,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         mediaController.setAnchorView(fragmentDetailBinding.videoView);
         fragmentDetailBinding.videoView.start();
 
-
         return view;
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -185,7 +183,6 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
 
                 listPhoto.add(Uri.parse(photoStr));
             }
-
             adapter.setPhotoList(listPhoto);
             adapter.setPhotoDescription(estate.getPhotoDescription().getPhotoDescription());
         }
@@ -194,7 +191,6 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
     @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressLint("SetTextI18n")
     private void updateUIfromMarker(Estate estate) {
-
 
         if (estate != null) {
             fragmentDetailBinding.etMandate.setText(String.valueOf(estate.getMandateNumberID()));
@@ -223,16 +219,8 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
 
                 }
             }
-
-
-
         }
-
-
     }
-
-
-
 
     @SuppressLint("SetTextI18n")
     public void updateUi() {
@@ -267,16 +255,11 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
 
                 }
             }
-
-//        } else {
-//            Snackbar.make(Objects.requireNonNull(getView()), "No Estate create", Snackbar.LENGTH_SHORT).show();
         }
     }
 
     @SuppressLint("SetTextI18n")
     public void updateUiForTablet(Estate estate) {
-
-
 
         if (estate != null) {
             fragmentDetailBinding.etMandate.setText(String.valueOf(estate.getMandateNumberID()));
@@ -298,15 +281,20 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
             fragmentDetailBinding.etCity.setText(estate.getCity());
             fragmentDetailBinding.etCity.setEnabled(false);
 
+            listPhoto.clear();
+            if (!estate.getPhotoList().getPhotoList().isEmpty()) {
+                for (String photoStr : estate.getPhotoList().getPhotoList()) {
+                    listPhoto.add(Uri.parse(photoStr));
+                }
+                adapter.setPhotoList(listPhoto);
+                adapter.setPhotoDescription(estate.getPhotoDescription().getPhotoDescription());
+            }
             if (!estate.getVideo().getPhotoList().isEmpty() && estate.getVideo().getPhotoList().size()>0) {
                 for (String videoStr : estate.getVideo().getPhotoList()) {
 
                     fragmentDetailBinding.videoView.setVideoURI(Uri.parse(videoStr));
-
                 }
             }
-
-
         }
     }
 
@@ -327,7 +315,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
             }
             executeHttpRequestWithRetrofit();
         } else {
-            Snackbar.make(fragmentDetailBinding.getRoot(), "No internet", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(fragmentDetailBinding.getRoot(), "No internet available", Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -369,7 +357,6 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
 
             Log.d("detailResultMap", String.valueOf(latLng));
         }
-
     }
 
     //http request for geocoding
@@ -397,8 +384,6 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
                     }
                 });
     }
-
-
     /**
      * Dispose subscription
      */
@@ -412,7 +397,4 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         super.onDestroy();
         this.disposeWhenDestroy();
     }
-
-
-
 }
