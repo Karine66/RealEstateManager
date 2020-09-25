@@ -226,17 +226,11 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                 }
                 photoText.setPhotoDescription(photoDescriptionList);
 
-                validateFieldsRequired();
+                fieldsRequired();
+                soldDateRequired();
                 saveEstates();
             }
-
         });
-
-        if(estateEdit == 0) {
-            this.estateViewModel.createEstate(estate);
-        }else{
-            this.estateViewModel.updateEstate(estate);
-        }
     }
 
     //for dates when sold is checked
@@ -290,17 +284,6 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
 //        estateFormBinding.soldDate.setError(null);
         return true;
    }
-
-    public void validateFieldsRequired() {
-        if(!fieldsRequired()){
-            return;
-        }
-        if (!soldDateRequired()){
-            return;
-        }
-
-        Snackbar.make(activityAddBinding.getRoot(), "Your new Estate is created", Snackbar.LENGTH_SHORT).show();
-    }
 
 
     private TextWatcher estateWatcher = new TextWatcher() {
@@ -364,9 +347,13 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                     photoText,
                     video);
 
-
-            this.estateViewModel.createEstate(estate);
-
+            if(estateEdit == 0) {
+                this.estateViewModel.createEstate(estate);
+                Snackbar.make(activityAddBinding.getRoot(), "Your new Estate is created", Snackbar.LENGTH_SHORT).show();
+            }else{
+                this.estateViewModel.updateEstate(estate);
+                Snackbar.make(activityAddBinding.getRoot(), "Your new Estate is updated", Snackbar.LENGTH_SHORT).show();
+            }
         }
 
     }
