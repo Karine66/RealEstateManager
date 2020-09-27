@@ -10,9 +10,10 @@ import com.openclassrooms.realestatemanager.database.converters.PhotoDescription
 import com.openclassrooms.realestatemanager.database.converters.UriListConverter
 import com.openclassrooms.realestatemanager.database.dao.EstateDAO
 import com.openclassrooms.realestatemanager.models.Estate
+import com.openclassrooms.realestatemanager.models.SearchEstate
 
 
-@Database(entities = [(Estate::class)], version = 1, exportSchema = false)
+@Database(entities = [(Estate::class), (SearchEstate::class)], version = 1, exportSchema = false)
 @TypeConverters(UriListConverter::class, DatesConverter::class, PhotoDescriptionConverter::class)
 abstract class EstateDatabase:RoomDatabase() {
 

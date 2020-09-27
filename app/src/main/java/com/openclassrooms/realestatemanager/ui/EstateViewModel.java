@@ -20,7 +20,7 @@ public class EstateViewModel extends ViewModel {
     private LiveData<List<Estate>> estate;
     private MutableLiveData<List<String>> mPhotos = new MutableLiveData<>();
 
-
+    //Constructor
     public EstateViewModel (EstateDataRepository estateDataSource, Executor executor) {
         this.estateDataSource = estateDataSource;
         this.executor = executor;
@@ -53,12 +53,4 @@ public class EstateViewModel extends ViewModel {
 
 
     }
-
-//    public void updateEstate(Long mandateNumberID) {
-//        executor.execute(()-> {
-//            estateDataSource.updateEstate(mandateNumberID);
-//        });
-//    }
-
-
 }

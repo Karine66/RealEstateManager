@@ -3,6 +3,8 @@ package com.openclassrooms.realestatemanager.repositories;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.sqlite.db.SimpleSQLiteQuery;
+import androidx.sqlite.db.SupportSQLiteQuery;
 
 import com.openclassrooms.realestatemanager.database.dao.EstateDAO;
 import com.openclassrooms.realestatemanager.models.Estate;
@@ -42,7 +44,8 @@ public class EstateDataRepository {
         estateDAO.updateEstate(estate);
     }
 
-//    public void updateEstate (Long mandateEstateID) {
-//        estateDAO.updateEstate(mandateEstateID);
-//    }
+    //For Search
+    public LiveData<List<Estate>> getSearchEstate(SupportSQLiteQuery query) {
+        return estateDAO.getSearchEstate(query);
+    }
 }
