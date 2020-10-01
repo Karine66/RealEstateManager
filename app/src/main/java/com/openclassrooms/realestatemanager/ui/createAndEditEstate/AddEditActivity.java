@@ -120,7 +120,12 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
 
         //for title toolbar
         ActionBar ab = getSupportActionBar();
-        Objects.requireNonNull(ab).setTitle("Create Estate");
+        if (estateEdit == 0) {
+            Objects.requireNonNull(ab).setTitle("Create Estate");
+        } else {
+            Objects.requireNonNull(ab).setTitle("Edit Estate");
+        }
+
         //For date picker
         mDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
         //For hide mandate number
@@ -151,15 +156,6 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         Objects.requireNonNull(estateFormBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
         estateFormBinding.rvPhoto.setAdapter(adapter);
-//        if (estate!= null &&!estate.getPhotoList().getPhotoList().isEmpty() && estate.getPhotoList().getPhotoList().size()>0) {
-//            for (String photoStr : estate.getPhotoList().getPhotoList()) {
-//
-//                listPhoto.add(Uri.parse(photoStr));
-//            }
-//
-//            adapter.setPhotoList(listPhoto);
-//            adapter.setPhotoDescription(estate.getPhotoDescription().getPhotoDescription());
-//        }
     }
 
     //for adapter generic

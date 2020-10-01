@@ -13,7 +13,7 @@ import com.openclassrooms.realestatemanager.models.Estate
 import com.openclassrooms.realestatemanager.models.SearchEstate
 
 
-@Database(entities = [(Estate::class), (SearchEstate::class)], version = 1, exportSchema = false)
+@Database(entities = [(Estate::class)], version = 1, exportSchema = false)
 @TypeConverters(UriListConverter::class, DatesConverter::class, PhotoDescriptionConverter::class)
 abstract class EstateDatabase:RoomDatabase() {
 

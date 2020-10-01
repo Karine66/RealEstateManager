@@ -25,7 +25,7 @@ interface EstateDAO {
         @Query("DELETE FROM Estate WHERE mandateNumberID = :mandateNumberID")
         fun deleteItem(mandateNumberID:Long):Int
 
-       @RawQuery(observedEntities = [SearchEstate::class])
+       @RawQuery(observedEntities = [Estate::class])
        fun getSearchEstate(query: SupportSQLiteQuery) : LiveData<List<Estate>>
 
 

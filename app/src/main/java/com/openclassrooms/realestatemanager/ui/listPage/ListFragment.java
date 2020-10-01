@@ -118,7 +118,7 @@ public class ListFragment extends Fragment {
 
     }
 
-    private void configureViewModel() {
+       private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
 
@@ -130,9 +130,9 @@ public class ListFragment extends Fragment {
 
 
     /**
- * Configuration RecyclerView
- * Configure RecyclerView, Adapter, LayoutManager & glue it
- */
+     * Configuration RecyclerView
+     * Configure RecyclerView, Adapter, LayoutManager & glue it
+     */
     private void configureRecyclerView() {
 
         this.estateList = new ArrayList<>();

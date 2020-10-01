@@ -1,8 +1,8 @@
 package com.openclassrooms.realestatemanager.models
 
-import androidx.room.Entity
+import java.io.Serializable
 
-@Entity
+
 data class SearchEstate(var estateType: String?,
 
         var city: String?,
@@ -23,7 +23,7 @@ data class SearchEstate(var estateType: String?,
         var sold:Boolean
 
 
-        ) {
+        ) :Serializable {
     constructor() : this("", "",null,null,null,null,null, null,"", "",
     UriList(), UriList(), false,false,false,false,false)
 }

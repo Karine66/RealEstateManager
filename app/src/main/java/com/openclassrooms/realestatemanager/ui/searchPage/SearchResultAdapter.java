@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.listPage;
+package com.openclassrooms.realestatemanager.ui.searchPage;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -10,19 +10,20 @@ import com.bumptech.glide.RequestManager;
 import com.openclassrooms.realestatemanager.databinding.FragmentListItemBinding;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.models.UriList;
+import com.openclassrooms.realestatemanager.ui.listPage.ListViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListAdapter extends RecyclerView.Adapter<ListViewHolder> {
-
+public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultViewHolder> {
 
     //For data
     private List<Estate> estateList;
     private RequestManager glide;
     private List<UriList> photoLists;
+
     //constructor
-    public ListAdapter(List<Estate> estateList, RequestManager glide, UriList photoLists) {
+    public SearchResultAdapter(List<Estate> estateList, RequestManager glide, UriList photoLists) {
 
         this.estateList = new ArrayList<>();
         this.glide = glide;
@@ -31,14 +32,14 @@ public class ListAdapter extends RecyclerView.Adapter<ListViewHolder> {
 
     @NonNull
     @Override
-    public ListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SearchResultViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        return new ListViewHolder(FragmentListItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new SearchResultViewHolder(FragmentListItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListViewHolder holder, int position) {
-       holder.updateWithEstate(this.estateList.get(position), this.glide);
+    public void onBindViewHolder(@NonNull SearchResultViewHolder holder, int position) {
+        holder.updateWithEstate(this.estateList.get(position), this.glide);
 
     }
 
@@ -58,3 +59,5 @@ public class ListAdapter extends RecyclerView.Adapter<ListViewHolder> {
 
 
 }
+
+

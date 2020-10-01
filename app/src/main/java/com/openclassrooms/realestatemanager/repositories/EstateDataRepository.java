@@ -45,7 +45,8 @@ public class EstateDataRepository {
     }
 
     //For Search
-    public LiveData<List<Estate>> getSearchEstate(SupportSQLiteQuery query) {
+    public LiveData<List<Estate>> getSearchEstate(String queryString, List<Object> args) {
+        SupportSQLiteQuery query = new SimpleSQLiteQuery(queryString, args.toArray());
         return estateDAO.getSearchEstate(query);
     }
 }
