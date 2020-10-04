@@ -26,17 +26,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="q">
-        <activity android:name=".ui.searchPage.SearchResultActivity"></activity>
-        <!-- &lt;!&ndash; Recommended for Android 9 (API level 28) and lower. &ndash;&gt; -->
-        <!-- &lt;!&ndash; Required for Android 10 (API level 29). &ndash;&gt; -->
-        <!-- <service -->
-        <!-- android:name="MyNavigationService" -->
-        <!-- android:foregroundServiceType="location" ... > -->
-        <!-- &lt;!&ndash; Any inner elements would go here. &ndash;&gt; -->
-        <!-- </service> -->
-        <!-- <activity android:name=".ui.detailDescription.DetailActivity"></activity> -->
-        <!-- A child of the main activity -->
-        <!-- DETAIL Activity -->
+
+
         <activity
             android:name=".ui.detailDescription.DetailActivity"
             android:label="Details Description"
@@ -65,9 +56,12 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <activity android:name=".ui.searchPage.SearchResultActivity"
+            android:parentActivityName=".ui.mainPage.MainActivity"/>
         <activity android:name=".ui.mapPage.MapActivity" />
-        <activity android:name=".ui.searchPage.SearchActivity" />
-        <activity android:name=".ui.EditEstate.EditActivity" />
+        <activity android:name=".ui.searchPage.SearchActivity"
+            android:parentActivityName=".ui.mainPage.MainActivity"/>
+
         <activity
             android:name=".ui.createAndEditEstate.AddEditActivity"
             android:parentActivityName=".ui.mainPage.MainActivity" />

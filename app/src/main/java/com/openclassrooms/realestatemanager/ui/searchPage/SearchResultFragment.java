@@ -19,6 +19,7 @@ import com.openclassrooms.realestatemanager.databinding.FragmentSearchResultBind
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
+import com.openclassrooms.realestatemanager.models.SearchEstate;
 import com.openclassrooms.realestatemanager.models.UriList;
 import com.openclassrooms.realestatemanager.ui.EstateViewModel;
 import com.openclassrooms.realestatemanager.ui.listPage.ListAdapter;
@@ -46,7 +47,7 @@ public class SearchResultFragment extends Fragment {
     private SearchResultAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private EstateViewModel estateViewModel;
-    private Estate estateSearch;
+    private SearchEstate estateSearch;
 
     public SearchResultFragment() {
         // Required empty public constructor
@@ -94,7 +95,7 @@ public class SearchResultFragment extends Fragment {
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
 
         Intent intent = new Intent(Objects.requireNonNull(Objects.requireNonNull(getActivity()).getIntent()));
-        estateSearch = (Estate) intent.getSerializableExtra("estateSearch");
+        estateSearch = (SearchEstate) intent.getSerializableExtra("estateSearch");
 
         Log.d("estateSearch", String.valueOf(estateSearch));
 
@@ -116,16 +117,20 @@ public class SearchResultFragment extends Fragment {
         //Create adapter
         this.mAdapter = new SearchResultAdapter(this.estateList, Glide.with(this), this.photoLists);
         // Attach the adapter to the recyclerview
-//        this.mRecyclerView.setAdapter(this.mAdapter);
-        //Set Layout manager
+//       this.mRecyclerView.setAdapter(this.mAdapter);
+//        Set Layout manager
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         fragmentSearchResultBinding.searchResultListRV.setLayoutManager(layoutManager);
         fragmentSearchResultBinding.searchResultListRV.setAdapter(mAdapter);
-//        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//       this.mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
     }
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        fragmentSearchResultBinding = null;
+    }
 
     private void updateEstateList(List<Estate> estates) {
         if(estates != null)

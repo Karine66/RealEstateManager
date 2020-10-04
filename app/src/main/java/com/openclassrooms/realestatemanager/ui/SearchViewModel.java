@@ -22,7 +22,7 @@ public class SearchViewModel extends ViewModel {
         this.executor = executor;
     }
 
-    public LiveData<Estate> searchEstate (
+    public LiveData<List<Estate>> searchEstate (
 
             String estateType,
             String city,
@@ -81,6 +81,7 @@ public class SearchViewModel extends ViewModel {
                 queryString += "AND upOfSaleDate BETWEEN ? AND ?";
                 args.add(minUpOfSaleDate);
                 args.add(maxUpOfSaleDate);
+                containsCondition = true;
             }
 //        if(!minPhotos.getPhotoList().isEmpty() && !maxPhotos.getPhotoList().isEmpty()) {
 //            queryString += "AND photos BETWEEN ? AND ?";
@@ -88,7 +89,8 @@ public class SearchViewModel extends ViewModel {
 //            args.add(maxPhotos);
 //        }
 
-        return this.searchEstate(estateType, city, minRooms, maxRooms, minSurface, maxSurface, minPrice, maxPrice, minUpOfSaleDate, maxUpOfSaleDate);
+//        return searchEstate(estateType, city, minRooms, maxRooms,minSurface, maxSurface,minPrice, maxPrice, minUpOfSaleDate, maxUpOfSaleDate);
+        return estateDataSource.getSearchEstate(queryString, args);
     }
 
 }
