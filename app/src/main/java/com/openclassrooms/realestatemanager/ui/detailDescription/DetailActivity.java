@@ -47,17 +47,8 @@ public class DetailActivity extends BaseActivity {
         //for title toolbar
         ActionBar ab = getSupportActionBar();
         Objects.requireNonNull(ab).setTitle("Estate Description");
-
-
-       
-
-
-//        if (!Utils.isInternetAvailable(this)) {
-//            Snackbar.make(activityDetailBinding.getRoot(), "No internet",Snackbar.LENGTH_SHORT).show();
-//        }
-
-
     }
+
     @Override
     public boolean onCreateOptionsMenu (Menu menu) {
         //Inflate the menu and add it to the Toolbar

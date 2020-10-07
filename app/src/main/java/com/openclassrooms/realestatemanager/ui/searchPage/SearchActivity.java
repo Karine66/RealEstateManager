@@ -55,18 +55,20 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         activitySearchBinding = ActivitySearchBinding.inflate(getLayoutInflater());
         View view = activitySearchBinding.getRoot();
         setContentView(view);
+        this.configureUpButton();
+        this.configureToolbar();
         this.dropDownAdapters();
         this.setDateField();
         this.configureViewModel();
-
         this.onClickValidateBtn();
 //        this.showSearchEstate();
 
         //For date picker
         mDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
-        //for toolbar
-//        ActionBar ab = getSupportActionBar();
-//        Objects.requireNonNull(ab).setTitle("Search Estate");
+//        for toolbar
+        ActionBar ab = getSupportActionBar();
+        Objects.requireNonNull(ab).setTitle("Search Estate");
+        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     //for adapter generic

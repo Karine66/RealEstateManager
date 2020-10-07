@@ -111,10 +111,6 @@ public class ListFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle saveInstateState) {
         super.onActivityCreated(saveInstateState);
-//        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//            Objects.requireNonNull(getActivity()).getActionBar();
-//
-//        }
 
     }
 

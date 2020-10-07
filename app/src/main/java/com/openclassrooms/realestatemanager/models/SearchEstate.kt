@@ -14,8 +14,7 @@ data class SearchEstate(var estateType: String?,
         var maxPrice:Double?,
         var minUpOfSaleDate:String?,
         var maxOfSaleDate:String?,
-        var minPhotos:UriList,
-        var maxPhotos:UriList,
+        var photos:Boolean,
         var schools:Boolean,
         var stores:Boolean,
         var park:Boolean,
@@ -25,6 +24,6 @@ data class SearchEstate(var estateType: String?,
 
         ) :Serializable {
     constructor() : this("", "",null,null,null,null,null, null,"", "",
-    UriList(), UriList(), false,false,false,false,false)
+    false, false,false,false,false,false)
 }
 

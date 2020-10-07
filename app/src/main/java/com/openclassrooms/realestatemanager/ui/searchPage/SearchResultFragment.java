@@ -1,8 +1,13 @@
 package com.openclassrooms.realestatemanager.ui.searchPage;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,6 +27,7 @@ import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.models.SearchEstate;
 import com.openclassrooms.realestatemanager.models.UriList;
 import com.openclassrooms.realestatemanager.ui.EstateViewModel;
+import com.openclassrooms.realestatemanager.ui.SearchViewModel;
 import com.openclassrooms.realestatemanager.ui.listPage.ListAdapter;
 
 import java.util.ArrayList;
@@ -47,7 +53,9 @@ public class SearchResultFragment extends Fragment {
     private SearchResultAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private EstateViewModel estateViewModel;
+    private SearchViewModel searchViewModel;
     private SearchEstate estateSearch;
+    private ActionBar ab;
 
     public SearchResultFragment() {
         // Required empty public constructor
@@ -87,19 +95,33 @@ public class SearchResultFragment extends Fragment {
         configureViewModel();
         configureRecyclerView();
 
+//        Objects.requireNonNull(Objects.requireNonNull(getActivity()).getActionBar()).setSubtitle("Search Result");
+
         return view;
+    }
+
+
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        //For change title action bar
+//        Objects.requireNonNull(Objects.requireNonNull(getActivity()).getActionBar()).setTitle("Search Results");
+       
     }
 
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());
-        this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
+        this.searchViewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel.class);
 
         Intent intent = new Intent(Objects.requireNonNull(Objects.requireNonNull(getActivity()).getIntent()));
         estateSearch = (SearchEstate) intent.getSerializableExtra("estateSearch");
 
         Log.d("estateSearch", String.valueOf(estateSearch));
 
-        this.estateViewModel.getEstates().observe(this, this::updateEstateList);
+        this.searchViewModel.searchEstate(Objects.requireNonNull(estateSearch.getEstateType()), estateSearch.getCity(),estateSearch.getMinRooms(), estateSearch.getMaxRooms(),
+                estateSearch.getMinSurface(),estateSearch.getMaxSurface(), estateSearch.getMinPrice(), estateSearch.getMaxPrice(),
+                estateSearch.getMinUpOfSaleDate(),estateSearch.getMaxOfSaleDate()).observe(this, this::updateEstateList);
 
 
     }

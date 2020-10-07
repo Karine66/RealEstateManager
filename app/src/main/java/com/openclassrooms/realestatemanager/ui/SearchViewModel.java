@@ -50,46 +50,72 @@ public class SearchViewModel extends ViewModel {
             queryString += "SELECT * FROM Estate";
 
             if (!estateType.isEmpty()) {
-                queryString += "AND estateType=?";
-                args.add(estateType);
-                containsCondition = true;
+                if(containsCondition) {
+                    queryString += " AND";
+                } else {
+                    queryString += " WHERE";
+                    containsCondition = true;
+                } queryString += " estateType=?";
+                  args.add(estateType);
             }
+//                queryString += "AND estateType=?";
+//                args.add(estateType);
+//                containsCondition = true;
+//            }
             if (!city.isEmpty()) {
-                queryString += "AND city=?";
+                if(containsCondition) {
+                    queryString += " AND";
+                }else {
+                    queryString += " WHERE";
+                    containsCondition = true;
+                } queryString += " city=?";
                 args.add(city);
-                containsCondition = true;
+//                containsCondition = true;
             }
-            if (minRooms >= 0 && maxRooms > 0) {
-                queryString += "AND rooms BETWEEN ? AND ?";
+            if (minRooms !=null && maxRooms!=null && minRooms >= 0 && maxRooms > 0) {
+                if(containsCondition){
+                    queryString += " AND";
+                }else {
+                    queryString += " WHERE";
+                    containsCondition = true;
+                } queryString += " rooms BETWEEN ? AND ?";
+//                queryString += "AND rooms BETWEEN ? AND ?";
                 args.add(minRooms);
                 args.add(maxRooms);
-                containsCondition = true;
+//                containsCondition = true;
             }
-            if (minSurface >= 0 && maxSurface > 0) {
-                queryString += "AND surface BETWEEN ? AND ?";
+            if (minSurface!=null && maxSurface!=null && minSurface >= 0 && maxSurface > 0) {
+                if(containsCondition){
+                    queryString += " AND";
+                }else {
+                    queryString += " WHERE";
+                }queryString += " surface BETWEEN ? AND ?";
                 args.add(minSurface);
                 args.add(maxSurface);
-                containsCondition = true;
+//                containsCondition = true;
             }
-            if (minPrice >= 0 && maxPrice > 0) {
-                queryString += "AND price BETWEEN ? AND ?";
+            if (minPrice!=null && maxPrice!=null && minPrice >= 0 && maxPrice > 0) {
+                if(containsCondition) {
+                    queryString += " AND";
+                } else {
+                    queryString += " WHERE";
+                } queryString += " price BETWEEN ? AND ?";
                 args.add(minPrice);
                 args.add(maxPrice);
-                containsCondition = true;
+//                containsCondition = true;
             }
             if (!minUpOfSaleDate.isEmpty() && !maxUpOfSaleDate.isEmpty()) {
-                queryString += "AND upOfSaleDate BETWEEN ? AND ?";
+                if(containsCondition) {
+                    queryString += " AND";
+                } else {
+                    queryString += " WHERE";
+                } queryString += " upOfSaleDate BETWEEN ? AND ?";
                 args.add(minUpOfSaleDate);
                 args.add(maxUpOfSaleDate);
-                containsCondition = true;
+//                containsCondition = true;
             }
-//        if(!minPhotos.getPhotoList().isEmpty() && !maxPhotos.getPhotoList().isEmpty()) {
-//            queryString += "AND photos BETWEEN ? AND ?";
-//            args.add(minPhotos);
-//            args.add(maxPhotos);
-//        }
 
-//        return searchEstate(estateType, city, minRooms, maxRooms,minSurface, maxSurface,minPrice, maxPrice, minUpOfSaleDate, maxUpOfSaleDate);
+
         return estateDataSource.getSearchEstate(queryString, args);
     }
 
