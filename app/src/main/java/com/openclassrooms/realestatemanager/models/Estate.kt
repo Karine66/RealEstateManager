@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.models
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
+import java.time.LocalDateTime
 
 
 @Entity
@@ -33,7 +34,7 @@ data class Estate (@PrimaryKey (autoGenerate = true) val mandateNumberID: Long,
 
 ) : Serializable {
     constructor() : this(0, "", null, null, null, null, null, null, "", "",
-            null, "", false, false, false, false, false, null, null, "", UriList(), PhotoDescription(), UriList())
+            null, "", false, false, false, false, false, "", "", "", UriList(), PhotoDescription(), UriList())
 
 }
 

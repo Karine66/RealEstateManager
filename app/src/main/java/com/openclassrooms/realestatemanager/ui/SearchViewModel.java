@@ -1,11 +1,14 @@
 package com.openclassrooms.realestatemanager.ui;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.models.UriList;
 import com.openclassrooms.realestatemanager.repositories.EstateDataRepository;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,19 +107,21 @@ public class SearchViewModel extends ViewModel {
                 args.add(maxPrice);
 //                containsCondition = true;
             }
-            if (!minUpOfSaleDate.isEmpty() && !maxUpOfSaleDate.isEmpty()) {
+            if (!Utils.dateFormat(minUpOfSaleDate).isEmpty() && !Utils.dateFormat(maxUpOfSaleDate).isEmpty()) {
                 if(containsCondition) {
                     queryString += " AND";
                 } else {
                     queryString += " WHERE";
                 } queryString += " upOfSaleDate BETWEEN ? AND ?";
-                args.add(minUpOfSaleDate);
-                args.add(maxUpOfSaleDate);
+                args.add(Utils.dateFormat(minUpOfSaleDate));
+                args.add(Utils.dateFormat(maxUpOfSaleDate));
 //                containsCondition = true;
             }
 
-
+        Log.d("queryString", "queryString" + queryString);
         return estateDataSource.getSearchEstate(queryString, args);
+
+
     }
 
 }

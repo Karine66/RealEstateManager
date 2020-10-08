@@ -157,6 +157,7 @@ public class SearchResultFragment extends Fragment {
     private void updateEstateList(List<Estate> estates) {
         if(estates != null)
             mAdapter.updateData(estates);
+        Log.d("updateListSearch", "updateListSearch" + estates);
 
     }
 }

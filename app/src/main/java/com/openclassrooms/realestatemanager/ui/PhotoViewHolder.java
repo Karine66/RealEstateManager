@@ -23,6 +23,7 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
         this.activityAddPhotoItemBinding = activityAddPhotoItemBinding;
 
 
+
     }
 
     public void updateWithDetails(Uri photoList, RequestManager glide, String photoDescription) {

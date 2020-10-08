@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.ui;
 
 import android.net.Uri;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -9,11 +10,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPhotoItemBinding;
+import com.openclassrooms.realestatemanager.models.Estate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class PhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder>{
+public class PhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder> implements View.OnClickListener {
 
 
 
@@ -23,6 +26,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder>{
 private RequestManager glide;
 private List<Uri> mPhotoList = new ArrayList<Uri>();
 private List<String> mPhotoDescription = new ArrayList<>();
+private EstateViewModel estateViewModel;
 
 
     public PhotoAdapter(List<Uri> listPhoto,  RequestManager glide, ArrayList<String> photoDescription){
@@ -33,13 +37,14 @@ private List<String> mPhotoDescription = new ArrayList<>();
     @NonNull
     @Override
     public PhotoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
+//        Objects.requireNonNull(activityAddPhotoItemBinding.deleteImage).setOnClickListener(this);
         return new PhotoViewHolder(ActivityAddPhotoItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
 
     }
 
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
+
 
         Uri photoUri = null;
         String photoDescription ="";
@@ -75,11 +80,15 @@ private List<String> mPhotoDescription = new ArrayList<>();
         notifyDataSetChanged();
     }
 
+    private void deletePhoto (Estate estate) {
+        this.estateViewModel.deleteEstate(estate.getMandateNumberID());
+    }
 
 
+    @Override
+    public void onClick(View v) {
 
-//    public void updatePhoto(List<String> photoList) {
-//    this.photoList = photoList;
-//    this.notifyDataSetChanged();
-//    }
+    }
+
+
 }

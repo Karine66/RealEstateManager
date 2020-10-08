@@ -6,8 +6,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -63,5 +65,18 @@ public class Utils {
 
     }
 
+    public static String dateFormat(String stringDate) {
+         String dateString = "";
 
+            try {
+                SimpleDateFormat sdf = null;
+                Date date = new SimpleDateFormat(dateString, Locale.FRANCE).parse(stringDate);
+                sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
+                return sdf.format(Objects.requireNonNull(date));
+            } catch ( ParseException e) {
+                e.printStackTrace();
+            }
+
+        return "";
+    }
 }
