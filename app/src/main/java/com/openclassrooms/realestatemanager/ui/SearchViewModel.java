@@ -107,14 +107,14 @@ public class SearchViewModel extends ViewModel {
                 args.add(maxPrice);
 //                containsCondition = true;
             }
-            if (!Utils.dateFormat(minUpOfSaleDate).isEmpty() && !Utils.dateFormat(maxUpOfSaleDate).isEmpty()) {
+            if (!minUpOfSaleDate.isEmpty() && !maxUpOfSaleDate.isEmpty()) {
                 if(containsCondition) {
                     queryString += " AND";
                 } else {
                     queryString += " WHERE";
                 } queryString += " upOfSaleDate BETWEEN ? AND ?";
-                args.add(Utils.dateFormat(minUpOfSaleDate));
-                args.add(Utils.dateFormat(maxUpOfSaleDate));
+                args.add(minUpOfSaleDate);
+                args.add(maxUpOfSaleDate);
 //                containsCondition = true;
             }
 

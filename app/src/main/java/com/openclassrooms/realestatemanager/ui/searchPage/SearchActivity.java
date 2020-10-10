@@ -159,11 +159,11 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
             maxRooms = Integer.parseInt(Objects.requireNonNull(activitySearchBinding.etRoomsMax.getText()).toString());
             estateSearch.setMaxRooms(maxRooms);
         }
-        if(!activitySearchBinding.etSurfaceMini.getText().toString().isEmpty()) {
+        if(!Objects.requireNonNull(activitySearchBinding.etSurfaceMini.getText()).toString().isEmpty()) {
             minSurface = Integer.parseInt(Objects.requireNonNull(activitySearchBinding.etSurfaceMini.getText()).toString());
             estateSearch.setMinSurface(minSurface);
         }
-        if(!activitySearchBinding.etSurfaceMaxi.getText().toString().isEmpty()) {
+        if(!Objects.requireNonNull(activitySearchBinding.etSurfaceMaxi.getText()).toString().isEmpty()) {
             maxSurface = Integer.parseInt(Objects.requireNonNull(activitySearchBinding.etSurfaceMaxi.getText()).toString());
             estateSearch.setMaxSurface(maxSurface);
         }
@@ -176,11 +176,11 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
             estateSearch.setMaxPrice(maxPrice);
         }
         if(!Objects.requireNonNull(activitySearchBinding.etUpOfSaleDateMini.getText()).toString().isEmpty()) {
-            minUpOfSaleDate = Objects.requireNonNull(activitySearchBinding.etUpOfSaleDateMini.getText()).toString();
+            minUpOfSaleDate = activitySearchBinding.etUpOfSaleDateMini.getText().toString();
             estateSearch.setMinUpOfSaleDate(minUpOfSaleDate);
         }
         if(!Objects.requireNonNull(activitySearchBinding.etUpOfSaleDateMaxi.getText()).toString().isEmpty()) {
-            maxUpOfSaleDate = Objects.requireNonNull(activitySearchBinding.etUpOfSaleDateMaxi.getText()).toString();
+            maxUpOfSaleDate = activitySearchBinding.etUpOfSaleDateMaxi.getText().toString();
             estateSearch.setMaxOfSaleDate(maxUpOfSaleDate);
         }
       Log.d("estateSearch", "estateSearch" + estateSearch);

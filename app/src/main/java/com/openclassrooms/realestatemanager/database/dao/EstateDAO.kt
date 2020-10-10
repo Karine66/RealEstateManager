@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.database.dao
 
+import android.database.Cursor
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
@@ -28,5 +29,8 @@ interface EstateDAO {
        @RawQuery(observedEntities = [Estate::class])
        fun getSearchEstate(query: SupportSQLiteQuery) : LiveData<List<Estate>>
 
+    //For ContentProvider
+    @Query("SELECT * FROM Estate WHERE mandateNumberID = :mandateNumberID")
+    fun getEstateWithCursor(mandateNumberID: Long):Cursor
 
     }

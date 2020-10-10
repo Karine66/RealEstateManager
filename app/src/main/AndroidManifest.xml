@@ -45,7 +45,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_map_api_key" />
-
+        <!-- For photos -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.openclassrooms.realestatemanager.fileprovider"
@@ -55,6 +55,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+        <!-- For ContentProvider -->
+        <provider
+            android:authorities="com.openclassrooms.realestatemanager.provider"
+            android:name=".provider.EstateContentProvider"
+            android:exported="true"/>
 
         <activity android:name=".ui.searchPage.SearchResultActivity"
             android:parentActivityName=".ui.mainPage.MainActivity"/>

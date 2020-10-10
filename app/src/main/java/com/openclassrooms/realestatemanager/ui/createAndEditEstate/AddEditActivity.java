@@ -31,6 +31,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
@@ -93,7 +94,8 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
     private long idEstate;
     private Uri contentUri;
     private Estate estate;
-
+    private Date upOfSaleDate;
+    private Snackbar snackbar;
 
 
     @Override
@@ -142,7 +144,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         estateFormBinding.etPostalCode.addTextChangedListener(estateWatcher);
         estateFormBinding.etCity.addTextChangedListener(estateWatcher);
         estateFormBinding.etAgent.addTextChangedListener(estateWatcher);
-
+        
 
     }
 
@@ -226,8 +228,12 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                 soldDateRequired();
                 saveEstates();
             }
+
         });
     }
+
+
+
 
     //for dates when sold is checked
     public boolean soldDateRequired() {
@@ -345,10 +351,25 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
 
             if(estateEdit == 0) {
                 this.estateViewModel.createEstate(estate);
-                Snackbar.make(activityAddBinding.getRoot(), "Your new Estate is created", Snackbar.LENGTH_SHORT).show();
+                  Snackbar.make(activityAddBinding.getRoot(), "Your new Estate is created", Snackbar.LENGTH_SHORT)
+                          .addCallback(new Snackbar.Callback() {
+                              @Override
+                              public void onDismissed(Snackbar snackbar, int event) {
+                                  super.onDismissed(snackbar, event);
+                                  finish();
+                              }
+                          })
+                          .show();
             }else{
                 this.estateViewModel.updateEstate(estate);
-                Snackbar.make(activityAddBinding.getRoot(), "Your new Estate is updated", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(activityAddBinding.getRoot(), "Your new Estate is updated", Snackbar.LENGTH_SHORT)
+                        .addCallback(new Snackbar.Callback() {
+                            @Override
+                            public void onDismissed(Snackbar snackbar, int event) {
+                                super.onDismissed(snackbar, event);
+                                finish();
+                            }
+                        }).show();
             }
         }
 
@@ -390,7 +411,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
             estateFormBinding.boxRestaurants.setChecked(estate.getRestaurants());
             estateFormBinding.boxStores.setChecked(estate.getStores());
             estateFormBinding.availableRadiobtn.setChecked(estate.getSold());
-            estateFormBinding.upOfSaleDate.setText(estate.getUpOfSaleDate());
+            estateFormBinding.upOfSaleDate.setText(Objects.requireNonNull(estate.getUpOfSaleDate()));
             estateFormBinding.soldDate.setText(estate.getSoldDate());
             estateFormBinding.etAgent.setText(estate.getAgentName(),false);
 
