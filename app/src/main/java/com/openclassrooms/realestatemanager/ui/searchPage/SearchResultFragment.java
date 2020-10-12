@@ -28,7 +28,10 @@ import com.openclassrooms.realestatemanager.models.SearchEstate;
 import com.openclassrooms.realestatemanager.models.UriList;
 import com.openclassrooms.realestatemanager.ui.EstateViewModel;
 import com.openclassrooms.realestatemanager.ui.SearchViewModel;
+import com.openclassrooms.realestatemanager.ui.detailDescription.DetailActivity;
+import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
 import com.openclassrooms.realestatemanager.ui.listPage.ListAdapter;
+import com.openclassrooms.realestatemanager.utils.ItemClickSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +59,7 @@ public class SearchResultFragment extends Fragment {
     private SearchViewModel searchViewModel;
     private SearchEstate estateSearch;
     private ActionBar ab;
+    private DetailFragment detailFragment;
 
     public SearchResultFragment() {
         // Required empty public constructor
@@ -94,6 +98,7 @@ public class SearchResultFragment extends Fragment {
 
         configureViewModel();
         configureRecyclerView();
+        configureOnClickRecyclerView();
 
 //        Objects.requireNonNull(Objects.requireNonNull(getActivity()).getActionBar()).setSubtitle("Search Result");
 
@@ -146,6 +151,31 @@ public class SearchResultFragment extends Fragment {
         fragmentSearchResultBinding.searchResultListRV.setAdapter(mAdapter);
 //       this.mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+    }
+
+    private void configureOnClickRecyclerView() {
+        ItemClickSupport.addTo(fragmentSearchResultBinding.searchResultListRV, R.layout.fragment_list_item)
+                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+
+                        detailFragment = (DetailFragment) Objects.requireNonNull(getFragmentManager()).findFragmentById(R.id.detail_fragment_frameLayout);
+
+                        if (detailFragment != null && detailFragment.isVisible()) {
+                            Estate estate = mAdapter.getEstates(position);
+                            detailFragment.updateUiForTablet(estate);
+                            Log.d("bundleListFragment", "bundleFragment" + estate);
+
+                        }else{
+                            Estate estate = mAdapter.getEstates(position);
+                            Intent intent = new Intent(getContext(), DetailActivity.class);
+                            intent.putExtra("estate", estate);
+
+                            Log.d("bundleRV", "estate" + estate);
+                            startActivity(intent);
+                        }
+                    }
+                });
 
     }
     @Override
