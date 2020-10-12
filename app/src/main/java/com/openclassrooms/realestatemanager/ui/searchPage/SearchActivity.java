@@ -22,6 +22,7 @@ import com.openclassrooms.realestatemanager.ui.BaseActivity;
 import com.openclassrooms.realestatemanager.ui.EstateViewModel;
 import com.openclassrooms.realestatemanager.ui.SearchViewModel;
 import com.openclassrooms.realestatemanager.ui.createAndEditEstate.AddEditActivity;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,8 +46,8 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private int maxSurface;
     private double minPrice;
     private double maxPrice;
-    private String minUpOfSaleDate;
-    private String maxUpOfSaleDate;
+    private long minUpOfSaleDate;
+    private Long maxUpOfSaleDate;
 
 
     @Override
@@ -176,11 +177,11 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
             estateSearch.setMaxPrice(maxPrice);
         }
         if(!Objects.requireNonNull(activitySearchBinding.etUpOfSaleDateMini.getText()).toString().isEmpty()) {
-            minUpOfSaleDate = activitySearchBinding.etUpOfSaleDateMini.getText().toString();
+            minUpOfSaleDate = Utils.dateStringToLong(activitySearchBinding.etUpOfSaleDateMini.getText().toString());
             estateSearch.setMinUpOfSaleDate(minUpOfSaleDate);
         }
         if(!Objects.requireNonNull(activitySearchBinding.etUpOfSaleDateMaxi.getText()).toString().isEmpty()) {
-            maxUpOfSaleDate = activitySearchBinding.etUpOfSaleDateMaxi.getText().toString();
+            maxUpOfSaleDate = Utils.dateStringToLong(activitySearchBinding.etUpOfSaleDateMaxi.getText().toString());
             estateSearch.setMaxOfSaleDate(maxUpOfSaleDate);
         }
       Log.d("estateSearch", "estateSearch" + estateSearch);

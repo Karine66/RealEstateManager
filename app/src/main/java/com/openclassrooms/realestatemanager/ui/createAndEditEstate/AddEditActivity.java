@@ -44,6 +44,7 @@ import com.openclassrooms.realestatemanager.models.UriList;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
 import com.openclassrooms.realestatemanager.ui.EstateViewModel;
 import com.openclassrooms.realestatemanager.ui.PhotoAdapter;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -57,6 +58,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+
+import okhttp3.internal.Util;
 
 
 public class AddEditActivity extends BaseActivity implements View.OnClickListener {
@@ -342,13 +345,13 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                     estateFormBinding.boxPark.isChecked(),
                     estateFormBinding.boxRestaurants.isChecked(),
                     estateFormBinding.availableRadiobtn.isChecked(),
-                    Objects.requireNonNull(estateFormBinding.upOfSaleDate.getText()).toString(),
+                    Utils.dateStringToLong(Objects.requireNonNull(estateFormBinding.upOfSaleDate.getText()).toString()),
                     Objects.requireNonNull(estateFormBinding.soldDate.getText()).toString(),
                     estateFormBinding.etAgent.getText().toString(),
                     photo,
                     photoText,
                     video);
-
+                    Log.d("saveEstate", "saveEstate" + estate);
             if(estateEdit == 0) {
                 this.estateViewModel.createEstate(estate);
                   Snackbar.make(activityAddBinding.getRoot(), "Your new Estate is created", Snackbar.LENGTH_SHORT)
@@ -360,6 +363,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                               }
                           })
                           .show();
+
             }else{
                 this.estateViewModel.updateEstate(estate);
                 Snackbar.make(activityAddBinding.getRoot(), "Your new Estate is updated", Snackbar.LENGTH_SHORT)
@@ -411,7 +415,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
             estateFormBinding.boxRestaurants.setChecked(estate.getRestaurants());
             estateFormBinding.boxStores.setChecked(estate.getStores());
             estateFormBinding.availableRadiobtn.setChecked(estate.getSold());
-            estateFormBinding.upOfSaleDate.setText(Objects.requireNonNull(estate.getUpOfSaleDate()));
+            estateFormBinding.upOfSaleDate.setText(Utils.longDateToString(Objects.requireNonNull(estate.getUpOfSaleDate())));
             estateFormBinding.soldDate.setText(estate.getSoldDate());
             estateFormBinding.etAgent.setText(estate.getAgentName(),false);
 

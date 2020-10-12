@@ -32,6 +32,7 @@ public class EstateContentProviderTest {
 
     @Before
     public void setUp() {
+        InstrumentationRegistry.getInstrumentation().getContext().deleteDatabase("estate.db");
         Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getInstrumentation().getContext(), EstateDatabase.class)
                 .allowMainThreadQueries()
                 .build();
@@ -51,6 +52,7 @@ public class EstateContentProviderTest {
 
         private ContentValues generateEstate() {
         final ContentValues values = new ContentValues();
+
         values.put("estateType", "House");
         values.put("surface", 100);
         values.put("rooms", 3);

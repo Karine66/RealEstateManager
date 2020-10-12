@@ -27,8 +27,8 @@ data class Estate (@PrimaryKey (autoGenerate = true) val mandateNumberID: Long,
                    var park:Boolean,
                    var restaurants:Boolean,
                    var sold:Boolean,
-//                   var upOfSaleDate: Long?,
-                   var upOfSaleDate: String?,
+                   var upOfSaleDate: Long?,
+//                   var upOfSaleDate: String?,
                    var soldDate:String?,
                    var agentName:String,
                    var photoList: UriList,
@@ -60,7 +60,7 @@ data class Estate (@PrimaryKey (autoGenerate = true) val mandateNumberID: Long,
         if (values.containsKey("stores")) estate.stores = values.getAsBoolean("stores")
         if (values.containsKey("park")) estate.park = values.getAsBoolean("park")
         if (values.containsKey("restaurants")) estate.restaurants = values.getAsBoolean("restaurants")
-        if (values.containsKey("upOfSaleDate")) estate.upOfSaleDate = values.getAsString("upOfSaleDate")
+        if (values.containsKey("upOfSaleDate")) estate.upOfSaleDate = values.getAsLong("upOfSaleDate")
         if (values.containsKey("soldDate")) estate.soldDate = values.getAsString("soldDate")
         if (values.containsKey("agentName")) estate.agentName = values.getAsString("agentName")
 

@@ -35,10 +35,9 @@ public class SearchViewModel extends ViewModel {
             Integer maxSurface,
             Double minPrice,
             Double maxPrice,
-            String minUpOfSaleDate,
-            String maxUpOfSaleDate
-//        UriList minPhotos,
-//        UriList maxPhotos,
+            Long minUpOfSaleDate,
+            Long maxUpOfSaleDate
+//            Boolean photos,
 //        Boolean schools,
 //        Boolean stores,
 //        Boolean park,
@@ -107,7 +106,7 @@ public class SearchViewModel extends ViewModel {
                 args.add(maxPrice);
 //                containsCondition = true;
             }
-            if (!minUpOfSaleDate.isEmpty() && !maxUpOfSaleDate.isEmpty()) {
+            if (minUpOfSaleDate !=null && maxUpOfSaleDate!= null && minUpOfSaleDate >=0 && maxUpOfSaleDate >0) {
                 if(containsCondition) {
                     queryString += " AND";
                 } else {
@@ -117,7 +116,24 @@ public class SearchViewModel extends ViewModel {
                 args.add(maxUpOfSaleDate);
 //                containsCondition = true;
             }
-
+//
+//            if(photos.equals(true)) {
+//                if(containsCondition) {
+//                    queryString += " AND";
+//                }else {
+//                    queryString += " WHERE";
+//                } queryString += "photoList <> ''";
+//                args.add(true);
+//            }
+//
+//            if(schools.equals(true)) {
+//                if(containsCondition) {
+//                    queryString += " AND";
+//                }else{
+//                    queryString += " WHERE";
+//                } queryString += "schools = 0";
+//                    args.add(true);
+//            }
         Log.d("queryString", "queryString" + queryString);
         return estateDataSource.getSearchEstate(queryString, args);
 

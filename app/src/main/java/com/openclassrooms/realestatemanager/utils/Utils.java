@@ -18,6 +18,8 @@ import java.util.Objects;
 
 public class Utils {
 
+    private static long dateToLong;
+
     /**
      * Conversion d'un prix d'un bien immobilier (Dollars vers Euros)
      * NOTE : NE PAS SUPPRIMER, A MONTRER DURANT LA SOUTENANCE
@@ -65,18 +67,25 @@ public class Utils {
 
     }
 
-    public static String dateFormat(String stringDate) {
-         String dateString = "";
+    public static long dateStringToLong(String dateString) {
 
-            try {
-                SimpleDateFormat sdf = null;
-                Date date = new SimpleDateFormat(dateString, Locale.FRANCE).parse(stringDate);
-                sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
-                return sdf.format(Objects.requireNonNull(date));
-            } catch ( ParseException e) {
-                e.printStackTrace();
-            }
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy", Locale.FRANCE);
 
-        return "";
+        try {
+
+            Date date = sdf.parse(dateString);
+            dateToLong = Objects.requireNonNull(date).getTime();
+            return dateToLong;
+
+        } catch (ParseException e) {
+            e.getMessage();
+        }
+        return 0;
+    }
+
+    public static String longDateToString(long dateLong) {
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
+        return simpleDateFormat.format(dateLong);
     }
 }
