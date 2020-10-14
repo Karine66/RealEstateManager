@@ -36,9 +36,9 @@ public class SearchViewModel extends ViewModel {
             Double minPrice,
             Double maxPrice,
             Long minUpOfSaleDate,
-            Long maxUpOfSaleDate
-//            Boolean photos,
-//        Boolean schools,
+            Long maxUpOfSaleDate,
+            Boolean photos,
+        Boolean schools
 //        Boolean stores,
 //        Boolean park,
 //        Boolean restaurants,
@@ -116,24 +116,25 @@ public class SearchViewModel extends ViewModel {
                 args.add(maxUpOfSaleDate);
 //                containsCondition = true;
             }
-//
-//            if(photos.equals(true)) {
-//                if(containsCondition) {
-//                    queryString += " AND";
-//                }else {
-//                    queryString += " WHERE";
-//                } queryString += "photoList <> ''";
-//                args.add(true);
-//            }
-//
-//            if(schools.equals(true)) {
-//                if(containsCondition) {
-//                    queryString += " AND";
-//                }else{
-//                    queryString += " WHERE";
-//                } queryString += "schools = 0";
-//                    args.add(true);
-//            }
+
+
+        if(photos.equals(true)) {
+                if(containsCondition) {
+                    queryString += " AND";
+                }else {
+                    queryString += " WHERE";
+                } queryString += " photoList <> ''";
+                args.add(true);
+            }
+
+            if(schools.equals(true)) {
+                if(containsCondition) {
+                    queryString += " AND";
+                }else{
+                    queryString += " WHERE";
+                } queryString += " schools = 1";
+                    args.add(true);
+            }
         Log.d("queryString", "queryString" + queryString);
         return estateDataSource.getSearchEstate(queryString, args);
 

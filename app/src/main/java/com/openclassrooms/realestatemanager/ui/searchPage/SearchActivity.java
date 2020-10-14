@@ -48,6 +48,8 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private double maxPrice;
     private long minUpOfSaleDate;
     private Long maxUpOfSaleDate;
+    private Boolean photoSearch ;
+    private Boolean schoolsSearch;
 
 
     @Override
@@ -183,6 +185,14 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         if(!Objects.requireNonNull(activitySearchBinding.etUpOfSaleDateMaxi.getText()).toString().isEmpty()) {
             maxUpOfSaleDate = Utils.dateStringToLong(activitySearchBinding.etUpOfSaleDateMaxi.getText().toString());
             estateSearch.setMaxOfSaleDate(maxUpOfSaleDate);
+        }
+        if(activitySearchBinding.photosRadiobtn.isChecked()) {
+            photoSearch = activitySearchBinding.availableRadiobtn.isChecked();
+            estateSearch.setPhotos(photoSearch);
+        }
+        if(activitySearchBinding.boxSchools.isChecked()) {
+            schoolsSearch = activitySearchBinding.boxSchools.isChecked();
+            estateSearch.setSchools(schoolsSearch);
         }
       Log.d("estateSearch", "estateSearch" + estateSearch);
 
