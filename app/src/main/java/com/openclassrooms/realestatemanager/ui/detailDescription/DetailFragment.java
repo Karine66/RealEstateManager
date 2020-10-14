@@ -84,6 +84,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
     private List<Uri> listPhoto;
     private PhotoDescription photoText = new PhotoDescription();
     private List<Uri> listVideo;
+    private long estateEdit;
 
 //
 //    // TODO: Rename parameter arguments, choose names that match
@@ -173,7 +174,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
 
         listPhoto = new ArrayList<>();
 
-        adapter = new PhotoAdapter(listPhoto, Glide.with(this), photoText.getPhotoDescription());
+        adapter = new PhotoAdapter(listPhoto, Glide.with(this), photoText.getPhotoDescription(), estateEdit);
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         Objects.requireNonNull(fragmentDetailBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);

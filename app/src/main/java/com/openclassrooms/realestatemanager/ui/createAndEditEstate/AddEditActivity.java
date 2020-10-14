@@ -29,6 +29,8 @@ import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -44,6 +46,9 @@ import com.openclassrooms.realestatemanager.models.UriList;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
 import com.openclassrooms.realestatemanager.ui.EstateViewModel;
 import com.openclassrooms.realestatemanager.ui.PhotoAdapter;
+import com.openclassrooms.realestatemanager.ui.detailDescription.DetailActivity;
+import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
+import com.openclassrooms.realestatemanager.utils.ItemClickSupport;
 import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.io.File;
@@ -101,6 +106,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
     private Snackbar snackbar;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,6 +127,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         this.onClickPhotoBtn();
         this.onClickVideoBtn();
         this.onClickValidateBtn();
+        this.configureOnClickRecyclerView();
 
 
         //for title toolbar
@@ -156,7 +163,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
 
         listPhoto = new ArrayList<>();
 
-        adapter = new PhotoAdapter(listPhoto, Glide.with(this), photoText.getPhotoDescription());
+        adapter = new PhotoAdapter(listPhoto, Glide.with(this), photoText.getPhotoDescription(), estateEdit);
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         Objects.requireNonNull(estateFormBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
@@ -391,12 +398,14 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         this.estateViewModel.getEstate(estateEdit).observe(this, this::updateUIFromEdit);
 
 
+
     }
     //for edit
     @SuppressLint("SetTextI18n")
     private void updateUIFromEdit(Estate estate) {
-
+            this.estate = estate;
         if (estate != null) {
+
             mandateNumberID = estate.getMandateNumberID();
             estateFormBinding.etMandate.setText(String.valueOf(estate.getMandateNumberID()));
             estateFormBinding.etEstate.setText(estate.getEstateType(), false);
@@ -681,7 +690,32 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         } else
             return null;
     }
+    //For delete photos and description
+    private void configureOnClickRecyclerView() {
+        ItemClickSupport.addTo(estateFormBinding.rvPhoto, R.layout.activity_add_photo_item)
+                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
 
+                        if(estateEdit != 0) {
+
+//                           Estate estate = new Estate();
+
+                             String estatePhoto = estate.getPhotoList().getPhotoList().get(position);
+                            Log.d("estatePhoto", "estatePhoto" + estatePhoto);
+                           String estateDescription = estate.getPhotoDescription().getPhotoDescription().get(position);
+                            listPhoto.remove(Uri.parse(estatePhoto));
+                            photo.getPhotoList().remove(estatePhoto);
+                            photoText.getPhotoDescription().remove(estateDescription);
+                            adapter.setPhotoList(listPhoto);
+                            adapter.notifyItemRemoved(position);
+                           adapter.notifyDataSetChanged();
+                        }
+
+                    }
+                });
+
+    }
 
 }
 

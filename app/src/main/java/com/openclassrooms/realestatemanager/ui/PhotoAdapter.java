@@ -27,11 +27,12 @@ private RequestManager glide;
 private List<Uri> mPhotoList = new ArrayList<Uri>();
 private List<String> mPhotoDescription = new ArrayList<>();
 private EstateViewModel estateViewModel;
+    private long estateEdit;
 
-
-    public PhotoAdapter(List<Uri> listPhoto,  RequestManager glide, ArrayList<String> photoDescription){
+    public PhotoAdapter(List<Uri> listPhoto,  RequestManager glide, ArrayList<String> photoDescription, long estateEdit){
         this.glide = glide;
         this.mPhotoDescription = photoDescription;
+       this.estateEdit = estateEdit;
 }
 
     @NonNull
@@ -59,6 +60,12 @@ private EstateViewModel estateViewModel;
             }catch (Exception e) {
                 e.getMessage();
             }
+
+//            if(estateEdit == 0) {
+//              Objects.requireNonNull(activityAddPhotoItemBinding.deleteImage).setVisibility(View.INVISIBLE);
+//
+//
+//            }
     }
 
     @Override
