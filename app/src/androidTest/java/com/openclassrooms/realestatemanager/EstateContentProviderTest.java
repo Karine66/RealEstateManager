@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 
 import androidx.room.Room;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -46,8 +47,21 @@ public class EstateContentProviderTest {
                 null, null, null, null);
                 assertThat(cursor,notNullValue());
                 assertThat(cursor.getCount(), is(1));
-                assertThat(cursor.moveToFirst(), is(true));
-                assertThat(cursor.getString(cursor.getColumnIndex("estateType")), is("House"));
+               cursor.close();
+        }
+
+        @Test
+        public void insertAndGetEstate() {
+        //Before : Adding demo estate
+            final Uri estateUri = mContentResolver.insert(EstateContentProvider.URI_ESTATE, generateEstate());
+            //test
+            final Cursor cursor =
+                    mContentResolver.query(ContentUris.withAppendedId(EstateContentProvider.URI_ESTATE, mandateNumberID),
+                   null, null, null, null);
+                    assertThat(cursor, notNullValue());
+                    assertThat(cursor.getCount(), is(1));
+                    assertThat(cursor.moveToFirst(), is(true));
+                    assertThat(cursor.getString(cursor.getColumnIndexOrThrow("estateType")), is ("House"));
         }
 
         private ContentValues generateEstate() {
@@ -71,6 +85,7 @@ public class EstateContentProviderTest {
         values.put("upOfSaleDate", "01/10/2020");
         values.put("soldDate", "");
         values.put("agentName", "Karine Danjard");
+//        values.put("mandateNumberID", 1);
         return values;
         }
     }

@@ -126,7 +126,8 @@ public class SearchResultFragment extends Fragment {
 
         this.searchViewModel.searchEstate(Objects.requireNonNull(estateSearch.getEstateType()), estateSearch.getCity(),estateSearch.getMinRooms(), estateSearch.getMaxRooms(),
                 estateSearch.getMinSurface(),estateSearch.getMaxSurface(), estateSearch.getMinPrice(), estateSearch.getMaxPrice(),
-                estateSearch.getMinUpOfSaleDate(),estateSearch.getMaxOfSaleDate(), estateSearch.getPhotos(), estateSearch.getSchools()).observe(this, this::updateEstateList);
+                estateSearch.getMinUpOfSaleDate(),estateSearch.getMaxOfSaleDate(), estateSearch.getPhotos(), estateSearch.getSchools(), estateSearch.getStores(),
+                estateSearch.getPark(), estateSearch.getRestaurants(), estateSearch.getSold()).observe(this, this::updateEstateList);
 
 
     }

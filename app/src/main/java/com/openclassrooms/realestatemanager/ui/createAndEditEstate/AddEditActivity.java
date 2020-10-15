@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.ui.createAndEditEstate;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -33,7 +34,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
@@ -46,8 +46,6 @@ import com.openclassrooms.realestatemanager.models.UriList;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
 import com.openclassrooms.realestatemanager.ui.EstateViewModel;
 import com.openclassrooms.realestatemanager.ui.PhotoAdapter;
-import com.openclassrooms.realestatemanager.ui.detailDescription.DetailActivity;
-import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
 import com.openclassrooms.realestatemanager.utils.ItemClickSupport;
 import com.openclassrooms.realestatemanager.utils.Utils;
 
@@ -63,8 +61,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-
-import okhttp3.internal.Util;
 
 
 public class AddEditActivity extends BaseActivity implements View.OnClickListener {
@@ -104,7 +100,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
     private Estate estate;
     private Date upOfSaleDate;
     private Snackbar snackbar;
-
+    private MaterialAlertDialogBuilder builderDeletePhoto;
 
 
     @Override
@@ -697,22 +693,23 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
 
-                        if(estateEdit != 0) {
+                        if (estateEdit != 0) {
 
 //                           Estate estate = new Estate();
 
-                             String estatePhoto = estate.getPhotoList().getPhotoList().get(position);
+                            String estatePhoto = estate.getPhotoList().getPhotoList().get(position);
                             Log.d("estatePhoto", "estatePhoto" + estatePhoto);
-                           String estateDescription = estate.getPhotoDescription().getPhotoDescription().get(position);
+                            String estateDescription = estate.getPhotoDescription().getPhotoDescription().get(position);
                             listPhoto.remove(Uri.parse(estatePhoto));
                             photo.getPhotoList().remove(estatePhoto);
                             photoText.getPhotoDescription().remove(estateDescription);
                             adapter.setPhotoList(listPhoto);
                             adapter.notifyItemRemoved(position);
-                           adapter.notifyDataSetChanged();
+                            adapter.notifyDataSetChanged();
                         }
 
                     }
+
                 });
 
     }

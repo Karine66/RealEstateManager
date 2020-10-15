@@ -38,11 +38,11 @@ public class SearchViewModel extends ViewModel {
             Long minUpOfSaleDate,
             Long maxUpOfSaleDate,
             Boolean photos,
-        Boolean schools
-//        Boolean stores,
-//        Boolean park,
-//        Boolean restaurants,
-//        Boolean sold
+        Boolean schools,
+        Boolean stores,
+        Boolean park,
+       Boolean restaurants,
+        Boolean sold
 
         ) {
             String queryString = "";
@@ -124,7 +124,7 @@ public class SearchViewModel extends ViewModel {
                 }else {
                     queryString += " WHERE";
                 } queryString += " photoList <> ''";
-                args.add(true);
+
             }
 
             if(schools.equals(true)) {
@@ -133,8 +133,40 @@ public class SearchViewModel extends ViewModel {
                 }else{
                     queryString += " WHERE";
                 } queryString += " schools = 1";
-                    args.add(true);
             }
+
+            if(stores.equals(true)) {
+                if(containsCondition) {
+                    queryString += " AND";
+                }else{
+                    queryString += " WHERE";
+                } queryString += " stores = 1";
+            }
+
+            if(park.equals(true)) {
+                if(containsCondition) {
+                    queryString += " AND";
+                }else{
+                    queryString += " WHERE";
+                } queryString += " park = 1";
+            }
+
+            if(restaurants.equals(true)) {
+                if(containsCondition) {
+                    queryString += " AND";
+                }else{
+                    queryString += " WHERE";
+                } queryString += " restaurants = 1";
+            }
+
+            if(sold.equals(true)) {
+                if(containsCondition) {
+                    queryString += " AND";
+                }else{
+                    queryString += " WHERE";
+                } queryString += " sold = 1";
+            }
+
         Log.d("queryString", "queryString" + queryString);
         return estateDataSource.getSearchEstate(queryString, args);
 

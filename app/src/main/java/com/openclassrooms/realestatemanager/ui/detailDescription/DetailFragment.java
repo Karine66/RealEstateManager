@@ -140,6 +140,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         createStringForAddress();
         configureViewModel();
         configureRecyclerView();
+
         //for lite map
         GoogleMapOptions options = new GoogleMapOptions();
         options.liteMode(true);
@@ -161,14 +162,14 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
 
-        if(estateMap!=null) {
+        if (estateMap != null) {
             Intent intent = new Intent(Objects.requireNonNull(getActivity()).getIntent());
             Estate estateMap = (Estate) intent.getSerializableExtra("estate");
             estateId = Objects.requireNonNull(estateMap).getMandateNumberID();
             Log.d("idBundle", String.valueOf(estateMap));
         }
-            this.estateViewModel.getEstate(estateId).observe(this, this::updateUIfromMarker);
-        }
+        this.estateViewModel.getEstate(estateId).observe(this, this::updateUIfromMarker);
+    }
 
     public void configureRecyclerView() {
 
@@ -179,7 +180,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         Objects.requireNonNull(fragmentDetailBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
         fragmentDetailBinding.rvPhoto.setAdapter(adapter);
-        if (estate!= null &&!estate.getPhotoList().getPhotoList().isEmpty() && estate.getPhotoList().getPhotoList().size()>0) {
+        if (estate != null && !estate.getPhotoList().getPhotoList().isEmpty() && estate.getPhotoList().getPhotoList().size() > 0) {
             for (String photoStr : estate.getPhotoList().getPhotoList()) {
 
                 listPhoto.add(Uri.parse(photoStr));
@@ -213,7 +214,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
             fragmentDetailBinding.etCity.setText(estate.getCity());
             fragmentDetailBinding.etCity.setEnabled(false);
 
-            if (!estate.getVideo().getPhotoList().isEmpty() && estate.getVideo().getPhotoList().size()>0) {
+            if (!estate.getVideo().getPhotoList().isEmpty() && estate.getVideo().getPhotoList().size() > 0) {
                 for (String videoStr : estate.getVideo().getPhotoList()) {
 
                     fragmentDetailBinding.videoView.setVideoURI(Uri.parse(videoStr));
@@ -249,10 +250,10 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
             fragmentDetailBinding.etCity.setText(estateDetail.getCity());
             fragmentDetailBinding.etCity.setEnabled(false);
 
-            if (!estateDetail.getVideo().getPhotoList().isEmpty() && estateDetail.getVideo().getPhotoList().size()>0) {
+            if (!estateDetail.getVideo().getPhotoList().isEmpty() && estateDetail.getVideo().getPhotoList().size() > 0) {
                 for (String videoStr : estateDetail.getVideo().getPhotoList()) {
 
-                fragmentDetailBinding.videoView.setVideoURI(Uri.parse(videoStr));
+                    fragmentDetailBinding.videoView.setVideoURI(Uri.parse(videoStr));
 
                 }
             }
@@ -290,7 +291,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
                 adapter.setPhotoList(listPhoto);
                 adapter.setPhotoDescription(estate.getPhotoDescription().getPhotoDescription());
             }
-            if (!estate.getVideo().getPhotoList().isEmpty() && estate.getVideo().getPhotoList().size()>0) {
+            if (!estate.getVideo().getPhotoList().isEmpty() && estate.getVideo().getPhotoList().size() > 0) {
                 for (String videoStr : estate.getVideo().getPhotoList()) {
 
                     fragmentDetailBinding.videoView.setVideoURI(Uri.parse(videoStr));
@@ -332,7 +333,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         this.estate = estateDetail;
         Log.d("idDetail", "idDetail" + estateDetail);
 
-        if(estateDetail != null) {
+        if (estateDetail != null) {
             String address = Objects.requireNonNull(estateDetail).getAddress();
 
             String postalCode = String.valueOf(estateDetail.getPostalCode());
@@ -373,7 +374,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
 
                     @Override
                     public void onComplete() {
-                        if(completeAddress != null) {
+                        if (completeAddress != null) {
 
                             positionMarker(resultGeocoding);
                         }
@@ -385,6 +386,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
                     }
                 });
     }
+
     /**
      * Dispose subscription
      */
@@ -398,4 +400,6 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         super.onDestroy();
         this.disposeWhenDestroy();
     }
+
+
 }

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class PhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder> implements View.OnClickListener {
+public class PhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder>  {
 
 
 
@@ -39,12 +39,19 @@ private EstateViewModel estateViewModel;
     @Override
     public PhotoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 //        Objects.requireNonNull(activityAddPhotoItemBinding.deleteImage).setOnClickListener(this);
+
         return new PhotoViewHolder(ActivityAddPhotoItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
 
     }
 
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
+
+//        if(estateEdit == 0){
+//            Objects.requireNonNull(activityAddPhotoItemBinding.deleteImage).setVisibility(View.INVISIBLE);
+//        }else{
+//            Objects.requireNonNull(activityAddPhotoItemBinding.deleteImage).setVisibility(View.VISIBLE);
+//        }
 
 
         Uri photoUri = null;
@@ -61,11 +68,8 @@ private EstateViewModel estateViewModel;
                 e.getMessage();
             }
 
-//            if(estateEdit == 0) {
-//              Objects.requireNonNull(activityAddPhotoItemBinding.deleteImage).setVisibility(View.INVISIBLE);
-//
-//
-//            }
+
+
     }
 
     @Override
@@ -79,6 +83,7 @@ private EstateViewModel estateViewModel;
         mPhotoList.clear();
         mPhotoList.addAll(photos);
         notifyDataSetChanged();
+
     }
 
     public void setPhotoDescription (List<String> photoDescription) {
@@ -87,15 +92,6 @@ private EstateViewModel estateViewModel;
         notifyDataSetChanged();
     }
 
-    private void deletePhoto (Estate estate) {
-        this.estateViewModel.deleteEstate(estate.getMandateNumberID());
-    }
-
-
-    @Override
-    public void onClick(View v) {
-
-    }
 
 
 }
