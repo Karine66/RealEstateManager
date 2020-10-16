@@ -269,8 +269,8 @@
             android:textColor="@color/colorPrimary"
             android:textSize="12sp"/>
 
-        <RadioButton
-            android:id="@+id/photos_radiobtn"
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/photos_box"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
           android:layout_below="@+id/input_upOfSaleDateMini"
@@ -286,7 +286,7 @@
             android:id="@+id/tv_nearby_points"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/photos_radiobtn"
+            android:layout_below="@+id/photos_box"
             android:layout_marginTop="20dp"
             android:layout_marginStart="20dp"
             android:text="Nearby points interests :"
@@ -346,8 +346,8 @@
             android:textColor="@color/colorPrimary"
             android:textSize="12sp"/>
 
-        <com.google.android.material.radiobutton.MaterialRadioButton
-            android:id="@+id/available_radiobtn"
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/available_box"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/box_schools"

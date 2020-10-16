@@ -124,6 +124,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         this.onClickVideoBtn();
         this.onClickValidateBtn();
         this.configureOnClickRecyclerView();
+//        this.onClickDeleteVideo();
 
 
         //for title toolbar
@@ -150,7 +151,18 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         estateFormBinding.etPostalCode.addTextChangedListener(estateWatcher);
         estateFormBinding.etCity.addTextChangedListener(estateWatcher);
         estateFormBinding.etAgent.addTextChangedListener(estateWatcher);
-        
+        //for video in edit
+        estateFormBinding.videoView.requestFocus();
+        MediaController mediaController = new MediaController(this);
+        estateFormBinding.videoView.setMediaController(mediaController);
+        mediaController.setAnchorView(estateFormBinding.videoView);
+        estateFormBinding.videoView.start();
+
+        if(estateEdit==0) {
+            Objects.requireNonNull(estateFormBinding.deleteVideo).setVisibility(View.INVISIBLE);
+        }else{
+            Objects.requireNonNull(estateFormBinding.deleteVideo).setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -435,7 +447,12 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                 adapter.setPhotoDescription(estate.getPhotoDescription().getPhotoDescription());
                 photo.getPhotoList().addAll(estate.getPhotoList().getPhotoList());
             }
+            if (!estate.getVideo().getPhotoList().isEmpty() && estate.getVideo().getPhotoList().size() > 0) {
+                for (String videoStr : estate.getVideo().getPhotoList()) {
 
+                    estateFormBinding.videoView.setVideoURI(Uri.parse(videoStr));
+                }
+            }
         }
 
     }
@@ -587,11 +604,11 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                     String recordedVideoPath = getPath(contentURI);
                     Log.d("recordedVideoPaht", recordedVideoPath);
                     Objects.requireNonNull(activityAddBinding.includeForm.videoView).setVideoURI(contentURI);
-                    activityAddBinding.includeForm.videoView.requestFocus();
-                    MediaController mediaController = new MediaController(this);
-                    activityAddBinding.includeForm.videoView.setMediaController(mediaController);
-                    mediaController.setAnchorView(activityAddBinding.includeForm.videoView);
-                    activityAddBinding.includeForm.videoView.start();
+//                    activityAddBinding.includeForm.videoView.requestFocus();
+//                    MediaController mediaController = new MediaController(this);
+//                    activityAddBinding.includeForm.videoView.setMediaController(mediaController);
+//                    mediaController.setAnchorView(activityAddBinding.includeForm.videoView);
+//                    activityAddBinding.includeForm.videoView.start();
                     video.getPhotoList().add(String.valueOf(contentURI));
                 }
             }
@@ -712,6 +729,19 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
 
                 });
 
+    }
+
+    public void onClickDeleteVideo() {
+       Objects.requireNonNull(estateFormBinding.deleteVideo).setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+
+             String estateVideo = estate.getVideo().getPhotoList().get(0);
+             video.getPhotoList().remove(estateVideo);
+             estate.setVideo(video);
+
+           }
+       });
     }
 
 }

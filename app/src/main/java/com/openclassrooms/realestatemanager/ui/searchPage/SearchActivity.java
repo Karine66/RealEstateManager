@@ -47,9 +47,13 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private double minPrice;
     private double maxPrice;
     private long minUpOfSaleDate;
-    private Long maxUpOfSaleDate;
-    private Boolean photoSearch ;
-    private Boolean schoolsSearch;
+    private long maxUpOfSaleDate;
+    private boolean photoSearch ;
+    private boolean schoolsSearch;
+    private boolean parkSearch;
+    private boolean restaurantSearch;
+    private boolean storeSearch;
+    private boolean availableSearch;
 
 
     @Override
@@ -186,13 +190,30 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
             maxUpOfSaleDate = Utils.dateStringToLong(activitySearchBinding.etUpOfSaleDateMaxi.getText().toString());
             estateSearch.setMaxOfSaleDate(maxUpOfSaleDate);
         }
-        if(activitySearchBinding.photosRadiobtn.isChecked()) {
-            photoSearch = activitySearchBinding.availableRadiobtn.isChecked();
+        if(activitySearchBinding.photosBox.isChecked()) {
+            photoSearch = activitySearchBinding.photosBox.isChecked();
             estateSearch.setPhotos(photoSearch);
         }
         if(activitySearchBinding.boxSchools.isChecked()) {
             schoolsSearch = activitySearchBinding.boxSchools.isChecked();
             estateSearch.setSchools(schoolsSearch);
+        }
+
+        if(activitySearchBinding.boxPark.isChecked()) {
+            parkSearch = activitySearchBinding.boxPark.isChecked();
+            estateSearch.setPark(parkSearch);
+        }
+        if(activitySearchBinding.boxRestaurants.isChecked()) {
+            restaurantSearch = activitySearchBinding.boxRestaurants.isChecked();
+            estateSearch.setRestaurants(restaurantSearch);
+        }
+        if(activitySearchBinding.boxStores.isChecked()) {
+            storeSearch = activitySearchBinding.boxStores.isChecked();
+            estateSearch.setStores(storeSearch);
+        }
+        if(activitySearchBinding.availableBox.isChecked()) {
+            availableSearch = activitySearchBinding.availableBox.isChecked();
+            estateSearch.setSold(availableSearch);
         }
       Log.d("estateSearch", "estateSearch" + estateSearch);
 
