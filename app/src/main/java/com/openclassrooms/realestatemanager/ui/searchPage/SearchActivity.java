@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivitySearchBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
@@ -54,6 +55,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private boolean restaurantSearch;
     private boolean storeSearch;
     private boolean availableSearch;
+    private Intent fabIntent;
 
 
     @Override
@@ -135,15 +137,38 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
             public void onClick(View v) {
 
                 showSearchEstate();
-                Intent fabIntent = new Intent(getApplicationContext(), SearchResultActivity.class);
+                fabIntent = new Intent(getApplicationContext(), SearchResultActivity.class);
                 fabIntent.putExtra("estateSearch", estateSearch);
-                startActivity(fabIntent);
-//                showSearchEstate();
+
+                startActivityForResult(fabIntent, 1);
+
+
+
                 Log.d("SaveSearch", "saveSearch"+estateSearch);
 
             }
         });
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+
+//                fabIntent = new Intent(getApplicationContext(), SearchResultActivity.class);
+//                fabIntent.putExtra("estateSearch", estateSearch);
+            }
+            if (resultCode == RESULT_CANCELED) {
+
+                    Snackbar.make(activitySearchBinding.getRoot(), "No result found, please retry with another search", Snackbar.LENGTH_SHORT).show();
+                            
+
+            }
+        }
+    }
+
+
 
 
     public void showSearchEstate() {

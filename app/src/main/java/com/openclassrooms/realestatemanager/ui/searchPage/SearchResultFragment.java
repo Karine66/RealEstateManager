@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.searchPage;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -121,7 +122,8 @@ public class SearchResultFragment extends Fragment {
 
         Intent intent = new Intent(Objects.requireNonNull(Objects.requireNonNull(getActivity()).getIntent()));
         estateSearch = (SearchEstate) intent.getSerializableExtra("estateSearch");
-
+//        getActivity().setResult(Activity.RESULT_CANCELED, intent);
+//        getActivity().finish();
         Log.d("estateSearch", String.valueOf(estateSearch));
 
         this.searchViewModel.searchEstate(Objects.requireNonNull(estateSearch.getEstateType()), estateSearch.getCity(),estateSearch.getMinRooms(), estateSearch.getMaxRooms(),
