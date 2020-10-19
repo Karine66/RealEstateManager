@@ -47,11 +47,7 @@ private EstateViewModel estateViewModel;
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
 
-//        if(estateEdit == 0){
-//            Objects.requireNonNull(activityAddPhotoItemBinding.deleteImage).setVisibility(View.INVISIBLE);
-//        }else{
-//            Objects.requireNonNull(activityAddPhotoItemBinding.deleteImage).setVisibility(View.VISIBLE);
-//        }
+
 
 
         Uri photoUri = null;
@@ -63,7 +59,7 @@ private EstateViewModel estateViewModel;
             photoDescription = mPhotoDescription.get(position);
         }
             try {
-                holder.updateWithDetails(photoUri, this.glide, photoDescription);
+                holder.updateWithDetails(photoUri, this.glide, photoDescription, estateEdit);
             }catch (Exception e) {
                 e.getMessage();
             }

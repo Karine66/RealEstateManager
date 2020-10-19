@@ -28,6 +28,7 @@ import com.openclassrooms.realestatemanager.utils.Utils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -137,10 +138,15 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
             public void onClick(View v) {
 
                 showSearchEstate();
+
+//                if(Objects.requireNonNull(searchViewModel.searchEstate(estateType, city, minRooms, maxRooms, minSurface, maxSurface, minPrice, maxPrice, minUpOfSaleDate, maxUpOfSaleDate,
+//                        false, false, false, false, false, false)) {
+                    Snackbar.make(activitySearchBinding.getRoot(), "No result found, please retry with another search", Snackbar.LENGTH_SHORT).show();
+//                }
                 fabIntent = new Intent(getApplicationContext(), SearchResultActivity.class);
                 fabIntent.putExtra("estateSearch", estateSearch);
 
-                startActivityForResult(fabIntent, 1);
+                startActivity(fabIntent);
 
 
 
@@ -150,23 +156,23 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         });
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if(resultCode == RESULT_OK) {
-
-//                fabIntent = new Intent(getApplicationContext(), SearchResultActivity.class);
-//                fabIntent.putExtra("estateSearch", estateSearch);
-            }
-            if (resultCode == RESULT_CANCELED) {
-
-                    Snackbar.make(activitySearchBinding.getRoot(), "No result found, please retry with another search", Snackbar.LENGTH_SHORT).show();
-                            
-
-            }
-        }
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == 1) {
+//            if(resultCode == RESULT_OK) {
+//
+////                fabIntent = new Intent(getApplicationContext(), SearchResultActivity.class);
+////                fabIntent.putExtra("estateSearch", estateSearch);
+//            }
+//            if (resultCode == RESULT_CANCELED) {
+//
+//                    Snackbar.make(activitySearchBinding.getRoot(), "No result found, please retry with another search", Snackbar.LENGTH_SHORT).show();
+//
+//
+//            }
+//        }
+//    }
 
 
 

@@ -18,6 +18,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Objects;
+
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -33,7 +35,7 @@ public class EstateContentProviderTest {
 
     @Before
     public void setUp() {
-        InstrumentationRegistry.getInstrumentation().getContext().deleteDatabase("estate.db");
+        InstrumentationRegistry.getInstrumentation().getTargetContext().deleteDatabase("estate.db");
         Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getInstrumentation().getContext(), EstateDatabase.class)
                 .allowMainThreadQueries()
                 .build();
@@ -46,7 +48,7 @@ public class EstateContentProviderTest {
                 mContentResolver.query(ContentUris.withAppendedId(EstateContentProvider.URI_ESTATE, mandateNumberID),
                 null, null, null, null);
                 assertThat(cursor,notNullValue());
-                assertThat(cursor.getCount(), is(1));
+                assertThat(cursor.getCount(), is(0));
                cursor.close();
         }
 
@@ -62,6 +64,7 @@ public class EstateContentProviderTest {
                     assertThat(cursor.getCount(), is(1));
                     assertThat(cursor.moveToFirst(), is(true));
                     assertThat(cursor.getString(cursor.getColumnIndexOrThrow("estateType")), is ("House"));
+                     mContentResolver.delete(Objects.requireNonNull(estateUri), null, null);
         }
 
         private ContentValues generateEstate() {
