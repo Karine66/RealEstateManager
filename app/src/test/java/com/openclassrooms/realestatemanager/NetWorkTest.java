@@ -51,5 +51,6 @@ public class NetWorkTest {
         shadowOfActiveNetworkInfo.setConnectionStatus(NetworkInfo.State.DISCONNECTED);
         assertThat(Utils.isInternetAvailable(getApplicationContext())).isFalse();
     }
+    
 }
 
