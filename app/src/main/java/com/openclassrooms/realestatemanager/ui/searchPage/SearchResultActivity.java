@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.searchPage;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
@@ -43,10 +45,17 @@ public class SearchResultActivity extends BaseActivity {
 
         setContentView(view);
 
+        this.configureToolbar();
+        this.configureUpButton();
         this.configureAndShowSearchResultFragment();
 
+        ActionBar ab = getSupportActionBar();
+        Objects.requireNonNull(ab).setTitle("Search Results");
 
     }
+
+
+
 
     private void configureAndShowSearchResultFragment(){
 //        Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container

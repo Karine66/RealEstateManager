@@ -10,36 +10,33 @@ import com.openclassrooms.realestatemanager.database.converters.PhotoDescription
 import com.openclassrooms.realestatemanager.database.converters.UriListConverter
 import com.openclassrooms.realestatemanager.database.dao.EstateDAO
 import com.openclassrooms.realestatemanager.models.Estate
-import com.openclassrooms.realestatemanager.models.SearchEstate
 
 
 @Database(entities = [(Estate::class)], version = 1, exportSchema = false)
 @TypeConverters(UriListConverter::class, DatesConverter::class, PhotoDescriptionConverter::class)
-abstract class EstateDatabase:RoomDatabase() {
+abstract class EstateDatabase : RoomDatabase() {
 
     // --- DAO ---
     abstract fun estateDao(): EstateDAO
 
-   companion object {
+    companion object {
         // --- SINGLETON ---
-        @Volatile private var INSTANCE:EstateDatabase?=null
+        @Volatile
+        private var INSTANCE: EstateDatabase? = null
 
         // --- INSTANCE ---
-        fun getInstance(context:Context): EstateDatabase {
-            if (INSTANCE == null){
-                synchronized (EstateDatabase::class.java) {
+        fun getInstance(context: Context): EstateDatabase {
+            if (INSTANCE == null) {
+                synchronized(EstateDatabase::class.java) {
 
-                        INSTANCE = Room.databaseBuilder(context.applicationContext,
-                                EstateDatabase::class.java, "Estate.db")
-                                .build()
-                    }
+                    INSTANCE = Room.databaseBuilder(context.applicationContext,
+                            EstateDatabase::class.java, "Estate.db")
+                            .build()
                 }
-
+            }
             return INSTANCE as EstateDatabase
         }
-
     }
-
 }
 
 

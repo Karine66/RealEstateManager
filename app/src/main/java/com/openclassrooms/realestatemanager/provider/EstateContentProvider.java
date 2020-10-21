@@ -21,16 +21,30 @@ public class EstateContentProvider extends ContentProvider {
     public static final String TABLE_NAME = Estate.class.getSimpleName();
     public static final Uri URI_ESTATE = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME);
 
-    //Entry point of contentProvider
+    /**
+     * Entry point of contentProvider
+     *
+     * @return
+     */
     @Override
     public boolean onCreate() {
         return true;
     }
-    //For retrieve data from URI
+
+    /**
+     * For retrieve data from URI
+     *
+     * @param uri
+     * @param projection
+     * @param selection
+     * @param selectionArgs
+     * @param sortOrder
+     * @return
+     */
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
-        if(getContext() !=null) {
+        if (getContext() != null) {
             long mandateNumberID = ContentUris.parseId(uri);
             final Cursor cursor =
                     EstateDatabase.Companion.getInstance(getContext()).estateDao().getEstateWithCursor(mandateNumberID);
@@ -46,24 +60,39 @@ public class EstateContentProvider extends ContentProvider {
     public String getType(@NonNull Uri uri) {
         return "vnd.android.cursor.estate/" + AUTHORITY + "." + TABLE_NAME;
     }
-    //Return MIME type for retrieve date type precisely
+
+    /**
+     * Return MIME type for retrieve data type precisely
+     *
+     * @param uri
+     * @param contentValues
+     * @return
+     */
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        if(getContext() != null) {
+        if (getContext() != null) {
             final long id = EstateDatabase.Companion.getInstance(getContext()).estateDao()
                     .insertEstate(EstateKt.fromContentValues(Objects.requireNonNull(contentValues)));
-            if(id !=0) {
-                getContext().getContentResolver().notifyChange(uri,null);
-                return ContentUris.withAppendedId(uri,id);
+            if (id != 0) {
+                getContext().getContentResolver().notifyChange(uri, null);
+                return ContentUris.withAppendedId(uri, id);
             }
         }
-       throw new IllegalArgumentException("Failed to insert row into" + uri);
+        throw new IllegalArgumentException("Failed to insert row into" + uri);
     }
-    //For delete data at ContentValues format
+
+    /**
+     * For delete date at ContentValues Format
+     *
+     * @param uri
+     * @param s
+     * @param strings
+     * @return
+     */
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        if(getContext() != null) {
+        if (getContext() != null) {
             final int count =
                     EstateDatabase.Companion.getInstance(getContext()).estateDao().deleteItem(ContentUris.parseId(uri));
             getContext().getContentResolver().notifyChange(uri, null);
@@ -71,16 +100,24 @@ public class EstateContentProvider extends ContentProvider {
         }
         throw new IllegalArgumentException("Failed to delete row into" + uri);
     }
-    //For update data at ContentValues format
+
+    /**
+     * for update data at ContentValues format
+     *
+     * @param uri
+     * @param contentValues
+     * @param s
+     * @param strings
+     * @return
+     */
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
-        if(getContext() != null) {
+        if (getContext() != null) {
             final int count =
                     EstateDatabase.Companion.getInstance(getContext()).estateDao().updateEstate(EstateKt.fromContentValues(contentValues));
             getContext().getContentResolver().notifyChange(uri, null);
             return count;
         }
-
-      throw new IllegalArgumentException("Failed to update row into" + uri);
+        throw new IllegalArgumentException("Failed to update row into" + uri);
     }
 }

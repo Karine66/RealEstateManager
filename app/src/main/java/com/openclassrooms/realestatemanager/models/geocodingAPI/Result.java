@@ -7,7 +7,6 @@ import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
 
-@SuppressWarnings("unused")
 public class Result implements Serializable {
 
     @SerializedName("address_components")

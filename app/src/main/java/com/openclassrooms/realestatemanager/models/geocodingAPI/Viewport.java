@@ -5,7 +5,6 @@ package com.openclassrooms.realestatemanager.models.geocodingAPI;
 import com.google.gson.annotations.SerializedName;
 
 
-@SuppressWarnings("unused")
 public class Viewport {
 
     @SerializedName("northeast")

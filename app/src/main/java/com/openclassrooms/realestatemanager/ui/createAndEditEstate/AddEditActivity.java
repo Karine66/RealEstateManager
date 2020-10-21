@@ -2,7 +2,6 @@ package com.openclassrooms.realestatemanager.ui.createAndEditEstate;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -19,18 +18,17 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 import android.widget.MediaController;
 import android.widget.VideoView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -90,18 +88,9 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
     private UriList photo = new UriList();
     private PhotoDescription photoText = new PhotoDescription();
     private UriList video = new UriList();
-    private View view;
-    private InputMethodManager imm;
-    private int resId;
-    private long editId;
     private long estateEdit;
     private long idEstate;
-    private Uri contentUri;
     private Estate estate;
-    private Date upOfSaleDate;
-    private Snackbar snackbar;
-    private MaterialAlertDialogBuilder builderDeletePhoto;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +115,6 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         this.configureOnClickRecyclerView();
 //        this.onClickDeleteVideo();
 
-
         //for title toolbar
         ActionBar ab = getSupportActionBar();
         if (estateEdit == 0) {
@@ -134,7 +122,6 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         } else {
             Objects.requireNonNull(ab).setTitle("Edit Estate");
         }
-
         //For date picker
         mDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
         //For hide mandate number
@@ -157,15 +144,18 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         estateFormBinding.videoView.setMediaController(mediaController);
         mediaController.setAnchorView(estateFormBinding.videoView);
         estateFormBinding.videoView.start();
-
-        if(estateEdit==0) {
+        //For deleteButton video visibility
+        if (estateEdit == 0) {
             Objects.requireNonNull(estateFormBinding.deleteVideo).setVisibility(View.INVISIBLE);
-        }else{
+        } else {
             Objects.requireNonNull(estateFormBinding.deleteVideo).setVisibility(View.VISIBLE);
         }
 
     }
 
+    /**
+     * RecyclerView for photos
+     */
 
     public void configureRecyclerView() {
 
@@ -178,12 +168,19 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         estateFormBinding.rvPhoto.setAdapter(adapter);
     }
 
-    //for adapter generic
+    /**
+     * Adapter generic for dropdown
+     *
+     * @param resId
+     * @return
+     */
     private ArrayAdapter<String> factoryAdapter(int resId) {
         return new ArrayAdapter<>(this, R.layout.dropdown_menu_popup_item, getResources().getStringArray(resId));
     }
 
-    //For adapters dropdown
+    /**
+     * For set adapters dropdown
+     */
     public void dropDownAdapters() {
 
         estateFormBinding.etEstate.setAdapter(factoryAdapter(R.array.ESTATES));
@@ -193,9 +190,9 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         estateFormBinding.etAgent.setAdapter(factoryAdapter(R.array.AGENT));
     }
 
-
-
-    // for date picker
+    /**
+     * for date picker
+     */
     private void setDateField() {
         estateFormBinding.upOfSaleDate.setOnClickListener(this);
         estateFormBinding.soldDate.setOnClickListener(this);
@@ -214,7 +211,11 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
 
-    // for click on date picker
+    /**
+     * For click on date picker
+     *
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         if (view == estateFormBinding.upOfSaleDate) {
@@ -227,42 +228,46 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
-    // for click on fab validate btn
+    /**
+     * For click on validate button
+     */
     public void onClickValidateBtn() {
 
-        estateFormBinding.validateFabBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                ArrayList<String> photoDescriptionList = new ArrayList<>();
-                for (int i = 0; i < photoText.getPhotoDescription().size(); i++) {
-                    AppCompatEditText editText = Objects.requireNonNull(Objects.requireNonNull(activityAddBinding.includeForm.rvPhoto.getLayoutManager()).findViewByPosition(i)).findViewById(R.id.photo_description);
-                    String desc = Objects.requireNonNull(editText.getText()).toString();
-                    photoDescriptionList.add(desc);
-                }
-                photoText.setPhotoDescription(photoDescriptionList);
-
-                fieldsRequired();
-                soldDateRequired();
-                saveEstates();
+        estateFormBinding.validateFabBtn.setOnClickListener(v -> {
+            //For description photo in recyclerView
+            ArrayList<String> photoDescriptionList = new ArrayList<>();
+            for (int i = 0; i < photoText.getPhotoDescription().size(); i++) {
+                AppCompatEditText editText = Objects.requireNonNull(Objects.requireNonNull(activityAddBinding.includeForm.rvPhoto.getLayoutManager()).findViewByPosition(i)).findViewById(R.id.photo_description);
+                String desc = Objects.requireNonNull(editText.getText()).toString();
+                photoDescriptionList.add(desc);
             }
+            photoText.setPhotoDescription(photoDescriptionList);
 
+            fieldsRequired();
+            soldDateRequired();
+            saveEstates();
         });
     }
 
-
-
-
-    //for dates when sold is checked
+    /**
+     * For dates whein sold is checked
+     *
+     * @return
+     */
     public boolean soldDateRequired() {
         String soldDateInput = Objects.requireNonNull(estateFormBinding.inputSoldDate.getEditText()).getText().toString();
-        if (estateFormBinding.availableRadiobtn.isChecked()&& soldDateInput.isEmpty()) {
+        if (estateFormBinding.availableRadiobtn.isChecked() && soldDateInput.isEmpty()) {
             estateFormBinding.soldDate.setError("Required");
             return false;
         }
-            return true;
+        return true;
     }
 
+    /**
+     * For fields required in Estate form
+     *
+     * @return
+     */
     public boolean fieldsRequired() {
 
         String surfaceInput = Objects.requireNonNull(estateFormBinding.inputSurface.getEditText()).getText().toString().trim();
@@ -291,21 +296,12 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
 
             return false;
         }
-//        estateFormBinding.etSurface.setError(null);
-//        estateFormBinding.etRooms.setError(null);
-//        estateFormBinding.etBedrooms.setError(null);
-//        estateFormBinding.etBathrooms.setError(null);
-//        estateFormBinding.etPrice.setError(null);
-//        estateFormBinding.etDescription.setError(null);
-//        estateFormBinding.etAddress.setError(null);
-//        estateFormBinding.etPostalCode.setError(null);
-//        estateFormBinding.etCity.setError(null);
-//        estateFormBinding.etAgent.setError(null);
-//        estateFormBinding.soldDate.setError(null);
         return true;
-   }
+    }
 
-
+    /**
+     * For invalidate submit button if no all fields required are fill up
+     */
     private TextWatcher estateWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -330,88 +326,91 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                     && !cityInput.isEmpty() && !agentInput.isEmpty());
         }
 
-    @Override
-    public void afterTextChanged(Editable s) {
+        @Override
+        public void afterTextChanged(Editable s) {
 
-    }
-};
+        }
+    };
 
-    //For save in database
+    /**
+     * For save in database
+     */
     public void saveEstates() {
 
+        Estate estate = new Estate(
 
-        if (!Objects.requireNonNull(estateFormBinding.etSurface.getText()).toString().isEmpty()) {
-            Estate estate = new Estate(
-
-                    mandateNumberID,
-                    estateFormBinding.etEstate.getText().toString(),
-                    Integer.parseInt(Objects.requireNonNull(estateFormBinding.etSurface.getText()).toString()),
-                    Integer.parseInt(estateFormBinding.etRooms.getText().toString()),
-                    Integer.parseInt(estateFormBinding.etBedrooms.getText().toString()),
-                    Integer.parseInt(estateFormBinding.etBathrooms.getText().toString()),
-                    Integer.parseInt(Objects.requireNonNull(estateFormBinding.etGround.getText()).toString()),
-                    Double.parseDouble(Objects.requireNonNull((estateFormBinding.etPrice.getText())).toString()),
-                    Objects.requireNonNull(estateFormBinding.etDescription.getText()).toString(),
-                    Objects.requireNonNull(estateFormBinding.etAddress.getText()).toString(),
-                    Integer.parseInt(Objects.requireNonNull(estateFormBinding.etPostalCode.getText()).toString()),
-                    Objects.requireNonNull(estateFormBinding.etCity.getText()).toString(),
-                    estateFormBinding.boxSchools.isChecked(),
-                    estateFormBinding.boxStores.isChecked(),
-                    estateFormBinding.boxPark.isChecked(),
-                    estateFormBinding.boxRestaurants.isChecked(),
-                    estateFormBinding.availableRadiobtn.isChecked(),
-                    Utils.dateStringToLong(Objects.requireNonNull(estateFormBinding.upOfSaleDate.getText()).toString()),
-                    Objects.requireNonNull(estateFormBinding.soldDate.getText()).toString(),
-                    estateFormBinding.etAgent.getText().toString(),
-                    photo,
-                    photoText,
-                    video);
-                    Log.d("saveEstate", "saveEstate" + estate);
-            if(estateEdit == 0) {
-                this.estateViewModel.createEstate(estate);
-                  Snackbar.make(activityAddBinding.getRoot(), "Your new Estate is created", Snackbar.LENGTH_SHORT)
-                          .addCallback(new Snackbar.Callback() {
-                              @Override
-                              public void onDismissed(Snackbar snackbar, int event) {
-                                  super.onDismissed(snackbar, event);
-                                  finish();
-                              }
-                          })
-                          .show();
-
-            }else{
-                this.estateViewModel.updateEstate(estate);
-                Snackbar.make(activityAddBinding.getRoot(), "Your new Estate is updated", Snackbar.LENGTH_SHORT)
-                        .addCallback(new Snackbar.Callback() {
-                            @Override
-                            public void onDismissed(Snackbar snackbar, int event) {
-                                super.onDismissed(snackbar, event);
-                                finish();
-                            }
-                        }).show();
-            }
+                mandateNumberID,
+                estateFormBinding.etEstate.getText().toString(),
+                Integer.parseInt(Objects.requireNonNull(estateFormBinding.etSurface.getText()).toString()),
+                Integer.parseInt(estateFormBinding.etRooms.getText().toString()),
+                Integer.parseInt(estateFormBinding.etBedrooms.getText().toString()),
+                Integer.parseInt(estateFormBinding.etBathrooms.getText().toString()),
+                Integer.parseInt(Objects.requireNonNull(estateFormBinding.etGround.getText()).toString()),
+                Double.parseDouble(Objects.requireNonNull((estateFormBinding.etPrice.getText())).toString()),
+                Objects.requireNonNull(estateFormBinding.etDescription.getText()).toString(),
+                Objects.requireNonNull(estateFormBinding.etAddress.getText()).toString(),
+                Integer.parseInt(Objects.requireNonNull(estateFormBinding.etPostalCode.getText()).toString()),
+                Objects.requireNonNull(estateFormBinding.etCity.getText()).toString(),
+                estateFormBinding.boxSchools.isChecked(),
+                estateFormBinding.boxStores.isChecked(),
+                estateFormBinding.boxPark.isChecked(),
+                estateFormBinding.boxRestaurants.isChecked(),
+                estateFormBinding.availableRadiobtn.isChecked(),
+                Utils.dateStringToLong(Objects.requireNonNull(estateFormBinding.upOfSaleDate.getText()).toString()),
+                Objects.requireNonNull(estateFormBinding.soldDate.getText()).toString(),
+                estateFormBinding.etAgent.getText().toString(),
+                photo,
+                photoText,
+                video);
+        Log.d("saveEstate", "saveEstate" + estate);
+        if (estateEdit == 0) {
+            this.estateViewModel.createEstate(estate);
+            Snackbar.make(activityAddBinding.getRoot(), "Your new Estate is created", Snackbar.LENGTH_SHORT)
+                    .addCallback(new Snackbar.Callback() {
+                        @Override
+                        public void onDismissed(Snackbar snackbar, int event) {
+                            super.onDismissed(snackbar, event);
+                            finish();
+                        }
+                    })
+                    .show();
+        } else {
+            this.estateViewModel.updateEstate(estate);
+            Snackbar.make(activityAddBinding.getRoot(), "Your new Estate is updated", Snackbar.LENGTH_SHORT)
+                    .addCallback(new Snackbar.Callback() {
+                        @Override
+                        public void onDismissed(Snackbar snackbar, int event) {
+                            super.onDismissed(snackbar, event);
+                            finish();
+                        }
+                    }).show();
         }
-
     }
-    //Configuring ViewModel
+
+    /**
+     * Configure ViewModel
+     */
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
         //for retrieve id from click edit button
         Intent intent = new Intent(Objects.requireNonNull(this.getIntent()));
-        estateEdit = intent.getLongExtra("iDEstate",idEstate);
+        estateEdit = intent.getLongExtra("iDEstate", idEstate);
 
         Log.d("idEdit", String.valueOf(estateEdit));
 
         this.estateViewModel.getEstate(estateEdit).observe(this, this::updateUIFromEdit);
-
-
-
     }
-    //for edit
+
+    /**
+     * For edit
+     *
+     * @param estate
+     */
     @SuppressLint("SetTextI18n")
     private void updateUIFromEdit(Estate estate) {
-            this.estate = estate;
+        this.estate = estate;
+
         if (estate != null) {
 
             mandateNumberID = estate.getMandateNumberID();
@@ -434,7 +433,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
             estateFormBinding.availableRadiobtn.setChecked(estate.getSold());
             estateFormBinding.upOfSaleDate.setText(Utils.longDateToString(Objects.requireNonNull(estate.getUpOfSaleDate())));
             estateFormBinding.soldDate.setText(estate.getSoldDate());
-            estateFormBinding.etAgent.setText(estate.getAgentName(),false);
+            estateFormBinding.etAgent.setText(estate.getAgentName(), false);
 
             if (!estate.getPhotoList().getPhotoList().isEmpty()) {
                 listPhoto.clear();
@@ -454,23 +453,21 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                 }
             }
         }
-
     }
 
-
-    //For manage photos
-    //For click on photo btn
+    /**
+     * For click on photo btn
+     */
     public void onClickPhotoBtn() {
-        estateFormBinding.photoBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectImage();
-                saveImageInInternalStorage();
-            }
+        estateFormBinding.photoBtn.setOnClickListener(v -> {
+            selectImage();
+            saveImageInInternalStorage();
         });
     }
 
-    //For click on video btn
+    /**
+     * For click on video btn
+     */
     public void onClickVideoBtn() {
         estateFormBinding.cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -480,7 +477,9 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         });
     }
 
-    //For alert dialog for choose take photo or choose in gallery
+    /**
+     * For alert dialog for choose take photo or choose in gallery
+     */
     protected void selectImage() {
         final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
 
@@ -493,8 +492,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
 
                 if (options[item].equals("Take Photo")) {
 
-
-                   Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
                     if (takePicture.resolveActivity(getPackageManager()) != null) {
                         //Create the File where the photo should go
@@ -507,15 +505,14 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                         //Continue only if the file was successfully created
                         if (photoFile != null) {
 
-                               photoUri = FileProvider.getUriForFile(getApplicationContext(), "com.openclassrooms.realestatemanager.fileprovider", photoFile);
+                            photoUri = FileProvider.getUriForFile(getApplicationContext(), "com.openclassrooms.realestatemanager.fileprovider", photoFile);
 
-                                takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-                                Log.d("PhotoUri", "photoUri =" + photoUri);
+                            takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                            Log.d("PhotoUri", "photoUri =" + photoUri);
 
-                                startActivityForResult(takePicture, 1);
+                            startActivityForResult(takePicture, 1);
                         }
                     }
-
                 } else if (options[item].equals("Choose from Gallery")) {
 
                     Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -530,7 +527,12 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         builder.show();
     }
 
-
+    /**
+     * Create photo file
+     *
+     * @return
+     * @throws IOException
+     */
     protected File createImageFile() throws IOException {
         //Create an image file name
         String timeStamp = new SimpleDateFormat("ddMMyyyy", Locale.FRANCE).format(new Date());
@@ -543,11 +545,16 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         );
 //        Save file : path for use with ACTION_VIEW intent
         currentPhotoPath = image.getAbsolutePath();
-
         return image;
     }
 
-    //For photos
+    /**
+     * For photos
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -594,8 +601,6 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                     photo.getPhotoList().add(String.valueOf(contentUri));
                     photoText.getPhotoDescription().add("");
                     adapter.setPhotoList(listPhoto);
-
-
                 }
             }
             if (requestCode == PICK_VIDEO_CAMERA && data != null && data.getData() != null) {
@@ -604,11 +609,6 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                     String recordedVideoPath = getPath(contentURI);
                     Log.d("recordedVideoPaht", recordedVideoPath);
                     Objects.requireNonNull(activityAddBinding.includeForm.videoView).setVideoURI(contentURI);
-//                    activityAddBinding.includeForm.videoView.requestFocus();
-//                    MediaController mediaController = new MediaController(this);
-//                    activityAddBinding.includeForm.videoView.setMediaController(mediaController);
-//                    mediaController.setAnchorView(activityAddBinding.includeForm.videoView);
-//                    activityAddBinding.includeForm.videoView.start();
                     video.getPhotoList().add(String.valueOf(contentURI));
                 }
             }
@@ -631,13 +631,16 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
             }
         }
     }
+
     private String getFileExt(Uri contentUri) {
         ContentResolver contentResolver = getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(contentResolver.getType(contentUri));
     }
 
-    //for pick image camera
+    /**
+     * For save photo in internal storage
+     */
     public void saveImageInInternalStorage() {
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
@@ -656,9 +659,11 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                 e.printStackTrace();
             }
         }
-
     }
-    //For alert dialog for choose take video or choose video
+
+    /**
+     * For alert dialog for choose take video or choose video
+     */
     protected void selectVideo() {
         final CharSequence[] options = {"Take Video", "Choose Video", "Cancel"};
 
@@ -673,25 +678,26 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                     Intent takeVideo = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
                     startActivityForResult(takeVideo, PICK_VIDEO_CAMERA);
 
-
-
                 } else if (options[item].equals("Choose Video")) {
                     Intent pickVideo = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(pickVideo, PICK_VIDEO_GALLERY);
 
-
                 } else if (options[item].equals("Cancel")) {
                     dialog.dismiss();
-
                 }
             }
         });
         builderVideo.show();
     }
 
-    //For video
+    /**
+     * For video
+     *
+     * @param uri
+     * @return
+     */
     public String getPath(Uri uri) {
-        String[] projection = { MediaStore.Video.Media.DATA };
+        String[] projection = {MediaStore.Video.Media.DATA};
         @SuppressLint("Recycle") Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
         if (cursor != null) {
             // HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
@@ -703,47 +709,40 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         } else
             return null;
     }
-    //For delete photos and description
+
+    /**
+     * For delete photos and descriptions
+     */
     private void configureOnClickRecyclerView() {
         ItemClickSupport.addTo(estateFormBinding.rvPhoto, R.layout.activity_add_photo_item)
-                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-                    @Override
-                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                .setOnItemClickListener((recyclerView, position, v) -> {
 
-                        if (estateEdit != 0) {
+                    if (estateEdit != 0) {
 
-//                           Estate estate = new Estate();
-
-                            String estatePhoto = estate.getPhotoList().getPhotoList().get(position);
-                            Log.d("estatePhoto", "estatePhoto" + estatePhoto);
-                            String estateDescription = estate.getPhotoDescription().getPhotoDescription().get(position);
-                            listPhoto.remove(Uri.parse(estatePhoto));
-                            photo.getPhotoList().remove(estatePhoto);
-                            photoText.getPhotoDescription().remove(estateDescription);
-                            adapter.setPhotoList(listPhoto);
-                            adapter.notifyItemRemoved(position);
-                            adapter.notifyDataSetChanged();
-                        }
-
+                        String estatePhoto = estate.getPhotoList().getPhotoList().get(position);
+                        Log.d("estatePhoto", "estatePhoto" + estatePhoto);
+                        String estateDescription = estate.getPhotoDescription().getPhotoDescription().get(position);
+                        listPhoto.remove(Uri.parse(estatePhoto));
+                        photo.getPhotoList().remove(estatePhoto);
+                        photoText.getPhotoDescription().remove(estateDescription);
+                        adapter.setPhotoList(listPhoto);
+                        adapter.notifyItemRemoved(position);
+                        adapter.notifyDataSetChanged();
                     }
-
                 });
-
     }
 
+    /**
+     * For delete video
+     */
     public void onClickDeleteVideo() {
-       Objects.requireNonNull(estateFormBinding.deleteVideo).setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
+        Objects.requireNonNull(estateFormBinding.deleteVideo).setOnClickListener(v -> {
 
-             String estateVideo = estate.getVideo().getPhotoList().get(0);
-             video.getPhotoList().remove(estateVideo);
-             estate.setVideo(video);
-
-           }
-       });
+            String estateVideo = estate.getVideo().getPhotoList().get(0);
+            video.getPhotoList().remove(estateVideo);
+            estate.setVideo(video);
+        });
     }
-
 }
 
 

@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 
 public class Injection {
 
-    public static EstateDataRepository provideEstateDataSource (Context context) {
+    public static EstateDataRepository provideEstateDataSource(Context context) {
         EstateDatabase estateDatabase = EstateDatabase.Companion.getInstance(context);
         return new EstateDataRepository(estateDatabase.estateDao());
     }
@@ -19,7 +19,7 @@ public class Injection {
         return Executors.newSingleThreadExecutor();
     }
 
-    public static ViewModelFactory provideViewModelFactory (Context context) {
+    public static ViewModelFactory provideViewModelFactory(Context context) {
         EstateDataRepository dataSourceEstate = provideEstateDataSource(context);
         Executor executor = provideExecutor();
         return new ViewModelFactory(dataSourceEstate, executor);

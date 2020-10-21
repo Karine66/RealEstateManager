@@ -8,6 +8,11 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.MediaController;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -16,33 +21,22 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.MediaController;
-
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.snackbar.Snackbar;
-import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.models.PhotoDescription;
-import com.openclassrooms.realestatemanager.models.UriList;
 import com.openclassrooms.realestatemanager.models.geocodingAPI.Geocoding;
 import com.openclassrooms.realestatemanager.models.geocodingAPI.Result;
 import com.openclassrooms.realestatemanager.ui.EstateViewModel;
@@ -58,19 +52,13 @@ import java.util.Objects;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
-///**
-// * A simple {@link Fragment} subclass.
-// * Use the {@link DetailFragment#newInstance} factory method to
-// * create an instance of this fragment.
-// */
+
 public class DetailFragment extends Fragment implements OnMapReadyCallback {
 
     protected static final int PERMS_CALL_ID = 200;
     private FragmentDetailBinding fragmentDetailBinding;
     private Estate estate;
     private EstateViewModel estateViewModel;
-    private long mandateNumberID;
-    private SupportMapFragment mapFragment;
     private MapView mapView;
     private GoogleMap map;
     private Disposable mDisposable;
@@ -78,54 +66,20 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
     private List<Result> resultGeocoding;
     private Marker positionMarker;
     private long estateId;
-    private DetailFragment detailFragment;
     private Serializable estateMap;
     private PhotoAdapter adapter;
     private List<Uri> listPhoto;
     private PhotoDescription photoText = new PhotoDescription();
-    private List<Uri> listVideo;
     private long estateEdit;
-
-//
-//    // TODO: Rename parameter arguments, choose names that match
-//    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-//    private static final String ARG_PARAM1 = "param1";
-//    private static final String ARG_PARAM2 = "param2";
-//
-//    // TODO: Rename and change types of parameters
-//    private String mParam1;
-//    private String mParam2;
 
     public DetailFragment() {
         // Required empty public constructor
     }
 
 
-//    /**
-//     * Use this factory method to create a new instance of
-//     * this fragment using the provided parameters.
-//     *
-//     * @param param1 Parameter 1.
-//     * @param param2 Parameter 2.
-//     * @return A new instance of fragment DetailFragment.
-//     */
-//    // TODO: Rename and change types and number of parameters
-//    public static DetailFragment newInstance(String param1, String param2) {
-//        DetailFragment fragment = new DetailFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
 
     }
 
@@ -136,6 +90,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         // For viewbinding
         fragmentDetailBinding = FragmentDetailBinding.inflate(inflater, container, false);
         View view = fragmentDetailBinding.getRoot();
+
         updateUi();
         createStringForAddress();
         configureViewModel();
@@ -147,7 +102,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         mapView = (MapView) fragmentDetailBinding.mapView;
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
-
+        //For videos
         fragmentDetailBinding.videoView.requestFocus();
         MediaController mediaController = new MediaController(getContext());
         fragmentDetailBinding.videoView.setMediaController(mediaController);
@@ -157,11 +112,14 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
+    /**
+     * Configure ViewModel
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
-
+        //For retrieve data
         if (estateMap != null) {
             Intent intent = new Intent(Objects.requireNonNull(getActivity()).getIntent());
             Estate estateMap = (Estate) intent.getSerializableExtra("estate");
@@ -171,6 +129,9 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         this.estateViewModel.getEstate(estateId).observe(this, this::updateUIfromMarker);
     }
 
+    /**
+     * For RecyclerView photos
+     */
     public void configureRecyclerView() {
 
         listPhoto = new ArrayList<>();
@@ -180,6 +141,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         Objects.requireNonNull(fragmentDetailBinding.rvPhoto).setLayoutManager(horizontalLayoutManager);
         fragmentDetailBinding.rvPhoto.setAdapter(adapter);
+        //for photos
         if (estate != null && !estate.getPhotoList().getPhotoList().isEmpty() && estate.getPhotoList().getPhotoList().size() > 0) {
             for (String photoStr : estate.getPhotoList().getPhotoList()) {
 
@@ -190,6 +152,11 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    /**
+     * For retrieve Estate from marker Map
+     *
+     * @param estate
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressLint("SetTextI18n")
     private void updateUIfromMarker(Estate estate) {
@@ -218,12 +185,14 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
                 for (String videoStr : estate.getVideo().getPhotoList()) {
 
                     fragmentDetailBinding.videoView.setVideoURI(Uri.parse(videoStr));
-
                 }
             }
         }
     }
 
+    /**
+     * For update UI from list
+     */
     @SuppressLint("SetTextI18n")
     public void updateUi() {
         Intent intent = Objects.requireNonNull(getActivity()).getIntent();
@@ -254,12 +223,16 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
                 for (String videoStr : estateDetail.getVideo().getPhotoList()) {
 
                     fragmentDetailBinding.videoView.setVideoURI(Uri.parse(videoStr));
-
                 }
             }
         }
     }
 
+    /**
+     * For update UI for tablet
+     *
+     * @param estate
+     */
     @SuppressLint("SetTextI18n")
     public void updateUiForTablet(Estate estate) {
 
@@ -300,6 +273,11 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    /**
+     * For display map
+     *
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         if (Utils.isInternetAvailable(Objects.requireNonNull(getContext()))) {
@@ -327,6 +305,9 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         super.onResume();
     }
 
+    /**
+     * For create string adress for geocoding API
+     */
     public void createStringForAddress() {
         Intent intent = Objects.requireNonNull(getActivity()).getIntent();
         Estate estateDetail = (Estate) intent.getSerializableExtra("estate");
@@ -344,7 +325,11 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    //For retrieve estate position with LatLng and marker
+    /**
+     * For retrieve estate position with LatLng and marker
+     *
+     * @param resultGeocoding
+     */
     public void positionMarker(List<Result> resultGeocoding) {
         map.clear();
         for (Result geo : resultGeocoding) {
@@ -361,7 +346,9 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    //http request for geocoding
+    /**
+     * RX Java http request for geocoding API
+     */
     private void executeHttpRequestWithRetrofit() {
         this.mDisposable = EstateManagerStream.streamFetchGeocode(completeAddress)
                 .subscribeWith(new DisposableObserver<Geocoding>() {
@@ -400,6 +387,4 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         super.onDestroy();
         this.disposeWhenDestroy();
     }
-
-
 }

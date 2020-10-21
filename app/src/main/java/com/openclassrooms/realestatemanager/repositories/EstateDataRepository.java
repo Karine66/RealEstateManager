@@ -16,35 +16,61 @@ public class EstateDataRepository {
 
     private final EstateDAO estateDAO;
 
-    public EstateDataRepository (EstateDAO estateDAO) {
+    public EstateDataRepository(EstateDAO estateDAO) {
         this.estateDAO = estateDAO;
     }
-    //Get
+
+    /**
+     * Get
+     *
+     * @return
+     */
     public LiveData<List<Estate>> getEstates() {
         return this.estateDAO.getEstates();
     }
+
     public LiveData<Estate> getEstate(long mandateNumberID) {
         return this.estateDAO.getEstate(mandateNumberID);
     }
-    //Create
+
+    /**
+     * Create
+     *
+     * @param estate
+     */
     public void createEstate(Estate estate) {
         try {
             estateDAO.insertEstate(estate);
-        }catch (Exception e) {
+        } catch (Exception e) {
             Log.e("Error insertEstate", Objects.requireNonNull(e.getMessage()));
         }
-
     }
-    //Delete
-    public void deleteEstate (long mandateEstateID) {
+
+    /**
+     * Delete
+     *
+     * @param mandateEstateID
+     */
+    public void deleteEstate(long mandateEstateID) {
         estateDAO.deleteItem(mandateEstateID);
     }
-    //Update
-    public void updateEstate (Estate estate) {
+
+    /**
+     * Update
+     *
+     * @param estate
+     */
+    public void updateEstate(Estate estate) {
         estateDAO.updateEstate(estate);
     }
 
-    //For Search
+    /**
+     * For Search
+     *
+     * @param queryString
+     * @param args
+     * @return
+     */
     public LiveData<List<Estate>> getSearchEstate(String queryString, List<Object> args) {
         SupportSQLiteQuery query = new SimpleSQLiteQuery(queryString, args.toArray());
         return estateDAO.getSearchEstate(query);

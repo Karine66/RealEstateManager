@@ -2,7 +2,7 @@ package com.openclassrooms.realestatemanager.database.converters
 
 import androidx.room.TypeConverter
 import com.openclassrooms.realestatemanager.models.UriList
-import java.util.ArrayList
+import java.util.*
 
 class UriListConverter {
 

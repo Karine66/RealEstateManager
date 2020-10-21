@@ -4,9 +4,6 @@ import android.content.ContentValues
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
-import java.time.LocalDateTime
-import java.util.*
-
 
 @Entity
 data class Estate (@PrimaryKey (autoGenerate = true) val mandateNumberID: Long,
@@ -28,7 +25,6 @@ data class Estate (@PrimaryKey (autoGenerate = true) val mandateNumberID: Long,
                    var restaurants:Boolean,
                    var sold:Boolean,
                    var upOfSaleDate: Long?,
-//                   var upOfSaleDate: String?,
                    var soldDate:String?,
                    var agentName:String,
                    var photoList: UriList,
@@ -41,7 +37,9 @@ data class Estate (@PrimaryKey (autoGenerate = true) val mandateNumberID: Long,
 
 }
 
-    //For ContentProvider
+/**
+ * For ContentProvider
+ */
     fun fromContentValues(values: ContentValues): Estate {
         val estate = Estate()
 //        if (values.containsKey("mandateNumberID")) estate.mandateNumberID = values.getAsLong("mandateNumberID")

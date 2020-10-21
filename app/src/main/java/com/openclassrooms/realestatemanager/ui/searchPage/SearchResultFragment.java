@@ -1,14 +1,9 @@
 package com.openclassrooms.realestatemanager.ui.searchPage;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,7 +26,6 @@ import com.openclassrooms.realestatemanager.ui.EstateViewModel;
 import com.openclassrooms.realestatemanager.ui.SearchViewModel;
 import com.openclassrooms.realestatemanager.ui.detailDescription.DetailActivity;
 import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
-import com.openclassrooms.realestatemanager.ui.listPage.ListAdapter;
 import com.openclassrooms.realestatemanager.utils.ItemClickSupport;
 
 import java.util.ArrayList;
@@ -101,20 +95,9 @@ public class SearchResultFragment extends Fragment {
         configureRecyclerView();
         configureOnClickRecyclerView();
 
-//        Objects.requireNonNull(Objects.requireNonNull(getActivity()).getActionBar()).setSubtitle("Search Result");
-
         return view;
     }
 
-
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        //For change title action bar
-//        Objects.requireNonNull(Objects.requireNonNull(getActivity()).getActionBar()).setTitle("Search Results");
-       
-    }
 
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());

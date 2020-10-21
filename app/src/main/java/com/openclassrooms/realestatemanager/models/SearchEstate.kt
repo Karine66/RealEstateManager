@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.models
 
 import java.io.Serializable
-import java.util.*
 
 
 data class SearchEstate(var estateType: String?,

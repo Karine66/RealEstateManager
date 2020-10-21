@@ -1,12 +1,8 @@
 package com.openclassrooms.realestatemanager.database.converters
 
 import androidx.room.TypeConverter
-import com.google.gson.Gson
 
-import com.google.gson.reflect.TypeToken
 import com.openclassrooms.realestatemanager.models.PhotoDescription
-import java.lang.reflect.Type
-
 
 class PhotoDescriptionConverter {
 
@@ -20,12 +16,12 @@ class PhotoDescriptionConverter {
         val list: List<String> = value.split(",")
         val mutableList = mutableListOf<String>()
         mutableList.addAll(list)
-        mutableList.removeAt(list.size -1)
+        mutableList.removeAt(list.size - 1)
         val photoDescription = ArrayList<String>()
-        for(item in mutableList) {
+        for (item in mutableList) {
             if (item.isNotEmpty()) {
                 photoDescription.add(item.toString())
-            }else{
+            } else {
                 photoDescription.add("")
             }
         }
@@ -46,5 +42,4 @@ class PhotoDescriptionConverter {
         }
         return string
     }
-
 }
