@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -91,6 +92,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
     private long estateEdit;
     private long idEstate;
     private Estate estate;
+    public DialogInterface dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +115,8 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         this.onClickVideoBtn();
         this.onClickValidateBtn();
         this.configureOnClickRecyclerView();
-//        this.onClickDeleteVideo();
+        this.onClickDeleteVideo();
+
 
         //for title toolbar
         ActionBar ab = getSupportActionBar();
@@ -150,6 +153,11 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         } else {
             Objects.requireNonNull(estateFormBinding.deleteVideo).setVisibility(View.VISIBLE);
         }
+//        if(videoView != null && videoView.isPlaying()) {
+//            estateFormBinding.videoView.setVisibility(View.VISIBLE);
+//        }else{
+//            estateFormBinding.videoView.setVisibility(View.INVISIBLE);
+//        }
 
     }
 
@@ -233,19 +241,22 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
      */
     public void onClickValidateBtn() {
 
-        estateFormBinding.validateFabBtn.setOnClickListener(v -> {
-            //For description photo in recyclerView
-            ArrayList<String> photoDescriptionList = new ArrayList<>();
-            for (int i = 0; i < photoText.getPhotoDescription().size(); i++) {
-                AppCompatEditText editText = Objects.requireNonNull(Objects.requireNonNull(activityAddBinding.includeForm.rvPhoto.getLayoutManager()).findViewByPosition(i)).findViewById(R.id.photo_description);
-                String desc = Objects.requireNonNull(editText.getText()).toString();
-                photoDescriptionList.add(desc);
-            }
-            photoText.setPhotoDescription(photoDescriptionList);
+        estateFormBinding.validateFabBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //For description photo in recyclerView
+                ArrayList<String> photoDescriptionList = new ArrayList<>();
+                for (int i = 0; i < photoText.getPhotoDescription().size(); i++) {
+                    AppCompatEditText editText = Objects.requireNonNull(Objects.requireNonNull(activityAddBinding.includeForm.rvPhoto.getLayoutManager()).findViewByPosition(i)).findViewById(R.id.photo_description);
+                    String desc = Objects.requireNonNull(editText.getText()).toString();
+                    photoDescriptionList.add(desc);
+                }
+                photoText.setPhotoDescription(photoDescriptionList);
 
-            fieldsRequired();
-            soldDateRequired();
-            saveEstates();
+                fieldsRequired();
+                soldDateRequired();
+                saveEstates();
+            }
         });
     }
 
@@ -609,6 +620,11 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                     String recordedVideoPath = getPath(contentURI);
                     Log.d("recordedVideoPaht", recordedVideoPath);
                     Objects.requireNonNull(activityAddBinding.includeForm.videoView).setVideoURI(contentURI);
+                    activityAddBinding.includeForm.videoView.requestFocus();
+                    MediaController mediaController = new MediaController(this);
+                    activityAddBinding.includeForm.videoView.setMediaController(mediaController);
+                    mediaController.setAnchorView(activityAddBinding.includeForm.videoView);
+                    activityAddBinding.includeForm.videoView.start();
                     video.getPhotoList().add(String.valueOf(contentURI));
                 }
             }
@@ -619,13 +635,14 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
 
                     String selectedVideoPath = getPath(contentURI);
                     Log.d("path", selectedVideoPath);
-//                    saveVideoToInternalStorage(selectedVideoPath);
                     Objects.requireNonNull(activityAddBinding.includeForm.videoView).setVideoURI(contentURI);
+
                     activityAddBinding.includeForm.videoView.requestFocus();
                     MediaController mediaController = new MediaController(this);
                     activityAddBinding.includeForm.videoView.setMediaController(mediaController);
                     mediaController.setAnchorView(activityAddBinding.includeForm.videoView);
-                    activityAddBinding.includeForm.videoView.start();
+                            activityAddBinding.includeForm.videoView.start();
+                            activityAddBinding.includeForm.videoView.setVisibility(View.VISIBLE);
                     video.getPhotoList().add(String.valueOf(contentURI));
                 }
             }
@@ -741,8 +758,10 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
             String estateVideo = estate.getVideo().getPhotoList().get(0);
             video.getPhotoList().remove(estateVideo);
             estate.setVideo(video);
+
         });
     }
+
 }
 
 

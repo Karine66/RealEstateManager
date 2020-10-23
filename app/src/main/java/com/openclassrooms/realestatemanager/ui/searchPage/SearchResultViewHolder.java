@@ -17,37 +17,35 @@ public class SearchResultViewHolder extends RecyclerView.ViewHolder {
 
     FragmentListItemBinding fragmentListItemBinding;
 
-    public SearchResultViewHolder (FragmentListItemBinding fragmentListItemBinding) {
+    public SearchResultViewHolder(FragmentListItemBinding fragmentListItemBinding) {
+        //for viewBinding
         super(fragmentListItemBinding.getRoot());
         this.fragmentListItemBinding = fragmentListItemBinding;
     }
 
+    /**
+     * @param estate
+     * @param glide
+     */
     @SuppressLint("SetTextI18n")
     public void updateWithEstate(Estate estate, RequestManager glide) {
-
+        // for Estate type
         Objects.requireNonNull(fragmentListItemBinding.estateType).setText(estate.getEstateType());
-
+        // For city
         Objects.requireNonNull(fragmentListItemBinding.City).setText(estate.getCity());
-
+        //for price
         if (estate.getPrice() != null) {
             Objects.requireNonNull(fragmentListItemBinding.price).setText("$" + NumberFormat.getInstance(Locale.US).format(estate.getPrice()));
-
-
         }
+        //for sold estate
         if (estate.getSold()) {
             fragmentListItemBinding.listPhotoSold.setImageResource(R.drawable.sold4);
         }
-
-//        String photo = photoList.getPhotoList().get(0);
-
-//        glide.load(photo).into(fragmentListItemBinding.listPhoto);
-        if(!estate.getPhotoList().getPhotoList().isEmpty()) {
+        //for photo
+        if (!estate.getPhotoList().getPhotoList().isEmpty()) {
             glide.load(estate.getPhotoList().getPhotoList().get(0)).into(fragmentListItemBinding.listPhoto);
-//
-//        Log.d("photoList", "photolist" + estate.getPhotoList().getPhotoDescription().get(0));
-
-        }else {
-            fragmentListItemBinding.listPhoto.setImageResource(R.drawable.icon_no_image);
+        } else {
+            fragmentListItemBinding.listPhoto.setImageResource(R.drawable.no_image);
         }
     }
 }

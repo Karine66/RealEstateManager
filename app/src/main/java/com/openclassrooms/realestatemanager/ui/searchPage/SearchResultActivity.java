@@ -1,35 +1,14 @@
 package com.openclassrooms.realestatemanager.ui.searchPage;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 
-import com.bumptech.glide.Glide;
-import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.databinding.ActivitySearchBinding;
-import com.openclassrooms.realestatemanager.databinding.ActivitySearchResultBinding;
-import com.openclassrooms.realestatemanager.injections.Injection;
-import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
-import com.openclassrooms.realestatemanager.models.Estate;
-import com.openclassrooms.realestatemanager.models.UriList;
-import com.openclassrooms.realestatemanager.ui.BaseActivity;
-import com.openclassrooms.realestatemanager.ui.EstateViewModel;
-import com.openclassrooms.realestatemanager.ui.detailDescription.DetailActivity;
-import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
-import com.openclassrooms.realestatemanager.ui.listPage.ListAdapter;
-import com.openclassrooms.realestatemanager.ui.listPage.ListFragment;
-import com.openclassrooms.realestatemanager.utils.ItemClickSupport;
+import androidx.appcompat.app.ActionBar;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.databinding.ActivitySearchResultBinding;
+import com.openclassrooms.realestatemanager.ui.BaseActivity;
+
 import java.util.Objects;
 
 public class SearchResultActivity extends BaseActivity {
@@ -51,13 +30,12 @@ public class SearchResultActivity extends BaseActivity {
 
         ActionBar ab = getSupportActionBar();
         Objects.requireNonNull(ab).setTitle("Search Results");
-
     }
 
-
-
-
-    private void configureAndShowSearchResultFragment(){
+    /**
+     * For declaration fragment
+     */
+    private void configureAndShowSearchResultFragment() {
 //        Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
         searchResultFragment = (SearchResultFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_search_result);
 
@@ -70,5 +48,4 @@ public class SearchResultActivity extends BaseActivity {
                     .commit();
         }
     }
-
 }

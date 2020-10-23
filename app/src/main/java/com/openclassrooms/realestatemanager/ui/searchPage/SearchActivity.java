@@ -1,14 +1,11 @@
 package com.openclassrooms.realestatemanager.ui.searchPage;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -20,15 +17,11 @@ import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.SearchEstate;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
-import com.openclassrooms.realestatemanager.ui.EstateViewModel;
 import com.openclassrooms.realestatemanager.ui.SearchViewModel;
-import com.openclassrooms.realestatemanager.ui.createAndEditEstate.AddEditActivity;
 import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -71,7 +64,6 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         this.setDateField();
         this.configureViewModel();
         this.onClickValidateBtn();
-//        this.showSearchEstate();
 
         //For date picker
         mDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
@@ -81,17 +73,25 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
-    //for adapter generic
+    /**
+     * For adapter dropDown
+     * @param resId
+     * @return
+     */
     private ArrayAdapter<String> factoryAdapter(int resId) {
         return new ArrayAdapter<>(this, R.layout.dropdown_menu_popup_item, getResources().getStringArray(resId));
     }
 
-    //For adapters dropdown
+    /**
+     * For adapter dropdown Estates Type
+     */
     public void dropDownAdapters() {
         activitySearchBinding.etEstate.setAdapter(factoryAdapter(R.array.ESTATES));
     }
 
-    // for date picker
+    /**
+     * For date picker
+     */
     private void setDateField() {
         activitySearchBinding.etUpOfSaleDateMini.setOnClickListener(this);
         activitySearchBinding.etUpOfSaleDateMaxi.setOnClickListener(this);
@@ -110,27 +110,33 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
 
-    // for click on date picker
+    /**
+     * For click on date picker
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         if (view == activitySearchBinding.etUpOfSaleDateMini) {
             mUpOfSaleDateMinDialog.show();
             mUpOfSaleDateMinDialog.getDatePicker().setMaxDate((Calendar.getInstance().getTimeInMillis()));
-
         } else if (view == activitySearchBinding.etUpOfSaleDateMaxi) {
             mUpOfSaleDateMaxDialog.show();
             mUpOfSaleDateMaxDialog.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
         }
     }
 
-
+    /**
+     * For configure ViewModel
+     */
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         this.searchViewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel.class);
 
     }
 
-    // for click on fab validate btn
+    /**
+     * For click on fab validate btn for search
+     */
     public void onClickValidateBtn() {
 
         activitySearchBinding.validateFabBtn.setOnClickListener(new View.OnClickListener() {
@@ -148,10 +154,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 
                 startActivity(fabIntent);
 
-
-
                 Log.d("SaveSearch", "saveSearch"+estateSearch);
-
             }
         });
     }
@@ -175,8 +178,9 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 //    }
 
 
-
-
+    /**
+     * For Search Estates
+     */
     public void showSearchEstate() {
 
         estateSearch = new SearchEstate();
@@ -247,8 +251,5 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
             estateSearch.setSold(availableSearch);
         }
       Log.d("estateSearch", "estateSearch" + estateSearch);
-
-//        this.searchViewModel.searchEstate(estateType, city, minRooms, maxRooms, minSurface,maxSurface,minPrice,maxPrice,minUpOfSaleDate,maxUpOfSaleDate);
-
     }
 }

@@ -6,7 +6,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class EstateManagerRetrofitObject {
 
-
+    /**
+     * For return retrofit object
+     */
     public static Retrofit retrofit = new Retrofit.Builder()
             //define root URL
             .baseUrl("https://maps.googleapis.com/")
@@ -15,6 +17,4 @@ public class EstateManagerRetrofitObject {
             //For RxJava
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build();
-
-
 }

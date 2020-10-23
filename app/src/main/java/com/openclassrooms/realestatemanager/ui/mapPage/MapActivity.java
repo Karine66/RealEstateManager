@@ -1,11 +1,5 @@
 package com.openclassrooms.realestatemanager.ui.mapPage;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -16,11 +10,14 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -29,12 +26,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.databinding.ActivityMapBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.models.geocodingAPI.Geocoding;
-import com.openclassrooms.realestatemanager.models.geocodingAPI.Result;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
 import com.openclassrooms.realestatemanager.ui.EstateViewModel;
 import com.openclassrooms.realestatemanager.ui.detailDescription.DetailActivity;
@@ -53,27 +48,18 @@ import io.reactivex.observers.DisposableObserver;
 
 public class MapActivity extends BaseActivity implements OnMapReadyCallback, LocationListener, Serializable {
 
-    private ActivityMapBinding activityMapBinding;
     protected static final int PERMS_CALL_ID = 200;
-    private MapView mapView;
     private GoogleMap map;
     private String mPosition;
     private LocationManager locationManager;
-    private GoogleMap googleMap;
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
-    private List<Result> resultGeocoding;
     private EstateViewModel estateViewModel;
     private String completeAddress;
     private List<Estate> estateList = new ArrayList<>();
-    private List<String> adressList=new ArrayList<>();
+    private List<String> adressList = new ArrayList<>();
     private List<Long> idList = new ArrayList<>();
     private String estateType;
-    private Geocoding geocoding;
-    private Estate est;
     private Long id;
-    private String adress;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,15 +67,17 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
         setContentView(R.layout.activity_map);
 
         configureViewModel();
-
+        //For map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         Objects.requireNonNull(mapFragment).getMapAsync(this);
-
-        this.estateViewModel.getEstates().observe(this,this::createStringForAddress);
+        //For adress of estate
+        this.estateViewModel.getEstates().observe(this, this::createStringForAddress);
     }
 
-
+    /**
+     * For Configure ViewModel
+     */
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
@@ -99,7 +87,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
     /**
      * For permissions to position access
      */
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void checkPermissions() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
@@ -110,7 +97,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
             }, PERMS_CALL_ID);
             return;
         }
-
         locationManager = (LocationManager) (getSystemService(Context.LOCATION_SERVICE));
 
         if (Objects.requireNonNull(locationManager).isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -137,6 +123,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
         }
     }
 
+    /**
+     * For update location
+     */
     @Override
     public void onPause() {
         super.onPause();
@@ -172,7 +161,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
             map.moveCamera(CameraUpdateFactory.newLatLng(googleLocation));
             mPosition = mLatitude + "," + mLongitude;
             Log.d("TestLatLng", mPosition);
-
         }
     }
 
@@ -181,11 +169,13 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
     public void onResume() {
         super.onResume();
         checkPermissions();
-
-
     }
 
-
+    /**
+     * For map display
+     *
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         if (Utils.isInternetAvailable(Objects.requireNonNull(this))) {
@@ -205,7 +195,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
             }
 
             googleMap.setMyLocationEnabled(true);
-
+            //For click on infoWindow and retrieve estate detail
             map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
 
                 @Override
@@ -256,26 +246,28 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
             }
         }
     }
+
     //http request for geocoding
     private void executeHttpRequestWithRetrofit() {
         map.clear();
-        for(String address : adressList) {
+        for (String address : adressList) {
             Disposable d = EstateManagerStream.streamFetchGeocode(address)
                     .subscribeWith(new DisposableObserver<Geocoding>() {
                         @Override
                         public void onNext(Geocoding geocoding) {
 
                             LatLng latLng = new LatLng(geocoding.getResults().get(0).getGeometry()
-                                    .getLocation().getLat(),geocoding.getResults().get(0).getGeometry()
-                            .getLocation().getLng());
+                                    .getLocation().getLat(), geocoding.getResults().get(0).getGeometry()
+                                    .getLocation().getLng());
 
                             Marker marker = map.addMarker(new MarkerOptions().position(latLng)
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
-                            .title(geocoding.getResults().get(0).getFormattedAddress()));
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
+                                    .title(geocoding.getResults().get(0).getFormattedAddress()));
 
-                             marker.setTag(idList.get(adressList.indexOf(address)));
+                            marker.setTag(idList.get(adressList.indexOf(address)));
 
-                            }
+                        }
+
                         @Override
                         public void onComplete() {
 
@@ -283,7 +275,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
                         @Override
                         public void onError(Throwable e) {
-                          e.getMessage();
+                            e.getMessage();
                         }
                     });
             mCompositeDisposable.add(d);

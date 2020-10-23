@@ -1,8 +1,6 @@
 package com.openclassrooms.realestatemanager.ui;
 
 import android.Manifest;
-import android.content.Context;
-import android.location.LocationManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -10,7 +8,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.openclassrooms.realestatemanager.R;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -23,37 +20,42 @@ public abstract class BaseActivity extends AppCompatActivity {
     private static final String[] CAM_AND_READ_EXTERNAL_STORAGE =
             {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
 
-    private MaterialAlertDialogBuilder builder;
-
-    private String currentPhotoPath;
-    private Context context;
     protected ActionBar ab;
-    private LocationManager locationManager;
 
-
+    /**
+     * For toolbar
+     */
     protected void configureToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
     }
 
-
-
+    /**
+     * For up arrow in toolbar
+     */
     protected void configureUpButton() {
         ab = getSupportActionBar();
         if (ab != null) ab.setDisplayHomeAsUpEnabled(true);
     }
 
-
-    //For permissions camera en read external storage
+    /**
+     * For permissions camera and read external storage
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // 2 - Forward results to EasyPermissions
+        // Forward results to EasyPermissions
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
 
     }
 
+    /**
+     * For permissions
+     */
     @AfterPermissionGranted(RC_CAMERA_AND_STORAGE)
     protected void methodRequiresTwoPermission() {
 
@@ -65,11 +67,4 @@ public abstract class BaseActivity extends AppCompatActivity {
                     RC_CAMERA_AND_STORAGE, CAM_AND_READ_EXTERNAL_STORAGE);
         }
     }
-
-
-
-
-
-
-
 }

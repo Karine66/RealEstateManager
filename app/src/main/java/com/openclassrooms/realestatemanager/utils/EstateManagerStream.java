@@ -14,7 +14,11 @@ import io.reactivex.schedulers.Schedulers;
 
 public class EstateManagerStream {
 
-    //Create stream for geocoding
+      /**
+     * Create stream for Geocoding
+     * @param address
+     * @return
+     */
     public static Observable<Geocoding> streamFetchGeocode (String address) {
         EstateManagerService estateManagerService = EstateManagerRetrofitObject.retrofit.create(EstateManagerService.class);
         return estateManagerService.getGeocode(address)
@@ -22,5 +26,4 @@ public class EstateManagerStream {
                 .observeOn(AndroidSchedulers.mainThread())
                 .timeout(10, TimeUnit.SECONDS);
     }
-
 }

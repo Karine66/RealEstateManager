@@ -7,10 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import androidx.lifecycle.ViewModelProviders;
-
-import com.openclassrooms.realestatemanager.injections.Injection;
-import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
 import com.openclassrooms.realestatemanager.R;
@@ -59,6 +55,11 @@ public class MainActivity extends BaseActivity {
 //        this.textViewQuantity.setText(Integer.toString(quantity));
 //    }
 
+    /**
+     * For menu
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu (Menu menu) {
          //Inflate the menu and add it to the Toolbar
@@ -66,7 +67,9 @@ public class MainActivity extends BaseActivity {
         return true;
     }
 
-    //For click on floating action button
+    /**
+     * For click on fab for create new estate
+     */
     public void onClickFab () {
             binding.fabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,26 +77,20 @@ public class MainActivity extends BaseActivity {
 
                     Intent fabIntent = new Intent(getApplicationContext(), AddEditActivity.class);
                     startActivity(fabIntent);
-
             }
         });
-
     }
 
-    //Configuring ViewModel
-    private void configureViewModel() {
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
-        this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
-    }
-    //for click on buttons in toolbar
+    /**
+     * For click on button on toolbar
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
          //Handle actions on menu items
         switch (item.getItemId()) {
-            case R.id.edit_btn :
-                    Intent editIntent = new Intent(this, AddEditActivity.class);
-                    startActivity(editIntent);
-                return true;
+
             case R.id.search_btn :
                 Intent searchIntent = new Intent(this, SearchActivity.class);
                 startActivity(searchIntent);
@@ -108,6 +105,9 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    /**
+     * For connecting fragment list
+     */
     private void configureAndShowListFragment(){
 //        Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
         listFragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.list_fragment_frameLayout);
@@ -122,6 +122,9 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    /**
+     * For connecting fragment detail
+     */
     private void configureAndShowDetailFragment(){
         //Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
         detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.detail_fragment_frameLayout);

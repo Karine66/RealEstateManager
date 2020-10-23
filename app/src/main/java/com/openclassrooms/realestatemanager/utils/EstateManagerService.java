@@ -15,6 +15,11 @@ public interface EstateManagerService {
 
     String GOOGLE_MAP_API_KEY = BuildConfig.GOOGLE_MAP_API_KEY;
 
+    /**
+     * Create end point
+     * @param address
+     * @return
+     */
     //Geocoding API Request
     @GET("maps/api/geocode/json?key="+GOOGLE_MAP_API_KEY)
     Observable<Geocoding> getGeocode (@Query("address") String address);

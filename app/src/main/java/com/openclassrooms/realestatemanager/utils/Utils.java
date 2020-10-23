@@ -88,6 +88,4 @@ public class Utils {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
         return simpleDateFormat.format(dateLong);
     }
-
-
 }

@@ -32,63 +32,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-///**
-// * A simple {@link Fragment} subclass.
-// * Use the {@link ListFragment#newInstance} factory method to
-// * create an instance of this fragment.
-// */
-public class ListFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class ListFragment extends Fragment {
 
     private FragmentListBinding fragmentListBinding;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private List<Estate> estateList;
     private UriList photoLists = new UriList();
     private ListAdapter mAdapter;
-    private RecyclerView mRecyclerView;
     private EstateViewModel estateViewModel;
-    private long mandateNumberID;
-    private EstateDataRepository estateDateRepository;
     private DetailFragment detailFragment;
-    private Estate estate;
 
     public ListFragment() {
         // Required empty public constructor
     }
 
-//    /**
-//     * Use this factory method to create a new instance of
-//     * this fragment using the provided parameters.
-//     *
-//     * @param param1 Parameter 1.
-//     * @param param2 Parameter 2.
-//     * @return A new instance of fragment ListFragment.
-//     */
-//    // TODO: Rename and change types and number of parameters
-//    public static ListFragment newInstance(String param1, String param2) {
-//        ListFragment fragment = new ListFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
-
     }
 
     @Override
@@ -97,34 +59,28 @@ public class ListFragment extends Fragment {
         // For viewBinding
         fragmentListBinding = FragmentListBinding.inflate(inflater, container,false);
         View view = fragmentListBinding.getRoot();
+
         this.configureViewModel();
         this.configureRecyclerView();
         this.configureOnClickRecyclerView();
 
-
-
         return view;
-
-
     }
 
     @Override
     public void onActivityCreated(Bundle saveInstateState) {
         super.onActivityCreated(saveInstateState);
-
     }
 
+    /**
+     * Configure ViewModel
+     */
        private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
 
         this.estateViewModel.getEstates().observe(this, this::updateEstateList);
-
-
     }
-
-
-
     /**
      * Configuration RecyclerView
      * Configure RecyclerView, Adapter, LayoutManager & glue it
@@ -132,16 +88,12 @@ public class ListFragment extends Fragment {
     private void configureRecyclerView() {
 
         this.estateList = new ArrayList<>();
-
         //Create adapter
         this.mAdapter = new ListAdapter(this.estateList, Glide.with(this), this.photoLists);
-        // Attach the adapter to the recyclerview
-//        this.mRecyclerView.setAdapter(this.mAdapter);
         //Set Layout manager
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         fragmentListBinding.fragmentListRV.setLayoutManager(layoutManager);
         fragmentListBinding.fragmentListRV.setAdapter(mAdapter);
-//        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     /**
@@ -154,13 +106,14 @@ public class ListFragment extends Fragment {
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
 
                         detailFragment = (DetailFragment) Objects.requireNonNull(getFragmentManager()).findFragmentById(R.id.detail_fragment_frameLayout);
-
+                        //for tablet format
                         if (detailFragment != null && detailFragment.isVisible()) {
                             Estate estate = mAdapter.getEstates(position);
                             detailFragment.updateUiForTablet(estate);
                             Log.d("bundleListFragment", "bundleFragment" + estate);
 
                         }else{
+                            //for phone format
                             Estate estate = mAdapter.getEstates(position);
                             Intent intent = new Intent(getContext(), DetailActivity.class);
                             intent.putExtra("estate", estate);
@@ -170,7 +123,6 @@ public class ListFragment extends Fragment {
                         }
                     }
                 });
-
     }
 
     @Override
@@ -179,6 +131,10 @@ public class ListFragment extends Fragment {
         fragmentListBinding = null;
     }
 
+    /**
+     * for update estate list
+     * @param estates
+     */
     private void updateEstateList(List<Estate> estates) {
         if(estates != null)
             mAdapter.updateData(estates);

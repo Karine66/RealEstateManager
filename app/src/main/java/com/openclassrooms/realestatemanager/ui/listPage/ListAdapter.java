@@ -21,7 +21,14 @@ public class ListAdapter extends RecyclerView.Adapter<ListViewHolder> {
     private List<Estate> estateList;
     private RequestManager glide;
     private List<UriList> photoLists;
-    //constructor
+
+    /**
+     * Constructor
+     *
+     * @param estateList
+     * @param glide
+     * @param photoLists
+     */
     public ListAdapter(List<Estate> estateList, RequestManager glide, UriList photoLists) {
 
         this.estateList = new ArrayList<>();
@@ -36,25 +43,39 @@ public class ListAdapter extends RecyclerView.Adapter<ListViewHolder> {
         return new ListViewHolder(FragmentListItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
+    /**
+     * Update viewHolder
+     *
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull ListViewHolder holder, int position) {
-       holder.updateWithEstate(this.estateList.get(position), this.glide);
+        holder.updateWithEstate(this.estateList.get(position), this.glide);
 
     }
 
+    /**
+     * For return estates
+     *
+     * @return
+     */
     @Override
     public int getItemCount() {
         return this.estateList.size();
     }
 
-    public Estate getEstates (int position) {
+    public Estate getEstates(int position) {
         return this.estateList.get(position);
     }
 
+    /**
+     * For update estate list
+     *
+     * @param estateList
+     */
     public void updateData(List<Estate> estateList) {
         this.estateList = estateList;
         this.notifyDataSetChanged();
     }
-
-
 }
