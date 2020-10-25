@@ -10,7 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -94,6 +93,8 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
     private Estate estate;
     public DialogInterface dialog;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,9 +149,9 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         mediaController.setAnchorView(estateFormBinding.videoView);
         estateFormBinding.videoView.start();
         //For deleteButton video visibility
-        if (estateEdit == 0) {
+        if (estateEdit == 0 && estateFormBinding.deleteVideo != null) {
             Objects.requireNonNull(estateFormBinding.deleteVideo).setVisibility(View.INVISIBLE);
-        } else {
+        } if(estateEdit != 0 && estateFormBinding.deleteVideo == null){
             Objects.requireNonNull(estateFormBinding.deleteVideo).setVisibility(View.VISIBLE);
         }
 //        if(videoView != null && videoView.isPlaying()) {
@@ -255,7 +256,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
 
                 fieldsRequired();
                 soldDateRequired();
-                saveEstates();
+                    saveEstates();
             }
         });
     }
@@ -348,55 +349,56 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
      */
     public void saveEstates() {
 
-        Estate estate = new Estate(
 
-                mandateNumberID,
-                estateFormBinding.etEstate.getText().toString(),
-                Integer.parseInt(Objects.requireNonNull(estateFormBinding.etSurface.getText()).toString()),
-                Integer.parseInt(estateFormBinding.etRooms.getText().toString()),
-                Integer.parseInt(estateFormBinding.etBedrooms.getText().toString()),
-                Integer.parseInt(estateFormBinding.etBathrooms.getText().toString()),
-                Integer.parseInt(Objects.requireNonNull(estateFormBinding.etGround.getText()).toString()),
-                Double.parseDouble(Objects.requireNonNull((estateFormBinding.etPrice.getText())).toString()),
-                Objects.requireNonNull(estateFormBinding.etDescription.getText()).toString(),
-                Objects.requireNonNull(estateFormBinding.etAddress.getText()).toString(),
-                Integer.parseInt(Objects.requireNonNull(estateFormBinding.etPostalCode.getText()).toString()),
-                Objects.requireNonNull(estateFormBinding.etCity.getText()).toString(),
-                estateFormBinding.boxSchools.isChecked(),
-                estateFormBinding.boxStores.isChecked(),
-                estateFormBinding.boxPark.isChecked(),
-                estateFormBinding.boxRestaurants.isChecked(),
-                estateFormBinding.availableRadiobtn.isChecked(),
-                Utils.dateStringToLong(Objects.requireNonNull(estateFormBinding.upOfSaleDate.getText()).toString()),
-                Objects.requireNonNull(estateFormBinding.soldDate.getText()).toString(),
-                estateFormBinding.etAgent.getText().toString(),
-                photo,
-                photoText,
-                video);
-        Log.d("saveEstate", "saveEstate" + estate);
-        if (estateEdit == 0) {
-            this.estateViewModel.createEstate(estate);
-            Snackbar.make(activityAddBinding.getRoot(), "Your new Estate is created", Snackbar.LENGTH_SHORT)
-                    .addCallback(new Snackbar.Callback() {
-                        @Override
-                        public void onDismissed(Snackbar snackbar, int event) {
-                            super.onDismissed(snackbar, event);
-                            finish();
-                        }
-                    })
-                    .show();
-        } else {
-            this.estateViewModel.updateEstate(estate);
-            Snackbar.make(activityAddBinding.getRoot(), "Your new Estate is updated", Snackbar.LENGTH_SHORT)
-                    .addCallback(new Snackbar.Callback() {
-                        @Override
-                        public void onDismissed(Snackbar snackbar, int event) {
-                            super.onDismissed(snackbar, event);
-                            finish();
-                        }
-                    }).show();
+            Estate estate = new Estate(
+
+                    mandateNumberID,
+                    estateFormBinding.etEstate.getText().toString(),
+                    Integer.parseInt(Objects.requireNonNull(estateFormBinding.etSurface.getText()).toString()),
+                    Integer.parseInt(estateFormBinding.etRooms.getText().toString().replace("5 et +", "5")),
+                    Integer.parseInt(estateFormBinding.etBedrooms.getText().toString().replace("5 et +", "5")),
+                    Integer.parseInt(estateFormBinding.etBathrooms.getText().toString().replace("4 et +", "4")),
+                     Integer.parseInt(Objects.requireNonNull(estateFormBinding.etGround.getText()).toString().replace("","0")),
+                    Double.parseDouble(Objects.requireNonNull((estateFormBinding.etPrice.getText())).toString()),
+                    Objects.requireNonNull(estateFormBinding.etDescription.getText()).toString(),
+                    Objects.requireNonNull(estateFormBinding.etAddress.getText()).toString(),
+                    Integer.parseInt(Objects.requireNonNull(estateFormBinding.etPostalCode.getText()).toString()),
+                    Objects.requireNonNull(estateFormBinding.etCity.getText()).toString(),
+                    estateFormBinding.boxSchools.isChecked(),
+                    estateFormBinding.boxStores.isChecked(),
+                    estateFormBinding.boxPark.isChecked(),
+                    estateFormBinding.boxRestaurants.isChecked(),
+                    estateFormBinding.availableRadiobtn.isChecked(),
+                    Utils.dateStringToLong(Objects.requireNonNull(estateFormBinding.upOfSaleDate.getText()).toString()),
+                    Objects.requireNonNull(estateFormBinding.soldDate.getText()).toString(),
+                    estateFormBinding.etAgent.getText().toString(),
+                    photo,
+                    photoText,
+                    video);
+            Log.d("saveEstate", "saveEstate" + estate);
+            if (estateEdit == 0) {
+                this.estateViewModel.createEstate(estate);
+                Snackbar.make(activityAddBinding.getRoot(), "Your new Estate is created", Snackbar.LENGTH_SHORT)
+                        .addCallback(new Snackbar.Callback() {
+                            @Override
+                            public void onDismissed(Snackbar snackbar, int event) {
+                                super.onDismissed(snackbar, event);
+                                finish();
+                            }
+                        })
+                        .show();
+            } else {
+                this.estateViewModel.updateEstate(estate);
+                Snackbar.make(activityAddBinding.getRoot(), "Your new Estate is updated", Snackbar.LENGTH_SHORT)
+                        .addCallback(new Snackbar.Callback() {
+                            @Override
+                            public void onDismissed(Snackbar snackbar, int event) {
+                                super.onDismissed(snackbar, event);
+                                finish();
+                            }
+                        }).show();
+            }
         }
-    }
 
     /**
      * Configure ViewModel
@@ -429,10 +431,10 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
             estateFormBinding.etEstate.setText(estate.getEstateType(), false);
             estateFormBinding.etSurface.setText(Objects.requireNonNull(estate.getSurface()).toString());
             estateFormBinding.etDescription.setText(estate.getDescription());
-            estateFormBinding.etRooms.setText(Objects.requireNonNull(estate.getRooms()).toString(), false);
-            estateFormBinding.etBathrooms.setText(Objects.requireNonNull(estate.getBathrooms()).toString(), false);
-            estateFormBinding.etBedrooms.setText(Objects.requireNonNull(estate.getBedrooms()).toString(), false);
-            estateFormBinding.etGround.setText(Objects.requireNonNull(estate.getGround()).toString());
+            estateFormBinding.etRooms.setText(Objects.requireNonNull(estate.getRooms()).toString().replace("5 et +", "5"), false);
+            estateFormBinding.etBathrooms.setText(Objects.requireNonNull(estate.getBathrooms()).toString().replace("4 et +", "4"), false);
+            estateFormBinding.etBedrooms.setText(Objects.requireNonNull(estate.getBedrooms()).toString().replace("5 et +", "5"), false);
+            estateFormBinding.etGround.setText(Objects.requireNonNull(estate.getGround()).toString().replace("", "0"));
             estateFormBinding.etPrice.setText(Objects.requireNonNull(estate.getPrice()).toString());
             estateFormBinding.etAddress.setText(estate.getAddress());
             estateFormBinding.etPostalCode.setText(Objects.requireNonNull(estate.getPostalCode()).toString());
@@ -753,15 +755,16 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
      * For delete video
      */
     public void onClickDeleteVideo() {
-        Objects.requireNonNull(estateFormBinding.deleteVideo).setOnClickListener(v -> {
+        if (estateFormBinding.deleteVideo != null) {
+            Objects.requireNonNull(estateFormBinding.deleteVideo).setOnClickListener(v -> {
 
-            String estateVideo = estate.getVideo().getPhotoList().get(0);
-            video.getPhotoList().remove(estateVideo);
-            estate.setVideo(video);
+                String estateVideo = estate.getVideo().getPhotoList().get(0);
+                video.getPhotoList().remove(estateVideo);
+                estate.setVideo(video);
 
-        });
+            });
+        }
     }
-
 }
 
 

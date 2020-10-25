@@ -16,6 +16,7 @@ public class SearchResultActivity extends BaseActivity {
     private ActivitySearchResultBinding activitySearchResultBinding;
     private SearchResultFragment searchResultFragment;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -28,6 +28,8 @@ public class DetailActivity extends BaseActivity {
     private Estate estate;
     private EstateViewModel estateViewModel;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

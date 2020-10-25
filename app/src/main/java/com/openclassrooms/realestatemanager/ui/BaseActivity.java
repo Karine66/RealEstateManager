@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.models.Estate;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -21,6 +22,9 @@ public abstract class BaseActivity extends AppCompatActivity {
             {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
 
     protected ActionBar ab;
+
+
+
 
     /**
      * For toolbar

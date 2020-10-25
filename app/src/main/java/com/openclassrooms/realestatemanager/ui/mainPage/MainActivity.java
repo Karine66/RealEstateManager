@@ -7,6 +7,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.lifecycle.ViewModelProviders;
+
+import com.openclassrooms.realestatemanager.injections.Injection;
+import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
 import com.openclassrooms.realestatemanager.R;
@@ -18,14 +22,19 @@ import com.openclassrooms.realestatemanager.ui.listPage.ListFragment;
 import com.openclassrooms.realestatemanager.ui.mapPage.MapActivity;
 import com.openclassrooms.realestatemanager.ui.searchPage.SearchActivity;
 
+import java.util.Objects;
+
 
 public class MainActivity extends BaseActivity {
+
 
     private ActivityMainBinding binding;
     private ListFragment listFragment;
     private DetailFragment detailFragment;
-    private Estate estate;
+    private static final Estate estate = new Estate();
     private EstateViewModel estateViewModel;
+    private long mandateNumberID;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +48,7 @@ public class MainActivity extends BaseActivity {
 ////        this.textViewMain = findViewById(R.id.activity_second_activity_text_view_main);
          this.configureAndShowListFragment();
         this.configureAndShowDetailFragment();
+        this.configureViewModel();
 
          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
              this.configureToolbar();
@@ -55,6 +65,13 @@ public class MainActivity extends BaseActivity {
 //        this.textViewQuantity.setText(Integer.toString(quantity));
 //    }
 
+    /**
+     * Configure ViewModel
+     */
+    private void configureViewModel() {
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
+        this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
+    }
     /**
      * For menu
      * @param menu
@@ -90,7 +107,14 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
          //Handle actions on menu items
         switch (item.getItemId()) {
+            case R.id.edit_btn :
+//                    Estate estate = new Estate();
 
+                    long idEstate = estate.getMandateNumberID();
+                    Intent editIntent = new Intent(this, AddEditActivity.class);
+                    editIntent.putExtra("iDEstate", idEstate);
+                    startActivity(editIntent);
+                return true;
             case R.id.search_btn :
                 Intent searchIntent = new Intent(this, SearchActivity.class);
                 startActivity(searchIntent);

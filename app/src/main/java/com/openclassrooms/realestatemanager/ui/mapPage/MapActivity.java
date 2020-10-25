@@ -61,6 +61,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
     private String estateType;
     private Long id;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
