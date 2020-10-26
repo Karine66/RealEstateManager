@@ -228,6 +228,10 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    public Estate getEstate() {
+        return estate;
+    }
+
     /**
      * For update UI for tablet
      *

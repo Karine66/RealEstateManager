@@ -30,7 +30,7 @@ public class MainActivity extends BaseActivity {
 
     private ActivityMainBinding binding;
     private ListFragment listFragment;
-    private DetailFragment detailFragment;
+   private DetailFragment detailFragment;
     private static final Estate estate = new Estate();
     private EstateViewModel estateViewModel;
     private long mandateNumberID;
@@ -110,7 +110,7 @@ public class MainActivity extends BaseActivity {
             case R.id.edit_btn :
 //                    Estate estate = new Estate();
 
-                    long idEstate = estate.getMandateNumberID();
+                    long idEstate = detailFragment.getEstate().getMandateNumberID();
                     Intent editIntent = new Intent(this, AddEditActivity.class);
                     editIntent.putExtra("iDEstate", idEstate);
                     startActivity(editIntent);

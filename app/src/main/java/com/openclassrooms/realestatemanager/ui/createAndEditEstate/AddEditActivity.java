@@ -104,7 +104,10 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
 
         View view = activityAddBinding.getRoot();
         setContentView(view);
-
+        estateFormBinding.videoView.setVisibility(View.INVISIBLE);
+        if(estateEdit==0 && estateFormBinding.deleteVideo != null) {
+            Objects.requireNonNull(estateFormBinding.deleteVideo).setVisibility(View.INVISIBLE);
+        }
         this.methodRequiresTwoPermission();
         this.configureToolbar();
         this.configureUpButton();
@@ -131,7 +134,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         //For hide mandate number
         estateFormBinding.etMandate.setVisibility(View.INVISIBLE);
         estateFormBinding.inputMandate.setVisibility(View.INVISIBLE);
-        //for textWatcher
+         //for textWatcher
         estateFormBinding.etSurface.addTextChangedListener(estateWatcher);
         estateFormBinding.etRooms.addTextChangedListener(estateWatcher);
         estateFormBinding.etBedrooms.addTextChangedListener(estateWatcher);
@@ -148,17 +151,13 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         estateFormBinding.videoView.setMediaController(mediaController);
         mediaController.setAnchorView(estateFormBinding.videoView);
         estateFormBinding.videoView.start();
-        //For deleteButton video visibility
-        if (estateEdit == 0 && estateFormBinding.deleteVideo != null) {
-            Objects.requireNonNull(estateFormBinding.deleteVideo).setVisibility(View.INVISIBLE);
-        } if(estateEdit != 0 && estateFormBinding.deleteVideo == null){
-            Objects.requireNonNull(estateFormBinding.deleteVideo).setVisibility(View.VISIBLE);
-        }
-//        if(videoView != null && videoView.isPlaying()) {
-//            estateFormBinding.videoView.setVisibility(View.VISIBLE);
-//        }else{
-//            estateFormBinding.videoView.setVisibility(View.INVISIBLE);
+//        For deleteButton video visibility
+//        if (estateEdit == 0 && estateFormBinding.deleteVideo != null) {
+//            Objects.requireNonNull(estateFormBinding.deleteVideo).setVisibility(View.INVISIBLE);
+//        } if(estateEdit != 0 && estateFormBinding.deleteVideo == null){
+//            Objects.requireNonNull(estateFormBinding.deleteVideo).setVisibility(View.VISIBLE);
 //        }
+
 
     }
 
@@ -461,7 +460,8 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
             }
             if (!estate.getVideo().getPhotoList().isEmpty() && estate.getVideo().getPhotoList().size() > 0) {
                 for (String videoStr : estate.getVideo().getPhotoList()) {
-
+                    Objects.requireNonNull(estateFormBinding.deleteVideo).setVisibility(View.VISIBLE);
+                    estateFormBinding.videoView.setVisibility(View.VISIBLE);
                     estateFormBinding.videoView.setVideoURI(Uri.parse(videoStr));
                 }
             }
@@ -622,6 +622,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                     String recordedVideoPath = getPath(contentURI);
                     Log.d("recordedVideoPaht", recordedVideoPath);
                     Objects.requireNonNull(activityAddBinding.includeForm.videoView).setVideoURI(contentURI);
+                   estateFormBinding.videoView.setVisibility(View.VISIBLE);
                     activityAddBinding.includeForm.videoView.requestFocus();
                     MediaController mediaController = new MediaController(this);
                     activityAddBinding.includeForm.videoView.setMediaController(mediaController);
@@ -638,7 +639,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                     String selectedVideoPath = getPath(contentURI);
                     Log.d("path", selectedVideoPath);
                     Objects.requireNonNull(activityAddBinding.includeForm.videoView).setVideoURI(contentURI);
-
+                    estateFormBinding.videoView.setVisibility(View.VISIBLE);
                     activityAddBinding.includeForm.videoView.requestFocus();
                     MediaController mediaController = new MediaController(this);
                     activityAddBinding.includeForm.videoView.setMediaController(mediaController);
@@ -717,7 +718,8 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
      */
     public String getPath(Uri uri) {
         String[] projection = {MediaStore.Video.Media.DATA};
-        @SuppressLint("Recycle") Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+         Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+
         if (cursor != null) {
             // HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
             // THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
@@ -761,6 +763,8 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                 String estateVideo = estate.getVideo().getPhotoList().get(0);
                 video.getPhotoList().remove(estateVideo);
                 estate.setVideo(video);
+                estateFormBinding.videoView.setVisibility(View.INVISIBLE);
+                estateFormBinding.deleteVideo.setVisibility(View.INVISIBLE);
 
             });
         }
