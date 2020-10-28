@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.ui.searchPage;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivitySearchBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
+import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.models.SearchEstate;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
 import com.openclassrooms.realestatemanager.ui.SearchViewModel;
@@ -22,6 +24,7 @@ import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -50,6 +53,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private boolean storeSearch;
     private boolean availableSearch;
     private Intent fabIntent;
+
 
 
     @Override
@@ -131,7 +135,16 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         this.searchViewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel.class);
-
+//        //for retrieve estate from search
+//        Intent intent = new Intent(Objects.requireNonNull(this.getIntent())) ;
+//        estateSearch = (SearchEstate) intent.getSerializableExtra("estateSearch");
+//
+//        Log.d("estateSearchActivity", String.valueOf(estateSearch));
+//        //for observe data
+//        this.searchViewModel.searchEstate(Objects.requireNonNull(estateSearch.getEstateType()), estateSearch.getCity(), estateSearch.getMinRooms(), estateSearch.getMaxRooms(),
+//                estateSearch.getMinSurface(), estateSearch.getMaxSurface(), estateSearch.getMinPrice(), estateSearch.getMaxPrice(),
+//                estateSearch.getMinUpOfSaleDate(), estateSearch.getMaxOfSaleDate(), estateSearch.getPhotos(), estateSearch.getSchools(), estateSearch.getStores(),
+//                estateSearch.getPark(), estateSearch.getRestaurants(), estateSearch.getSold()).observe(this, this::showSearchEstate);
     }
 
     /**
@@ -144,39 +157,27 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
             public void onClick(View v) {
 
                 showSearchEstate();
+                if (estateSearch != null) {
+                    fabIntent = new Intent(getApplicationContext(), SearchResultActivity.class);
+                    fabIntent.putExtra("estateSearch", estateSearch);
+                    startActivity(fabIntent);
 
-//                if(Objects.requireNonNull(searchViewModel.searchEstate(estateType, city, minRooms, maxRooms, minSurface, maxSurface, minPrice, maxPrice, minUpOfSaleDate, maxUpOfSaleDate,
-//                        false, false, false, false, false, false)) {
-                    Snackbar.make(activitySearchBinding.getRoot(), "No result found, please retry with another search", Snackbar.LENGTH_SHORT).show();
-//                }
-                fabIntent = new Intent(getApplicationContext(), SearchResultActivity.class);
-                fabIntent.putExtra("estateSearch", estateSearch);
-
-                startActivity(fabIntent);
-
-                Log.d("SaveSearch", "saveSearch"+estateSearch);
+                    Log.d("SaveSearch", "saveSearch" + estateSearch);
+                }
+                Snackbar.make(activitySearchBinding.getRoot(), "No result found, please retry with another search", Snackbar.LENGTH_LONG)
+                        .setAction("Return", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getApplicationContext(),SearchActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
             }
+
+
         });
     }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == 1) {
-//            if(resultCode == RESULT_OK) {
-//
-////                fabIntent = new Intent(getApplicationContext(), SearchResultActivity.class);
-////                fabIntent.putExtra("estateSearch", estateSearch);
-//            }
-//            if (resultCode == RESULT_CANCELED) {
-//
-//                    Snackbar.make(activitySearchBinding.getRoot(), "No result found, please retry with another search", Snackbar.LENGTH_SHORT).show();
-//
-//
-//            }
-//        }
-//    }
-
 
     /**
      * For Search Estates
@@ -185,71 +186,87 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 
         estateSearch = new SearchEstate();
 
-        if(!activitySearchBinding.etEstate.getText().toString().isEmpty()) {
+        if (!activitySearchBinding.etEstate.getText().toString().isEmpty()) {
             estateType = activitySearchBinding.etEstate.getText().toString();
             estateSearch.setEstateType(estateType);
         }
-        if(!Objects.requireNonNull(activitySearchBinding.etCity.getText()).toString().isEmpty()) {
+        if (!Objects.requireNonNull(activitySearchBinding.etCity.getText()).toString().isEmpty()) {
             city = Objects.requireNonNull(activitySearchBinding.etCity.getText()).toString();
             estateSearch.setCity(city);
         }
-        if(!Objects.requireNonNull(activitySearchBinding.etRoomsMin.getText()).toString().isEmpty()) {
+        if (!Objects.requireNonNull(activitySearchBinding.etRoomsMin.getText()).toString().isEmpty()) {
             minRooms = Integer.parseInt(Objects.requireNonNull(activitySearchBinding.etRoomsMin.getText()).toString());
             estateSearch.setMinRooms(minRooms);
         }
-        if(!Objects.requireNonNull(activitySearchBinding.etRoomsMax.getText()).toString().isEmpty()) {
+        if (!Objects.requireNonNull(activitySearchBinding.etRoomsMax.getText()).toString().isEmpty()) {
             maxRooms = Integer.parseInt(Objects.requireNonNull(activitySearchBinding.etRoomsMax.getText()).toString());
             estateSearch.setMaxRooms(maxRooms);
         }
-        if(!Objects.requireNonNull(activitySearchBinding.etSurfaceMini.getText()).toString().isEmpty()) {
+        if (!Objects.requireNonNull(activitySearchBinding.etSurfaceMini.getText()).toString().isEmpty()) {
             minSurface = Integer.parseInt(Objects.requireNonNull(activitySearchBinding.etSurfaceMini.getText()).toString());
             estateSearch.setMinSurface(minSurface);
         }
-        if(!Objects.requireNonNull(activitySearchBinding.etSurfaceMaxi.getText()).toString().isEmpty()) {
+        if (!Objects.requireNonNull(activitySearchBinding.etSurfaceMaxi.getText()).toString().isEmpty()) {
             maxSurface = Integer.parseInt(Objects.requireNonNull(activitySearchBinding.etSurfaceMaxi.getText()).toString());
             estateSearch.setMaxSurface(maxSurface);
         }
-        if(!Objects.requireNonNull(activitySearchBinding.etPriceMini.getText()).toString().isEmpty()) {
+        if (!Objects.requireNonNull(activitySearchBinding.etPriceMini.getText()).toString().isEmpty()) {
             minPrice = Double.parseDouble(Objects.requireNonNull(activitySearchBinding.etPriceMini.getText()).toString());
             estateSearch.setMinPrice(minPrice);
         }
-        if(!Objects.requireNonNull(activitySearchBinding.etPriceMaxi.getText()).toString().isEmpty()) {
+        if (!Objects.requireNonNull(activitySearchBinding.etPriceMaxi.getText()).toString().isEmpty()) {
             maxPrice = Double.parseDouble(Objects.requireNonNull(activitySearchBinding.etPriceMaxi.getText()).toString());
             estateSearch.setMaxPrice(maxPrice);
         }
-        if(!Objects.requireNonNull(activitySearchBinding.etUpOfSaleDateMini.getText()).toString().isEmpty()) {
+        if (!Objects.requireNonNull(activitySearchBinding.etUpOfSaleDateMini.getText()).toString().isEmpty()) {
             minUpOfSaleDate = Utils.dateStringToLong(activitySearchBinding.etUpOfSaleDateMini.getText().toString());
             estateSearch.setMinUpOfSaleDate(minUpOfSaleDate);
         }
-        if(!Objects.requireNonNull(activitySearchBinding.etUpOfSaleDateMaxi.getText()).toString().isEmpty()) {
+        if (!Objects.requireNonNull(activitySearchBinding.etUpOfSaleDateMaxi.getText()).toString().isEmpty()) {
             maxUpOfSaleDate = Utils.dateStringToLong(activitySearchBinding.etUpOfSaleDateMaxi.getText().toString());
             estateSearch.setMaxOfSaleDate(maxUpOfSaleDate);
         }
-        if(activitySearchBinding.photosBox.isChecked()) {
+        if (activitySearchBinding.photosBox.isChecked()) {
             photoSearch = activitySearchBinding.photosBox.isChecked();
             estateSearch.setPhotos(photoSearch);
         }
-        if(activitySearchBinding.boxSchools.isChecked()) {
+        if (activitySearchBinding.boxSchools.isChecked()) {
             schoolsSearch = activitySearchBinding.boxSchools.isChecked();
             estateSearch.setSchools(schoolsSearch);
         }
 
-        if(activitySearchBinding.boxPark.isChecked()) {
+        if (activitySearchBinding.boxPark.isChecked()) {
             parkSearch = activitySearchBinding.boxPark.isChecked();
             estateSearch.setPark(parkSearch);
         }
-        if(activitySearchBinding.boxRestaurants.isChecked()) {
+        if (activitySearchBinding.boxRestaurants.isChecked()) {
             restaurantSearch = activitySearchBinding.boxRestaurants.isChecked();
             estateSearch.setRestaurants(restaurantSearch);
         }
-        if(activitySearchBinding.boxStores.isChecked()) {
+        if (activitySearchBinding.boxStores.isChecked()) {
             storeSearch = activitySearchBinding.boxStores.isChecked();
             estateSearch.setStores(storeSearch);
         }
-        if(activitySearchBinding.availableBox.isChecked()) {
+        if (activitySearchBinding.availableBox.isChecked()) {
             availableSearch = activitySearchBinding.availableBox.isChecked();
             estateSearch.setSold(availableSearch);
         }
-      Log.d("estateSearch", "estateSearch" + estateSearch);
+//        if (estateSearch == null) {
+//            Log.d("estateSearch", "estateSearch" + estateSearch);
+//            Snackbar.make(activitySearchBinding.getRoot(), "No result found, please retry with another search", Snackbar.LENGTH_LONG)
+//                    .setAction("Return", new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+//                            startActivity(intent);
+//                        }
+//                    })
+//                    .show();
+//        }
     }
+
 }
+
+
+
+

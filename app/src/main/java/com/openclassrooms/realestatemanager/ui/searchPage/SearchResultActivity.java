@@ -1,10 +1,12 @@
 package com.openclassrooms.realestatemanager.ui.searchPage;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivitySearchResultBinding;
 import com.openclassrooms.realestatemanager.ui.BaseActivity;
@@ -49,4 +51,6 @@ public class SearchResultActivity extends BaseActivity {
                     .commit();
         }
     }
+
+
 }

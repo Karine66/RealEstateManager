@@ -1,10 +1,13 @@
 package com.openclassrooms.realestatemanager.ui.searchPage;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
+import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentListItemBinding;
 import com.openclassrooms.realestatemanager.models.Estate;
@@ -29,6 +32,7 @@ public class SearchResultViewHolder extends RecyclerView.ViewHolder {
      */
     @SuppressLint("SetTextI18n")
     public void updateWithEstate(Estate estate, RequestManager glide) {
+        if(estate != null) {
         // for Estate type
         Objects.requireNonNull(fragmentListItemBinding.estateType).setText(estate.getEstateType());
         // For city
@@ -47,5 +51,7 @@ public class SearchResultViewHolder extends RecyclerView.ViewHolder {
         } else {
             fragmentListItemBinding.listPhoto.setImageResource(R.drawable.no_image);
         }
+    }
+
     }
 }

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentSearchResultBinding;
 import com.openclassrooms.realestatemanager.injections.Injection;
@@ -28,6 +29,8 @@ import com.openclassrooms.realestatemanager.utils.ItemClickSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+
 
 
 public class SearchResultFragment extends Fragment {
@@ -72,16 +75,18 @@ public class SearchResultFragment extends Fragment {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());
         this.searchViewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel.class);
         //for retrieve estate from search
+
         Intent intent = new Intent(Objects.requireNonNull(Objects.requireNonNull(getActivity()).getIntent()));
         estateSearch = (SearchEstate) intent.getSerializableExtra("estateSearch");
-
         Log.d("estateSearch", String.valueOf(estateSearch));
+
         //for observe data
         this.searchViewModel.searchEstate(Objects.requireNonNull(estateSearch.getEstateType()), estateSearch.getCity(), estateSearch.getMinRooms(), estateSearch.getMaxRooms(),
                 estateSearch.getMinSurface(), estateSearch.getMaxSurface(), estateSearch.getMinPrice(), estateSearch.getMaxPrice(),
                 estateSearch.getMinUpOfSaleDate(), estateSearch.getMaxOfSaleDate(), estateSearch.getPhotos(), estateSearch.getSchools(), estateSearch.getStores(),
                 estateSearch.getPark(), estateSearch.getRestaurants(), estateSearch.getSold()).observe(this, this::updateEstateList);
     }
+
 
     /**
      * Configuration RecyclerView
@@ -140,8 +145,18 @@ public class SearchResultFragment extends Fragment {
      * @param estates
      */
     private void updateEstateList(List<Estate> estates) {
-        if (estates != null)
+        if (estates != null) {
             mAdapter.updateData(estates);
-        Log.d("updateListSearch", "updateListSearch" + estates);
+            Log.d("updateListSearch", "updateListSearch" + estates);
+        }
+            Snackbar.make(fragmentSearchResultBinding.getRoot(), "No result found, please retry with another search", Snackbar.LENGTH_LONG)
+                    .setAction("Return", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getContext(), SearchActivity.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .show();
+        }
     }
-}

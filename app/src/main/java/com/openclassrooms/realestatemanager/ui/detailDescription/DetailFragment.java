@@ -71,6 +71,8 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
     private List<Uri> listPhoto;
     private PhotoDescription photoText = new PhotoDescription();
     private long estateEdit;
+    private Estate estateDetail;
+    private long estateDetailId;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -91,7 +93,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         fragmentDetailBinding = FragmentDetailBinding.inflate(inflater, container, false);
         View view = fragmentDetailBinding.getRoot();
 
-        updateUi();
+//        updateUi(estate);
         createStringForAddress();
         configureViewModel();
         configureRecyclerView();
@@ -109,6 +111,15 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         mediaController.setAnchorView(fragmentDetailBinding.videoView);
         fragmentDetailBinding.videoView.start();
 
+//                if (estateDetail != null) {
+//            Intent intent = Objects.requireNonNull(getActivity()).getIntent();
+//            Estate estateDetail = (Estate) intent.getSerializableExtra("estate");
+//            estateDetailId = estateDetail.getMandateNumberID();
+//            Log.d("estateDetailId", "estateDetailId" + estateDetailId);
+
+//        this.estateViewModel.getEstate(estateDetailId).observe(this, this::updateUi);
+
+
         return view;
     }
 
@@ -119,15 +130,20 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
+
+        this.estateViewModel.getEstate(estateDetailId).observe(this, this::updateUi);
         //For retrieve data
         if (estateMap != null) {
             Intent intent = new Intent(Objects.requireNonNull(getActivity()).getIntent());
             Estate estateMap = (Estate) intent.getSerializableExtra("estate");
             estateId = Objects.requireNonNull(estateMap).getMandateNumberID();
             Log.d("idBundle", String.valueOf(estateMap));
+
+            this.estateViewModel.getEstate(estateId).observe(this, this::updateUIfromMarker);
         }
-        this.estateViewModel.getEstate(estateId).observe(this, this::updateUIfromMarker);
-    }
+        }
+
+
 
     /**
      * For RecyclerView photos
@@ -194,10 +210,12 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
      * For update UI from list
      */
     @SuppressLint("SetTextI18n")
-    public void updateUi() {
+    public void updateUi(Estate estate) {
         Intent intent = Objects.requireNonNull(getActivity()).getIntent();
         Estate estateDetail = (Estate) intent.getSerializableExtra("estate");
-        Log.d("estateDetail", "estateDetail" + estateDetail);
+        long estateDetailId = estateDetail.getMandateNumberID();
+//        this.estateViewModel.getEstate(estateDetailId).observe(this, this::updateUi);
+//        Log.d("estateDetail", "estateDetail" + estateDetail);
 
         if (estateDetail != null) {
             fragmentDetailBinding.etMandate.setText(String.valueOf(estateDetail.getMandateNumberID()));
@@ -226,8 +244,14 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
         }
+        this.estateViewModel.getEstate(estateDetailId).observe(this, this::updateUi);
+
     }
 
+    /**
+     * For edit button tablet in MainActivity
+     * @return
+     */
     public Estate getEstate() {
         return estate;
     }

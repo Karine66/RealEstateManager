@@ -92,7 +92,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
     private long idEstate;
     private Estate estate;
     public DialogInterface dialog;
-
+    private Cursor cursor;
 
 
     @Override
@@ -718,7 +718,8 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
      */
     public String getPath(Uri uri) {
         String[] projection = {MediaStore.Video.Media.DATA};
-         Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+
+        cursor = getContentResolver().query(uri, projection, null, null, null);
 
         if (cursor != null) {
             // HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
@@ -729,7 +730,9 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
             return cursor.getString(column_index);
         } else
             return null;
-    }
+        }
+
+
 
     /**
      * For delete photos and descriptions
