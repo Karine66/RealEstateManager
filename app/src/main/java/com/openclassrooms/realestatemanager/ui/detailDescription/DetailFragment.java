@@ -41,6 +41,7 @@ import com.openclassrooms.realestatemanager.models.geocodingAPI.Geocoding;
 import com.openclassrooms.realestatemanager.models.geocodingAPI.Result;
 import com.openclassrooms.realestatemanager.ui.EstateViewModel;
 import com.openclassrooms.realestatemanager.ui.PhotoAdapter;
+import com.openclassrooms.realestatemanager.ui.mainPage.MainActivity;
 import com.openclassrooms.realestatemanager.utils.EstateManagerStream;
 import com.openclassrooms.realestatemanager.utils.Utils;
 
@@ -118,6 +119,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
 //            Log.d("estateDetailId", "estateDetailId" + estateDetailId);
 
 //        this.estateViewModel.getEstate(estateDetailId).observe(this, this::updateUi);
+
 
 
         return view;
@@ -213,7 +215,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
     public void updateUi(Estate estate) {
         Intent intent = Objects.requireNonNull(getActivity()).getIntent();
         Estate estateDetail = (Estate) intent.getSerializableExtra("estate");
-        long estateDetailId = estateDetail.getMandateNumberID();
+//        long estateDetailId = Objects.requireNonNull(estateDetail).getMandateNumberID();
 //        this.estateViewModel.getEstate(estateDetailId).observe(this, this::updateUi);
 //        Log.d("estateDetail", "estateDetail" + estateDetail);
 
@@ -254,6 +256,10 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
      */
     public Estate getEstate() {
         return estate;
+    }
+
+    public long getEstateId() {
+        return estateId;
     }
 
     /**

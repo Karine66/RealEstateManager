@@ -149,14 +149,16 @@ public class SearchResultFragment extends Fragment {
             mAdapter.updateData(estates);
             Log.d("updateListSearch", "updateListSearch" + estates);
         }
+        if (Objects.requireNonNull(estates).isEmpty()) {
             Snackbar.make(fragmentSearchResultBinding.getRoot(), "No result found, please retry with another search", Snackbar.LENGTH_LONG)
                     .setAction("Return", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(getContext(), SearchActivity.class);
-                            startActivity(intent);
+
+                            Objects.requireNonNull(getActivity()).finish();
                         }
                     })
                     .show();
         }
     }
+}

@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.ui.mainPage;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.ui.EstateViewModel;
 import com.openclassrooms.realestatemanager.ui.createAndEditEstate.AddEditActivity;
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding;
+import com.openclassrooms.realestatemanager.ui.detailDescription.DetailActivity;
 import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
 import com.openclassrooms.realestatemanager.ui.listPage.ListFragment;
 import com.openclassrooms.realestatemanager.ui.mapPage.MapActivity;
@@ -31,9 +33,12 @@ public class MainActivity extends BaseActivity {
     private ActivityMainBinding binding;
     private ListFragment listFragment;
    private DetailFragment detailFragment;
-    private static final Estate estate = new Estate();
+   private DetailActivity detailActivity;
+    private Estate estate;
     private EstateViewModel estateViewModel;
     private long mandateNumberID;
+    private long idEstate;
+    private Estate tabletMain;
 
 
     @Override
@@ -54,6 +59,9 @@ public class MainActivity extends BaseActivity {
              this.configureToolbar();
 
          }
+
+
+
      }
 
 //    @SuppressLint("SetTextI18n")
@@ -108,9 +116,11 @@ public class MainActivity extends BaseActivity {
          //Handle actions on menu items
         switch (item.getItemId()) {
             case R.id.edit_btn :
-//                    Estate estate = new Estate();
 
-                    long idEstate = detailFragment.getEstate().getMandateNumberID();
+ //                  idEstate = detailFragment.getEstate().getMandateNumberID();
+                Intent intent = Objects.requireNonNull(getIntent());
+                Estate estateDetail = (Estate) intent.getSerializableExtra("estate");
+                idEstate = Objects.requireNonNull(estateDetail).getMandateNumberID();
                     Intent editIntent = new Intent(this, AddEditActivity.class);
                     editIntent.putExtra("iDEstate", idEstate);
                     startActivity(editIntent);
@@ -128,6 +138,7 @@ public class MainActivity extends BaseActivity {
                         super.onOptionsItemSelected(item);
         }
     }
+
 
     /**
      * For connecting fragment list

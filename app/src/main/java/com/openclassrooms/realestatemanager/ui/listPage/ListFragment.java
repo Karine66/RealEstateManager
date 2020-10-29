@@ -26,6 +26,7 @@ import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Estate;
 import com.openclassrooms.realestatemanager.ui.detailDescription.DetailActivity;
 import com.openclassrooms.realestatemanager.ui.detailDescription.DetailFragment;
+import com.openclassrooms.realestatemanager.ui.mainPage.MainActivity;
 import com.openclassrooms.realestatemanager.utils.ItemClickSupport;
 
 import java.util.ArrayList;
@@ -109,8 +110,12 @@ public class ListFragment extends Fragment {
                         //for tablet format
                         if (detailFragment != null && detailFragment.isVisible()) {
                             Estate estate = mAdapter.getEstates(position);
-                            detailFragment.updateUiForTablet(estate);
+//                            detailFragment.updateUiForTablet(estate);
                             Log.d("bundleListFragment", "bundleFragment" + estate);
+                            Intent intent = new Intent(getContext(), MainActivity.class);
+                            intent.putExtra("estate", estate);
+                            startActivity(intent);
+
 
                         }else{
                             //for phone format

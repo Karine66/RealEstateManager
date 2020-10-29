@@ -164,15 +164,6 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 
                     Log.d("SaveSearch", "saveSearch" + estateSearch);
                 }
-                Snackbar.make(activitySearchBinding.getRoot(), "No result found, please retry with another search", Snackbar.LENGTH_LONG)
-                        .setAction("Return", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(getApplicationContext(),SearchActivity.class);
-                                startActivity(intent);
-                            }
-                        })
-                        .show();
             }
 
 
@@ -251,18 +242,6 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
             availableSearch = activitySearchBinding.availableBox.isChecked();
             estateSearch.setSold(availableSearch);
         }
-//        if (estateSearch == null) {
-//            Log.d("estateSearch", "estateSearch" + estateSearch);
-//            Snackbar.make(activitySearchBinding.getRoot(), "No result found, please retry with another search", Snackbar.LENGTH_LONG)
-//                    .setAction("Return", new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
-//                            startActivity(intent);
-//                        }
-//                    })
-//                    .show();
-//        }
     }
 
 }
