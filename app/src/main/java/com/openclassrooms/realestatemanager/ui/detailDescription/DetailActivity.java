@@ -64,6 +64,7 @@ public class DetailActivity extends BaseActivity {
         //Handle actions on menu items
         switch (item.getItemId()) {
             case R.id.edit_btn:
+
                 long idEstate = estate.getMandateNumberID();
                 Intent editIntent = new Intent(this, AddEditActivity.class);
                 editIntent.putExtra("iDEstate", idEstate);

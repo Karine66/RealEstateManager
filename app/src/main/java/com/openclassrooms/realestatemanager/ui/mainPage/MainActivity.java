@@ -39,6 +39,7 @@ public class MainActivity extends BaseActivity {
     private long mandateNumberID;
     private long idEstate;
     private Estate tabletMain;
+    private Estate estateMain;
 
 
     @Override
@@ -117,10 +118,11 @@ public class MainActivity extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.edit_btn :
 
- //                  idEstate = detailFragment.getEstate().getMandateNumberID();
+//                   idEstate = detailFragment.getEstate().getMandateNumberID();
                 Intent intent = Objects.requireNonNull(getIntent());
                 Estate estateDetail = (Estate) intent.getSerializableExtra("estate");
                 idEstate = Objects.requireNonNull(estateDetail).getMandateNumberID();
+
                     Intent editIntent = new Intent(this, AddEditActivity.class);
                     editIntent.putExtra("iDEstate", idEstate);
                     startActivity(editIntent);
@@ -138,7 +140,6 @@ public class MainActivity extends BaseActivity {
                         super.onOptionsItemSelected(item);
         }
     }
-
 
     /**
      * For connecting fragment list

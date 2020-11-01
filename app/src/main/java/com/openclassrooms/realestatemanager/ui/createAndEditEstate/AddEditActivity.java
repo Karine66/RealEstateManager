@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.createAndEditEstate;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -10,7 +11,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
+import android.media.MediaSync;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -23,9 +27,12 @@ import android.widget.ArrayAdapter;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -48,9 +55,12 @@ import com.openclassrooms.realestatemanager.utils.ItemClickSupport;
 import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -93,6 +103,8 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
     private Estate estate;
     public DialogInterface dialog;
     private Cursor cursor;
+    private File newfile;
+    private boolean success;
 
 
     @Override
@@ -151,13 +163,6 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         estateFormBinding.videoView.setMediaController(mediaController);
         mediaController.setAnchorView(estateFormBinding.videoView);
         estateFormBinding.videoView.start();
-//        For deleteButton video visibility
-//        if (estateEdit == 0 && estateFormBinding.deleteVideo != null) {
-//            Objects.requireNonNull(estateFormBinding.deleteVideo).setVisibility(View.INVISIBLE);
-//        } if(estateEdit != 0 && estateFormBinding.deleteVideo == null){
-//            Objects.requireNonNull(estateFormBinding.deleteVideo).setVisibility(View.VISIBLE);
-//        }
-
 
     }
 
@@ -460,7 +465,9 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
             }
             if (!estate.getVideo().getPhotoList().isEmpty() && estate.getVideo().getPhotoList().size() > 0) {
                 for (String videoStr : estate.getVideo().getPhotoList()) {
-                    Objects.requireNonNull(estateFormBinding.deleteVideo).setVisibility(View.VISIBLE);
+                    if(estateFormBinding.deleteVideo != null) {
+                        estateFormBinding.deleteVideo.setVisibility(View.VISIBLE);
+                    }
                     estateFormBinding.videoView.setVisibility(View.VISIBLE);
                     estateFormBinding.videoView.setVideoURI(Uri.parse(videoStr));
                 }
@@ -621,31 +628,34 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                     Uri contentURI = data.getData();
                     String recordedVideoPath = getPath(contentURI);
                     Log.d("recordedVideoPaht", recordedVideoPath);
-                    Objects.requireNonNull(activityAddBinding.includeForm.videoView).setVideoURI(contentURI);
+                    saveVideoToInternalStorage(recordedVideoPath);
+                    Objects.requireNonNull(estateFormBinding.videoView).setVideoURI(contentURI);
                    estateFormBinding.videoView.setVisibility(View.VISIBLE);
-                    activityAddBinding.includeForm.videoView.requestFocus();
+                    estateFormBinding.videoView.requestFocus();
                     MediaController mediaController = new MediaController(this);
-                    activityAddBinding.includeForm.videoView.setMediaController(mediaController);
-                    mediaController.setAnchorView(activityAddBinding.includeForm.videoView);
-                    activityAddBinding.includeForm.videoView.start();
+                    estateFormBinding.videoView.setMediaController(mediaController);
+                    mediaController.setAnchorView(estateFormBinding.videoView);
+                    estateFormBinding.videoView.start();
                     video.getPhotoList().add(String.valueOf(contentURI));
                 }
             }
             if (requestCode == PICK_VIDEO_GALLERY && data != null && data.getData() != null) {
                 if (resultCode == Activity.RESULT_OK) {
 
+
                     Uri contentURI = data.getData();
 
                     String selectedVideoPath = getPath(contentURI);
                     Log.d("path", selectedVideoPath);
-                    Objects.requireNonNull(activityAddBinding.includeForm.videoView).setVideoURI(contentURI);
+                    saveVideoToInternalStorage(selectedVideoPath);
+                    Objects.requireNonNull(estateFormBinding.videoView).setVideoURI(contentURI);
                     estateFormBinding.videoView.setVisibility(View.VISIBLE);
-                    activityAddBinding.includeForm.videoView.requestFocus();
+                    estateFormBinding.videoView.requestFocus();
                     MediaController mediaController = new MediaController(this);
-                    activityAddBinding.includeForm.videoView.setMediaController(mediaController);
-                    mediaController.setAnchorView(activityAddBinding.includeForm.videoView);
-                            activityAddBinding.includeForm.videoView.start();
-                            activityAddBinding.includeForm.videoView.setVisibility(View.VISIBLE);
+                    estateFormBinding.videoView.setMediaController(mediaController);
+                    mediaController.setAnchorView(estateFormBinding.videoView);
+                            estateFormBinding.videoView.start();
+                            estateFormBinding.videoView.setVisibility(View.VISIBLE);
                     video.getPhotoList().add(String.valueOf(contentURI));
                 }
             }
@@ -711,6 +721,46 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
     }
 
     /**
+     * For save video in internal storage
+     * @param filePath
+     */
+    private void saveVideoToInternalStorage (String filePath) {
+
+        try {
+
+            File currentFile = new File(filePath);
+            File wallpaperDirectory = new File(Environment.getExternalStorageDirectory() + VIDEO_DIRECTORY);
+            newfile = new File(wallpaperDirectory, Calendar.getInstance().getTimeInMillis() + ".mp4");
+
+            if (!wallpaperDirectory.exists()) {
+                success = wallpaperDirectory.mkdirs();
+            }
+
+            if(currentFile.exists()){
+
+                InputStream in = new FileInputStream(currentFile);
+                OutputStream out = new FileOutputStream(newfile);
+
+                // Copy the bits from instream to outstream
+                byte[] buf = new byte[1024];
+                int len;
+
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+                in.close();
+                out.close();
+                Log.d("vii", "Video file saved successfully.");
+            }else{
+                Log.e("vii", "Video saving failed. Source file missing.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
      * For video
      *
      * @param uri
@@ -731,7 +781,6 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
         } else
             return null;
         }
-
 
 
     /**

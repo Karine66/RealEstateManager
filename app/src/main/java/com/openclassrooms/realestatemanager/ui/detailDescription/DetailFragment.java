@@ -112,16 +112,6 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         mediaController.setAnchorView(fragmentDetailBinding.videoView);
         fragmentDetailBinding.videoView.start();
 
-//                if (estateDetail != null) {
-//            Intent intent = Objects.requireNonNull(getActivity()).getIntent();
-//            Estate estateDetail = (Estate) intent.getSerializableExtra("estate");
-//            estateDetailId = estateDetail.getMandateNumberID();
-//            Log.d("estateDetailId", "estateDetailId" + estateDetailId);
-
-//        this.estateViewModel.getEstate(estateDetailId).observe(this, this::updateUi);
-
-
-
         return view;
     }
 
@@ -133,7 +123,15 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());
         this.estateViewModel = ViewModelProviders.of(this, viewModelFactory).get(EstateViewModel.class);
 
+        Intent intentDetail = Objects.requireNonNull(getActivity()).getIntent();
+        Estate estateDetail = (Estate) intentDetail.getSerializableExtra("estate");
+        if (estateDetail != null) {
+            estateDetailId = Objects.requireNonNull(estateDetail).getMandateNumberID();
+            Log.d("estateDetailId", "estateDetailId" + estateDetailId);
+        }
         this.estateViewModel.getEstate(estateDetailId).observe(this, this::updateUi);
+
+
         //For retrieve data
         if (estateMap != null) {
             Intent intent = new Intent(Objects.requireNonNull(getActivity()).getIntent());
@@ -141,7 +139,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
             estateId = Objects.requireNonNull(estateMap).getMandateNumberID();
             Log.d("idBundle", String.valueOf(estateMap));
 
-            this.estateViewModel.getEstate(estateId).observe(this, this::updateUIfromMarker);
+            this.estateViewModel.getEstate(estateId).observe(this, this::updateUi);
         }
         }
 
@@ -172,12 +170,53 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
 
     /**
      * For retrieve Estate from marker Map
-     *
-     * @param estate
+//     *
+//     * @param estate
+//     */
+//    @RequiresApi(api = Build.VERSION_CODES.N)
+//    @SuppressLint("SetTextI18n")
+//    private void updateUIfromMarker(Estate estate) {
+//
+//        if (estate != null) {
+//            fragmentDetailBinding.etMandate.setText(String.valueOf(estate.getMandateNumberID()));
+//            fragmentDetailBinding.etMandate.setEnabled(false);
+//            fragmentDetailBinding.etSurface.setText(Objects.requireNonNull(estate.getSurface()).toString());
+//            fragmentDetailBinding.etSurface.setEnabled(false);
+//            fragmentDetailBinding.etDescription.setText(estate.getDescription());
+//            fragmentDetailBinding.etDescription.setEnabled(false);
+//            fragmentDetailBinding.etRooms.setText(Objects.requireNonNull(estate.getRooms()).toString());
+//            fragmentDetailBinding.etRooms.setEnabled(false);
+//            fragmentDetailBinding.etBathrooms.setText(Objects.requireNonNull(estate.getBathrooms()).toString());
+//            fragmentDetailBinding.etBathrooms.setEnabled(false);
+//            fragmentDetailBinding.etBedrooms.setText(Objects.requireNonNull(estate.getBedrooms()).toString());
+//            fragmentDetailBinding.etBedrooms.setEnabled(false);
+//            fragmentDetailBinding.etAddress.setText(estate.getAddress());
+//            fragmentDetailBinding.etAddress.setEnabled(false);
+//            fragmentDetailBinding.etPostalCode.setText(Objects.requireNonNull(estate.getPostalCode()).toString());
+//            fragmentDetailBinding.etPostalCode.setEnabled(false);
+//            fragmentDetailBinding.etCity.setText(estate.getCity());
+//            fragmentDetailBinding.etCity.setEnabled(false);
+//
+//            if (!estate.getVideo().getPhotoList().isEmpty() && estate.getVideo().getPhotoList().size() > 0) {
+//                for (String videoStr : estate.getVideo().getPhotoList()) {
+//
+//                    fragmentDetailBinding.videoView.setVideoURI(Uri.parse(videoStr));
+//                }
+//            }
+//        }
+//    }
+
+
+    public Estate getEstate() {
+        return estate;
+    }
+
+
+    /**
+     * For update UI from list
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressLint("SetTextI18n")
-    private void updateUIfromMarker(Estate estate) {
+    public void updateUi(Estate estate) {
 
         if (estate != null) {
             fragmentDetailBinding.etMandate.setText(String.valueOf(estate.getMandateNumberID()));
@@ -208,59 +247,9 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    /**
-     * For update UI from list
-     */
-    @SuppressLint("SetTextI18n")
-    public void updateUi(Estate estate) {
-        Intent intent = Objects.requireNonNull(getActivity()).getIntent();
-        Estate estateDetail = (Estate) intent.getSerializableExtra("estate");
-//        long estateDetailId = Objects.requireNonNull(estateDetail).getMandateNumberID();
-//        this.estateViewModel.getEstate(estateDetailId).observe(this, this::updateUi);
-//        Log.d("estateDetail", "estateDetail" + estateDetail);
 
-        if (estateDetail != null) {
-            fragmentDetailBinding.etMandate.setText(String.valueOf(estateDetail.getMandateNumberID()));
-            fragmentDetailBinding.etMandate.setEnabled(false);
-            fragmentDetailBinding.etSurface.setText(Objects.requireNonNull(estateDetail.getSurface()).toString());
-            fragmentDetailBinding.etSurface.setEnabled(false);
-            fragmentDetailBinding.etDescription.setText(estateDetail.getDescription());
-            fragmentDetailBinding.etDescription.setEnabled(false);
-            fragmentDetailBinding.etRooms.setText(Objects.requireNonNull(estateDetail.getRooms()).toString());
-            fragmentDetailBinding.etRooms.setEnabled(false);
-            fragmentDetailBinding.etBathrooms.setText(Objects.requireNonNull(estateDetail.getBathrooms()).toString());
-            fragmentDetailBinding.etBathrooms.setEnabled(false);
-            fragmentDetailBinding.etBedrooms.setText(Objects.requireNonNull(estateDetail.getBedrooms()).toString());
-            fragmentDetailBinding.etBedrooms.setEnabled(false);
-            fragmentDetailBinding.etAddress.setText(estateDetail.getAddress());
-            fragmentDetailBinding.etAddress.setEnabled(false);
-            fragmentDetailBinding.etPostalCode.setText(Objects.requireNonNull(estateDetail.getPostalCode()).toString());
-            fragmentDetailBinding.etPostalCode.setEnabled(false);
-            fragmentDetailBinding.etCity.setText(estateDetail.getCity());
-            fragmentDetailBinding.etCity.setEnabled(false);
 
-            if (!estateDetail.getVideo().getPhotoList().isEmpty() && estateDetail.getVideo().getPhotoList().size() > 0) {
-                for (String videoStr : estateDetail.getVideo().getPhotoList()) {
 
-                    fragmentDetailBinding.videoView.setVideoURI(Uri.parse(videoStr));
-                }
-            }
-        }
-        this.estateViewModel.getEstate(estateDetailId).observe(this, this::updateUi);
-
-    }
-
-    /**
-     * For edit button tablet in MainActivity
-     * @return
-     */
-    public Estate getEstate() {
-        return estate;
-    }
-
-    public long getEstateId() {
-        return estateId;
-    }
 
     /**
      * For update UI for tablet
