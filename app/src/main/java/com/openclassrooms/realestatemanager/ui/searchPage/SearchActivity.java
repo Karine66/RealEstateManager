@@ -135,16 +135,6 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         this.searchViewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel.class);
-//        //for retrieve estate from search
-//        Intent intent = new Intent(Objects.requireNonNull(this.getIntent())) ;
-//        estateSearch = (SearchEstate) intent.getSerializableExtra("estateSearch");
-//
-//        Log.d("estateSearchActivity", String.valueOf(estateSearch));
-//        //for observe data
-//        this.searchViewModel.searchEstate(Objects.requireNonNull(estateSearch.getEstateType()), estateSearch.getCity(), estateSearch.getMinRooms(), estateSearch.getMaxRooms(),
-//                estateSearch.getMinSurface(), estateSearch.getMaxSurface(), estateSearch.getMinPrice(), estateSearch.getMaxPrice(),
-//                estateSearch.getMinUpOfSaleDate(), estateSearch.getMaxOfSaleDate(), estateSearch.getPhotos(), estateSearch.getSchools(), estateSearch.getStores(),
-//                estateSearch.getPark(), estateSearch.getRestaurants(), estateSearch.getSold()).observe(this, this::showSearchEstate);
     }
 
     /**

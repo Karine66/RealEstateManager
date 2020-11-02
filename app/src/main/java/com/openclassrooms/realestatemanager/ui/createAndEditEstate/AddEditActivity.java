@@ -104,7 +104,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
     public DialogInterface dialog;
     private Cursor cursor;
     private File newfile;
-    private boolean success;
+
 
 
     @Override
@@ -353,7 +353,11 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
      */
     public void saveEstates() {
 
+        int ground = 0;
 
+        if (!estateFormBinding.etGround.getText().toString().isEmpty()) {
+           ground = Integer.parseInt(estateFormBinding.etGround.getText().toString());
+        }
             Estate estate = new Estate(
 
                     mandateNumberID,
@@ -362,7 +366,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                     Integer.parseInt(estateFormBinding.etRooms.getText().toString().replace("5 et +", "5")),
                     Integer.parseInt(estateFormBinding.etBedrooms.getText().toString().replace("5 et +", "5")),
                     Integer.parseInt(estateFormBinding.etBathrooms.getText().toString().replace("4 et +", "4")),
-                     Integer.parseInt(Objects.requireNonNull(estateFormBinding.etGround.getText()).toString().replace("","0")),
+                     ground,
                     Double.parseDouble(Objects.requireNonNull((estateFormBinding.etPrice.getText())).toString()),
                     Objects.requireNonNull(estateFormBinding.etDescription.getText()).toString(),
                     Objects.requireNonNull(estateFormBinding.etAddress.getText()).toString(),
@@ -438,7 +442,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
             estateFormBinding.etRooms.setText(Objects.requireNonNull(estate.getRooms()).toString().replace("5 et +", "5"), false);
             estateFormBinding.etBathrooms.setText(Objects.requireNonNull(estate.getBathrooms()).toString().replace("4 et +", "4"), false);
             estateFormBinding.etBedrooms.setText(Objects.requireNonNull(estate.getBedrooms()).toString().replace("5 et +", "5"), false);
-            estateFormBinding.etGround.setText(Objects.requireNonNull(estate.getGround()).toString().replace("", "0"));
+            estateFormBinding.etGround.setText(Objects.requireNonNull(estate.getGround()).toString());
             estateFormBinding.etPrice.setText(Objects.requireNonNull(estate.getPrice()).toString());
             estateFormBinding.etAddress.setText(estate.getAddress());
             estateFormBinding.etPostalCode.setText(Objects.requireNonNull(estate.getPostalCode()).toString());
@@ -733,7 +737,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
             newfile = new File(wallpaperDirectory, Calendar.getInstance().getTimeInMillis() + ".mp4");
 
             if (!wallpaperDirectory.exists()) {
-                success = wallpaperDirectory.mkdirs();
+               wallpaperDirectory.mkdirs();
             }
 
             if(currentFile.exists()){

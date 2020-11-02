@@ -42,7 +42,7 @@ data class Estate (@PrimaryKey (autoGenerate = true) val mandateNumberID: Long,
  */
     fun fromContentValues(values: ContentValues): Estate {
         val estate = Estate()
-//        if (values.containsKey("mandateNumberID")) estate.mandateNumberID = values.getAsLong("mandateNumberID")
+
         if (values.containsKey("estateType")) estate.estateType = values.getAsString("estateType")
         if (values.containsKey("surface")) estate.surface = values.getAsInteger("surface")
         if (values.containsKey("rooms")) estate.rooms = values.getAsInteger("rooms")
