@@ -110,13 +110,10 @@ public class ListFragment extends Fragment {
                         //for tablet format
                         if (detailFragment != null && detailFragment.isVisible()) {
                             Estate estate = mAdapter.getEstates(position);
-//                            detailFragment.updateUiForTablet(estate);
                             Log.d("bundleListFragment", "bundleFragment" + estate);
                             Intent intent = new Intent(getContext(), MainActivity.class);
                             intent.putExtra("estate", estate);
                             startActivity(intent);
-
-
                         }else{
                             //for phone format
                             Estate estate = mAdapter.getEstates(position);
@@ -145,9 +142,4 @@ public class ListFragment extends Fragment {
             mAdapter.updateData(estates);
 
     }
-
-
-
-
-
 }

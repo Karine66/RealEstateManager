@@ -94,7 +94,6 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         fragmentDetailBinding = FragmentDetailBinding.inflate(inflater, container, false);
         View view = fragmentDetailBinding.getRoot();
 
-//        updateUi(estate);
         createStringForAddress();
         configureViewModel();
         configureRecyclerView();
@@ -144,7 +143,6 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         }
 
 
-
     /**
      * For RecyclerView photos
      */
@@ -167,50 +165,6 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
             adapter.setPhotoDescription(estate.getPhotoDescription().getPhotoDescription());
         }
     }
-
-    /**
-     * For retrieve Estate from marker Map
-//     *
-//     * @param estate
-//     */
-//    @RequiresApi(api = Build.VERSION_CODES.N)
-//    @SuppressLint("SetTextI18n")
-//    private void updateUIfromMarker(Estate estate) {
-//
-//        if (estate != null) {
-//            fragmentDetailBinding.etMandate.setText(String.valueOf(estate.getMandateNumberID()));
-//            fragmentDetailBinding.etMandate.setEnabled(false);
-//            fragmentDetailBinding.etSurface.setText(Objects.requireNonNull(estate.getSurface()).toString());
-//            fragmentDetailBinding.etSurface.setEnabled(false);
-//            fragmentDetailBinding.etDescription.setText(estate.getDescription());
-//            fragmentDetailBinding.etDescription.setEnabled(false);
-//            fragmentDetailBinding.etRooms.setText(Objects.requireNonNull(estate.getRooms()).toString());
-//            fragmentDetailBinding.etRooms.setEnabled(false);
-//            fragmentDetailBinding.etBathrooms.setText(Objects.requireNonNull(estate.getBathrooms()).toString());
-//            fragmentDetailBinding.etBathrooms.setEnabled(false);
-//            fragmentDetailBinding.etBedrooms.setText(Objects.requireNonNull(estate.getBedrooms()).toString());
-//            fragmentDetailBinding.etBedrooms.setEnabled(false);
-//            fragmentDetailBinding.etAddress.setText(estate.getAddress());
-//            fragmentDetailBinding.etAddress.setEnabled(false);
-//            fragmentDetailBinding.etPostalCode.setText(Objects.requireNonNull(estate.getPostalCode()).toString());
-//            fragmentDetailBinding.etPostalCode.setEnabled(false);
-//            fragmentDetailBinding.etCity.setText(estate.getCity());
-//            fragmentDetailBinding.etCity.setEnabled(false);
-//
-//            if (!estate.getVideo().getPhotoList().isEmpty() && estate.getVideo().getPhotoList().size() > 0) {
-//                for (String videoStr : estate.getVideo().getPhotoList()) {
-//
-//                    fragmentDetailBinding.videoView.setVideoURI(Uri.parse(videoStr));
-//                }
-//            }
-//        }
-//    }
-
-
-    public Estate getEstate() {
-        return estate;
-    }
-
 
     /**
      * For update UI from list
@@ -237,6 +191,15 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
             fragmentDetailBinding.etPostalCode.setEnabled(false);
             fragmentDetailBinding.etCity.setText(estate.getCity());
             fragmentDetailBinding.etCity.setEnabled(false);
+
+            listPhoto.clear();
+            if (!estate.getPhotoList().getPhotoList().isEmpty()) {
+                for (String photoStr : estate.getPhotoList().getPhotoList()) {
+                    listPhoto.add(Uri.parse(photoStr));
+                }
+                adapter.setPhotoList(listPhoto);
+                adapter.setPhotoDescription(estate.getPhotoDescription().getPhotoDescription());
+            }
 
             if (!estate.getVideo().getPhotoList().isEmpty() && estate.getVideo().getPhotoList().size() > 0) {
                 for (String videoStr : estate.getVideo().getPhotoList()) {
@@ -308,14 +271,14 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
             map.getUiSettings().setMyLocationButtonEnabled(false);
             map.getUiSettings().setMapToolbarEnabled(false);
             googleMap.moveCamera(CameraUpdateFactory.zoomBy(15));
-            if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions((Activity) getContext(), new String[]{
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                }, PERMS_CALL_ID);
-                return;
-            }
+//            if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+//                    ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                ActivityCompat.requestPermissions((Activity) getContext(), new String[]{
+//                        Manifest.permission.ACCESS_FINE_LOCATION,
+//                        Manifest.permission.ACCESS_COARSE_LOCATION
+//                }, PERMS_CALL_ID);
+//                return;
+//            }
             executeHttpRequestWithRetrofit();
         } else {
             Snackbar.make(fragmentDetailBinding.getRoot(), "No internet available", Snackbar.LENGTH_SHORT).show();

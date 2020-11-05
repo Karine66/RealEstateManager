@@ -660,7 +660,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
                     mediaController.setAnchorView(estateFormBinding.videoView);
                             estateFormBinding.videoView.start();
                             estateFormBinding.videoView.setVisibility(View.VISIBLE);
-                    video.getPhotoList().add(String.valueOf(contentURI));
+                    video.getPhotoList().add(selectedVideoPath);
                 }
             }
         }

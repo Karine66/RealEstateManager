@@ -60,6 +60,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
     private List<Long> idList = new ArrayList<>();
     private String estateType;
     private Long id;
+    private GoogleMap googleMap;
 
 
     @Override
@@ -171,6 +172,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
         super.onResume();
         checkPermissions();
     }
+
+
+
 
     /**
      * For map display
