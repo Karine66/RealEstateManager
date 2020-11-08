@@ -38,9 +38,6 @@ public class MainActivity extends BaseActivity {
     private EstateViewModel estateViewModel;
     private long mandateNumberID;
     private long idEstate;
-    private Estate tabletMain;
-    private Estate estateMain;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +55,7 @@ public class MainActivity extends BaseActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             this.configureToolbar();
-
         }
-
-
     }
 
 //    @SuppressLint("SetTextI18n")
@@ -116,15 +110,16 @@ public class MainActivity extends BaseActivity {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        Intent intent = Objects.requireNonNull(getIntent());
+        Estate estateDetail = (Estate) intent.getSerializableExtra("estate");
+        idEstate = estateDetail != null ? estateDetail.getMandateNumberID() : 0;
+
         //Handle actions on menu items
         switch (item.getItemId()) {
             case R.id.edit_btn:
 
                 if (idEstate > 0) {
-                    Intent intent = Objects.requireNonNull(getIntent());
-                    Estate estateDetail = (Estate) intent.getSerializableExtra("estate");
-                    idEstate = Objects.requireNonNull(estateDetail).getMandateNumberID();
-
                     Intent editIntent = new Intent(this, AddEditActivity.class);
                     editIntent.putExtra("iDEstate", idEstate);
                     startActivity(editIntent);
@@ -132,7 +127,6 @@ public class MainActivity extends BaseActivity {
                 } else {
                     Snackbar.make(binding.getRoot(), "No estate selected", Snackbar.LENGTH_SHORT).show();
                 }
-
                 return true;
             case R.id.search_btn:
                 Intent searchIntent = new Intent(this, SearchActivity.class);

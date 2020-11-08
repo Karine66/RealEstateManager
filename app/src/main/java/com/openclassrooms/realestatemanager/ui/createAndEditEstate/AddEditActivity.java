@@ -116,8 +116,9 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
 
         View view = activityAddBinding.getRoot();
         setContentView(view);
+
         estateFormBinding.videoView.setVisibility(View.INVISIBLE);
-        if(estateEdit==0 && estateFormBinding.deleteVideo != null) {
+        if(estateEdit==0) {
             Objects.requireNonNull(estateFormBinding.deleteVideo).setVisibility(View.INVISIBLE);
         }
         this.methodRequiresTwoPermission();
@@ -469,9 +470,8 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
             }
             if (!estate.getVideo().getPhotoList().isEmpty() && estate.getVideo().getPhotoList().size() > 0) {
                 for (String videoStr : estate.getVideo().getPhotoList()) {
-                    if(estateFormBinding.deleteVideo != null) {
-                        estateFormBinding.deleteVideo.setVisibility(View.VISIBLE);
-                    }
+
+                    estateFormBinding.deleteVideo.setVisibility(View.VISIBLE);
                     estateFormBinding.videoView.setVisibility(View.VISIBLE);
                     estateFormBinding.videoView.setVideoURI(Uri.parse(videoStr));
                 }
@@ -509,42 +509,38 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
 
         builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle("Add pictures");
-        builder.setItems(options, new DialogInterface.OnClickListener() {
+        builder.setItems(options, (dialog, item) -> {
 
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
+            if (options[item].equals("Take Photo")) {
 
-                if (options[item].equals("Take Photo")) {
+                Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-                    Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-                    if (takePicture.resolveActivity(getPackageManager()) != null) {
-                        //Create the File where the photo should go
-                        File photoFile = null;
-                        try {
-                            photoFile = createImageFile();
-                        } catch (IOException ex) {
-                            Log.e("PhotoFileException", Objects.requireNonNull(ex.getMessage()));
-                        }
-                        //Continue only if the file was successfully created
-                        if (photoFile != null) {
-
-                            photoUri = FileProvider.getUriForFile(getApplicationContext(), "com.openclassrooms.realestatemanager.fileprovider", photoFile);
-
-                            takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-                            Log.d("PhotoUri", "photoUri =" + photoUri);
-
-                            startActivityForResult(takePicture, 1);
-                        }
+                if (takePicture.resolveActivity(getPackageManager()) != null) {
+                    //Create the File where the photo should go
+                    File photoFile = null;
+                    try {
+                        photoFile = createImageFile();
+                    } catch (IOException ex) {
+                        Log.e("PhotoFileException", Objects.requireNonNull(ex.getMessage()));
                     }
-                } else if (options[item].equals("Choose from Gallery")) {
+                    //Continue only if the file was successfully created
+                    if (photoFile != null) {
 
-                    Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(pickPhoto, 2);
+                        photoUri = FileProvider.getUriForFile(getApplicationContext(), "com.openclassrooms.realestatemanager.fileprovider", photoFile);
 
-                } else if (options[item].equals("Cancel")) {
-                    dialog.dismiss();
+                        takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                        Log.d("PhotoUri", "photoUri =" + photoUri);
+
+                        startActivityForResult(takePicture, 1);
+                    }
                 }
+            } else if (options[item].equals("Choose from Gallery")) {
+
+                Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(pickPhoto, 2);
+
+            } else if (options[item].equals("Cancel")) {
+                dialog.dismiss();
             }
         });
 
@@ -583,7 +579,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != Activity.RESULT_CANCELED) {
-            if (requestCode == PICK_IMAGE_CAMERA && data != null) {
+            if (requestCode == PICK_IMAGE_CAMERA && data != null && data.getData() !=null) {
                 if (resultCode == Activity.RESULT_OK) {
 
                     listPhoto.add(photoUri);
@@ -645,7 +641,6 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
             }
             if (requestCode == PICK_VIDEO_GALLERY && data != null && data.getData() != null) {
                 if (resultCode == Activity.RESULT_OK) {
-
 
                     Uri contentURI = data.getData();
 
@@ -771,8 +766,8 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
      * @return
      */
     public String getPath(Uri uri) {
-        String[] projection = {MediaStore.Video.Media.DATA};
 
+        String[] projection = {MediaStore.Video.Media.DATA};
         cursor = getContentResolver().query(uri, projection, null, null, null);
 
         if (cursor != null) {
@@ -780,12 +775,13 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
             // THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
             int column_index = ((Cursor) cursor)
                     .getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
+
             cursor.moveToFirst();
             return cursor.getString(column_index);
-        } else
+        } else {
             return null;
         }
-
+    }
 
     /**
      * For delete photos and descriptions
@@ -813,8 +809,8 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
      * For delete video
      */
     public void onClickDeleteVideo() {
-        if (estateFormBinding.deleteVideo != null) {
-            Objects.requireNonNull(estateFormBinding.deleteVideo).setOnClickListener(v -> {
+
+            estateFormBinding.deleteVideo.setOnClickListener(v -> {
 
                 String estateVideo = estate.getVideo().getPhotoList().get(0);
                 video.getPhotoList().remove(estateVideo);
@@ -825,7 +821,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
             });
         }
     }
-}
+
 
 
 

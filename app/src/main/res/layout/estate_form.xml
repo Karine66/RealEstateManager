@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/relative_layout_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <include
             layout="@layout/toolbar"
             android:layout_width="match_parent"
@@ -15,15 +16,15 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_mandate"
-            app:boxStrokeColor="@color/colorAccent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="70dp"
+            app:boxStrokeColor="@color/colorAccent"
+            app:errorEnabled="true"
             app:helperText="Required"
-            app:helperTextEnabled="true"
-            app:errorEnabled="true">
+            app:helperTextEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_Mandate"
@@ -38,43 +39,42 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_estate"
-            app:boxStrokeColor="@color/colorAccent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_marginTop="70dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginTop="70dp">
+            app:boxStrokeColor="@color/colorAccent">
 
             <AutoCompleteTextView
                 android:id="@+id/et_Estate"
                 android:layout_width="140dp"
-                android:hint="Estate Type"
-                android:textSize="12sp"
-                android:paddingBottom="8dp"
                 android:layout_height="40dp"
-                android:focusable="true"
                 android:clickable="false"
-                android:inputType="none"
+                android:focusable="true"
                 android:focusableInTouchMode="false"
-               />
+                android:hint="Estate Type"
+                android:inputType="none"
+                android:paddingBottom="8dp"
+                android:textSize="12sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_surface"
-            app:boxStrokeColor="@color/colorAccent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_marginStart="20dp"
             android:layout_marginTop="130dp"
-            android:layout_alignParentTop="true"
             android:nextFocusUp="@id/input_mandate"
-            app:suffixText="m²"
-            app:suffixTextColor="#000000"
+            app:boxStrokeColor="@color/colorAccent"
+            app:errorEnabled="true"
             app:helperText="Required"
-            app:errorEnabled="true">
+            app:suffixText="m²"
+            app:suffixTextColor="#000000">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_surface"
@@ -89,62 +89,61 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_rooms"
-            app:boxStrokeColor="@color/colorAccent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="20dp"
             android:layout_marginTop="130dp"
+            android:layout_marginEnd="20dp"
+            app:boxStrokeColor="@color/colorAccent"
+            app:errorEnabled="true"
             app:helperText="Required"
-            app:helperTextEnabled="true"
-            app:errorEnabled="true">
+            app:helperTextEnabled="true">
 
             <AutoCompleteTextView
                 android:id="@+id/et_rooms"
                 android:layout_width="140dp"
                 android:layout_height="40dp"
-                android:paddingBottom="8dp"
-                android:hint="Rooms"
-                android:textSize="12sp"
-                android:focusable="true"
                 android:clickable="false"
+                android:focusable="true"
+                android:focusableInTouchMode="false"
+                android:hint="Rooms"
                 android:inputType="none"
-                android:focusableInTouchMode="false"/>
+                android:paddingBottom="8dp"
+                android:textSize="12sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_bedrooms"
-            app:boxStrokeColor="@color/colorAccent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginStart="20dp"
             android:layout_marginTop="190dp"
+            app:boxStrokeColor="@color/colorAccent"
+            app:errorEnabled="true"
             app:helperText="Required"
-            app:helperTextEnabled="true"
-            app:errorEnabled="true">
+            app:helperTextEnabled="true">
 
             <AutoCompleteTextView
                 android:id="@+id/et_bedrooms"
                 android:layout_width="140dp"
                 android:layout_height="40dp"
-                android:paddingBottom="8dp"
-                android:hint="Bedrooms"
-                android:textSize="12sp"
-                android:focusable="true"
                 android:clickable="false"
+                android:focusable="true"
+                android:focusableInTouchMode="false"
+                android:hint="Bedrooms"
                 android:inputType="none"
-                android:focusableInTouchMode="false"/>
+                android:paddingBottom="8dp"
+                android:textSize="12sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_bathrooms"
-            app:boxStrokeColor="@color/colorAccent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
@@ -152,32 +151,33 @@
             android:layout_alignParentEnd="true"
             android:layout_marginTop="190dp"
             android:layout_marginEnd="20dp"
+            app:boxStrokeColor="@color/colorAccent"
+            app:errorEnabled="true"
             app:helperText="Required"
-            app:helperTextEnabled="true"
-            app:errorEnabled="true">
+            app:helperTextEnabled="true">
 
             <AutoCompleteTextView
                 android:id="@+id/et_bathrooms"
                 android:layout_width="140dp"
                 android:layout_height="40dp"
-                android:paddingBottom="8dp"
-                android:hint="Bathrooms"
-                android:textSize="12sp"
-                android:focusable="true"
                 android:clickable="false"
+                android:focusable="true"
+                android:focusableInTouchMode="false"
+                android:hint="Bathrooms"
                 android:inputType="none"
-                android:focusableInTouchMode="false"/>
+                android:paddingBottom="8dp"
+                android:textSize="12sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_ground"
-            app:boxStrokeColor="@color/colorAccent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_marginStart="20dp"
             android:layout_marginTop="250dp"
-            android:layout_alignParentTop="true"
+            app:boxStrokeColor="@color/colorAccent"
             app:suffixText="m²"
             app:suffixTextColor="#000000">
 
@@ -186,27 +186,27 @@
                 android:layout_width="140dp"
                 android:layout_height="40dp"
                 android:hint="Ground"
-                android:paddingBottom="8dp"
                 android:inputType="number"
+                android:paddingBottom="8dp"
                 android:singleLine="true"
                 android:textSize="12sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_price"
-            app:boxStrokeColor="@color/colorAccent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="250dp"
             android:layout_alignParentTop="true"
-            app:suffixText="$"
-            app:suffixTextColor="#000000"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="250dp"
+            android:layout_marginEnd="20dp"
+            app:boxStrokeColor="@color/colorAccent"
+            app:errorEnabled="true"
             app:helperText="Required"
             app:helperTextEnabled="true"
-            app:errorEnabled="true" >
+            app:suffixText="$"
+            app:suffixTextColor="#000000">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_price"
@@ -221,55 +221,55 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_description"
-            app:boxStrokeColor="@color/colorAccent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="310dp"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="310dp"
+            android:layout_marginEnd="20dp"
+            app:boxStrokeColor="@color/colorAccent"
             app:counterEnabled="true"
             app:counterMaxLength="400"
-            android:layout_alignParentTop="true"
+            app:errorEnabled="true"
             app:helperText="Required"
-            app:helperTextEnabled="true"
-            app:errorEnabled="true" >
+            app:helperTextEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_description"
                 android:layout_width="match_parent"
                 android:layout_height="145dp"
-                android:hint="Description"
                 android:ellipsize="end"
-                android:inputType="textMultiLine"
                 android:gravity="top"
+                android:hint="Description"
+                android:inputType="textMultiLine"
                 android:paddingBottom="7dp"
                 android:textSize="12sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_address"
-            app:boxStrokeColor="@color/colorAccent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="480dp"
             android:layout_alignParentTop="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="480dp"
+            android:layout_marginEnd="20dp"
+            app:boxStrokeColor="@color/colorAccent"
+            app:errorEnabled="true"
             app:helperText="Required"
-            app:helperTextEnabled="true"
-            app:errorEnabled="true">
+            app:helperTextEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_address"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:hint="address"
-                android:paddingBottom="8dp"
-                android:inputType="textPostalAddress"
                 android:gravity="top"
+                android:hint="address"
+                android:inputType="textPostalAddress"
+                android:paddingBottom="8dp"
                 android:singleLine="true"
                 android:textSize="12sp" />
 
@@ -277,52 +277,52 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_postalCode"
-            app:boxStrokeColor="@color/colorAccent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_marginStart="20dp"
             android:layout_marginTop="540dp"
-            android:layout_alignParentTop="true"
+            app:boxStrokeColor="@color/colorAccent"
+            app:errorEnabled="true"
             app:helperText="Required"
-            app:helperTextEnabled="true"
-            app:errorEnabled="true">
+            app:helperTextEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_postalCode"
                 android:layout_width="140dp"
                 android:layout_height="40dp"
                 android:hint="Postal Code"
-                android:paddingBottom="8dp"
                 android:inputType="number"
+                android:paddingBottom="8dp"
                 android:singleLine="true"
                 android:textSize="12sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_city"
-            app:boxStrokeColor="@color/colorAccent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
             android:layout_marginStart="20dp"
             android:layout_marginTop="540dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
             android:layout_marginEnd="20dp"
+            app:boxStrokeColor="@color/colorAccent"
+            app:errorEnabled="true"
             app:helperText="Required"
-            app:helperTextEnabled="true"
-            app:errorEnabled="true">
+            app:helperTextEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_city"
                 android:layout_width="140dp"
                 android:layout_height="40dp"
                 android:hint="City"
-                android:textAllCaps="true"
-                android:paddingBottom="8dp"
                 android:inputType="text"
+                android:paddingBottom="8dp"
                 android:singleLine="true"
+                android:textAllCaps="true"
                 android:textSize="12sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -330,22 +330,22 @@
             android:id="@+id/tv_nearby_points"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="610dp"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="610dp"
             android:text="Nearby points interests :"
-            android:textStyle="bold"
             android:textColor="@color/colorPrimary"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/box_schools"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="620dp"
             android:layout_marginStart="20dp"
-            android:text="Schools"
+            android:layout_marginTop="620dp"
             android:buttonTint="@color/colorPrimary"
-            android:textSize="12sp"/>
+            android:text="Schools"
+            android:textSize="12sp" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/box_stores"
@@ -381,134 +381,133 @@
 
             android:layout_width="90dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="680dp"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="680dp"
             android:text="Estate status :"
-            android:textStyle="bold"
             android:textColor="@color/colorPrimary"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
         <RadioButton
             android:id="@+id/available_radiobtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="665dp"
             android:layout_marginStart="100dp"
+            android:layout_marginTop="665dp"
             android:buttonTint="@color/colorPrimary"
             android:text="Sold"
             android:textSize="12sp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_upOfSaleDate"
-            app:boxStrokeColor="@color/colorAccent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_marginStart="20dp"
             android:layout_marginTop="710dp"
-            app:startIconDrawable="@drawable/baseline_date_range_black_48dp"
-            android:layout_alignParentTop="true">
+            app:boxStrokeColor="@color/colorAccent"
+            app:startIconDrawable="@drawable/baseline_date_range_black_48dp">
 
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/upOfSaleDate"
                 android:layout_width="150dp"
                 android:layout_height="40dp"
-                android:hint="Up Of Sale Date"
-                android:paddingBottom="8dp"
                 android:focusableInTouchMode="false"
+                android:hint="Up Of Sale Date"
                 android:inputType="date"
+                android:paddingBottom="8dp"
                 android:textSize="14sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_soldDate"
-            app:boxStrokeColor="@color/colorAccent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="710dp"
-            app:startIconDrawable="@drawable/baseline_date_range_black_48dp"
             android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="710dp"
+            android:layout_marginEnd="20dp"
+            app:boxStrokeColor="@color/colorAccent"
+            app:errorEnabled="true"
             app:helperText="Required"
             app:helperTextEnabled="true"
-            app:errorEnabled="true">
+            app:startIconDrawable="@drawable/baseline_date_range_black_48dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/soldDate"
                 android:layout_width="150dp"
                 android:layout_height="40dp"
-                android:hint="Sold Date"
-                android:paddingBottom="8dp"
                 android:focusableInTouchMode="false"
+                android:hint="Sold Date"
                 android:inputType="date"
+                android:paddingBottom="8dp"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_agent"
-            app:boxStrokeColor="@color/colorAccent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="770dp"
             android:layout_marginEnd="20dp"
+            app:boxStrokeColor="@color/colorAccent"
+            app:errorEnabled="true"
             app:helperText="Required"
-            app:helperTextEnabled="true"
-            app:errorEnabled="true">
+            app:helperTextEnabled="true">
 
             <AutoCompleteTextView
                 android:id="@+id/et_agent"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:paddingBottom="8dp"
-                android:hint="Real Estate Agent Name"
-                android:textSize="12sp"
-                android:inputType="none"
-                android:focusable="true"
                 android:clickable="false"
-                android:focusableInTouchMode="false"/>
+                android:focusable="true"
+                android:focusableInTouchMode="false"
+                android:hint="Real Estate Agent Name"
+                android:inputType="none"
+                android:paddingBottom="8dp"
+                android:textSize="12sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/photo_btn"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="860dp"
             android:layout_marginStart="20dp"
-            android:background="@drawable/baseline_add_a_photo_black_48dp"/>
+            android:layout_marginTop="860dp"
+            android:background="@drawable/baseline_add_a_photo_black_48dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_photo"
             android:layout_width="match_parent"
             android:layout_height="90dp"
             android:layout_marginStart="80dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="840dp" />
-
-
+            android:layout_marginTop="840dp"
+            android:layout_marginEnd="20dp" />
 
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/camera_btn"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="1000dp"
             android:layout_marginStart="20dp"
-            android:background="@drawable/baseline_camera_black_48dp"/>
+            android:layout_marginTop="1000dp"
+            android:background="@drawable/baseline_camera_black_48dp" />
 
         <FrameLayout
             android:layout_width="160dp"
             android:layout_height="110dp"
             android:layout_below="@+id/rv_photo"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="25dp"
-            android:layout_marginStart="180dp">
+            android:layout_marginStart="180dp"
+            android:layout_marginTop="25dp">
+
             <VideoView
                 android:id="@+id/videoView"
                 android:layout_width="match_parent"
@@ -519,11 +518,11 @@
             android:id="@+id/delete_video"
             android:layout_width="160dp"
             android:layout_height="110dp"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/delete"
             android:layout_below="@+id/rv_photo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="180dp"
             android:layout_marginTop="25dp"
-            android:layout_marginStart="180dp">
+            android:background="@drawable/delete">
 
         </androidx.appcompat.widget.AppCompatImageButton>
 
@@ -531,19 +530,17 @@
             android:id="@+id/validate_fab_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:rippleColor="@color/colorAccent"
-            android:src="@drawable/baseline_done_black_24dp"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
-            android:elevation="15dp"
             android:clickable="true"
+            android:elevation="15dp"
             android:focusable="true"
-            app:fabSize="normal"/>
+            android:src="@drawable/baseline_done_black_24dp"
+            app:fabSize="normal"
+            app:rippleColor="@color/colorAccent" />
 
     </RelativeLayout>
-
-
 
 </ScrollView>

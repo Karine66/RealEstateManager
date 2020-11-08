@@ -279,8 +279,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
                         }
 
                         @Override
-                        public void onError(Throwable e) {
-                            e.getMessage();
+                        public void onError(@NonNull Throwable e) {
+
                         }
                     });
             mCompositeDisposable.add(d);

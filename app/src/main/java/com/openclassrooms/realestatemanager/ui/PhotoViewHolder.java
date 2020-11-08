@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.ui;
 
 import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;

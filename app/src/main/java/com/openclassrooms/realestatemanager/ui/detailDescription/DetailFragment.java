@@ -354,8 +354,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-                        Log.d("onErrorGeocoding", Log.getStackTraceString(e));
+                    public void onError(@NonNull Throwable e) {
                     }
                 });
     }

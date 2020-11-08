@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.detailDescription.DetailActivity">
+
     <include
         layout="@layout/toolbar"
-        android:layout_below="@+id/detail_fragment_frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/detail_fragment_frameLayout" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:layout_height="wrap_content">
-    <FrameLayout
-        android:id="@+id/detail_fragment_frameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <FrameLayout
+            android:id="@+id/detail_fragment_frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </ScrollView>
 
