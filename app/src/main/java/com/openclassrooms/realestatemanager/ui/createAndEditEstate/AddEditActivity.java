@@ -579,7 +579,7 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != Activity.RESULT_CANCELED) {
-            if (requestCode == PICK_IMAGE_CAMERA && data != null && data.getData() !=null) {
+            if (requestCode == PICK_IMAGE_CAMERA) {
                 if (resultCode == Activity.RESULT_OK) {
 
                     listPhoto.add(photoUri);
