@@ -63,6 +63,7 @@ dependencies {
     //for recyclerview
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
+
     //for ROOM
     def room_version = "2.2.5"
 
@@ -113,3 +114,4 @@ dependencies {
 repositories {
     mavenCentral()
 }
+apply plugin: 'com.google.gms.google-services'
