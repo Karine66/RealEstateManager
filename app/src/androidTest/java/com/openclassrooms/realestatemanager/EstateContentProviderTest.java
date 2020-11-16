@@ -35,7 +35,7 @@ public class EstateContentProviderTest {
 
     @Before
     public void setUp() {
-        InstrumentationRegistry.getInstrumentation().getTargetContext().deleteDatabase("estate.db");
+        InstrumentationRegistry.getInstrumentation().getTargetContext().deleteDatabase("Estate.db");
         Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getInstrumentation().getContext(), EstateDatabase.class)
                 .allowMainThreadQueries()
                 .build();
@@ -88,7 +88,7 @@ public class EstateContentProviderTest {
         values.put("upOfSaleDate", "01/10/2020");
         values.put("soldDate", "");
         values.put("agentName", "Karine Danjard");
-//        values.put("mandateNumberID", 1);
+
         return values;
         }
     }
