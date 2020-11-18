@@ -6,6 +6,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.room.Room;
 import androidx.test.ext.junit.runners.AndroidJUnit4;

@@ -83,7 +83,7 @@ public class EstateContentProvider extends ContentProvider {
     }
 
     /**
-     * For delete date at ContentValues Format
+     * For delete data at ContentValues Format
      *
      * @param uri
      * @param s

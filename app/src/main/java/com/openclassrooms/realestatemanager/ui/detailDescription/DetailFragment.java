@@ -271,14 +271,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
             map.getUiSettings().setMyLocationButtonEnabled(false);
             map.getUiSettings().setMapToolbarEnabled(false);
             googleMap.moveCamera(CameraUpdateFactory.zoomBy(15));
-//            if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-//                    ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                ActivityCompat.requestPermissions((Activity) getContext(), new String[]{
-//                        Manifest.permission.ACCESS_FINE_LOCATION,
-//                        Manifest.permission.ACCESS_COARSE_LOCATION
-//                }, PERMS_CALL_ID);
-//                return;
-//            }
+
             executeHttpRequestWithRetrofit();
         } else {
             Snackbar.make(fragmentDetailBinding.getRoot(), "No internet available", Snackbar.LENGTH_SHORT).show();
