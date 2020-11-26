@@ -261,6 +261,9 @@ public class AddEditActivity extends BaseActivity implements View.OnClickListene
 
                 fieldsRequired();
                 soldDateRequired();
+                if (!soldDateRequired()){
+                    return;
+                }
                     saveEstates();
             }
         });
